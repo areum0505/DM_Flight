@@ -3,6 +3,7 @@ class GameScene {
     this.sceneManager = sceneManager;
     this.player = new Player(width / 2, height - (CONFIG.PLAYER.SIZE + 20));
     this.bullets = [];
+    this.enemyBullets = [];
     this.enemies = [];
     
     // SpawnManager 인스턴스 생성
@@ -13,6 +14,7 @@ class GameScene {
     // 모든 게임 요소 그리기
     this.player.draw();
     this.bullets.forEach(b => b.draw());
+    this.enemyBullets.forEach(b => b.draw());
     this.enemies.forEach(e => e.draw());
     
     this.drawHealthUI(); // 체력 UI 그리기
@@ -32,7 +34,7 @@ class GameScene {
   update() {
     this.player.move();
 
-    // 총알 이동 및 화면 밖 총알 제거
+    // 플레이어 총알 이동 및 화면 밖 총알 제거
     for (let i = this.bullets.length - 1; i >= 0; i--) {
       this.bullets[i].move();
       if (this.bullets[i].y < 0) {
@@ -40,9 +42,17 @@ class GameScene {
       }
     }
 
+    // 적 총알 이동 및 화면 밖 총알 제거
+    for (let i = this.enemyBullets.length - 1; i >= 0; i--) {
+      this.enemyBullets[i].move();
+      if (this.enemyBullets[i].y > height) {
+        this.enemyBullets.splice(i, 1);
+      }
+    }
+
     // 적 이동 및 화면 밖 적 제거
     for (let i = this.enemies.length - 1; i >= 0; i--) {
-      this.enemies[i].move();
+      this.enemies[i].update(this.enemyBullets);
       if (this.enemies[i].y > height + this.enemies[i].size) {
         this.enemies.splice(i, 1);
       }
@@ -66,7 +76,7 @@ class GameScene {
   }
 
   checkCollisions() {
-    // 총알과 적의 충돌
+    // 플레이어 총알과 적의 충돌
     for (let i = this.bullets.length - 1; i >= 0; i--) {
       for (let j = this.enemies.length - 1; j >= 0; j--) {
         const bullet = this.bullets[i];
@@ -81,6 +91,15 @@ class GameScene {
           }
           break; 
         }
+      }
+    }
+
+    // 적 총알과 플레이어의 충돌
+    for (let i = this.enemyBullets.length - 1; i >= 0; i--) {
+      const bullet = this.enemyBullets[i];
+      if (this.isCollidingCircles(this.player, bullet)) {
+        this.enemyBullets.splice(i, 1);
+        this.player.takeDamage();
       }
     }
 
@@ -111,6 +130,12 @@ class GameScene {
                                pow(circleDistance.y - rect.size / 2, 2);
 
     return (cornerDistance_sq <= pow(circle.size / 2, 2));
+  }
+
+  // 원과 원의 충돌 판정 헬퍼 함수
+  isCollidingCircles(circle1, circle2) {
+    const distance = dist(circle1.x, circle1.y, circle2.x, circle2.y);
+    return distance < (circle1.size / 2 + circle2.size / 2);
   }
 
   handleInput(keyCode) {

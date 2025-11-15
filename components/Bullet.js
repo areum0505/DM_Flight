@@ -1,13 +1,13 @@
 class Bullet {
-  constructor(x, y) {
+  constructor(x, y, speed) {
     this.x = x;
     this.y = y;
-    this.speed = CONFIG.BULLET.SPEED;
+    this.speed = speed;
     this.size = CONFIG.BULLET.SIZE;
   }
 
   move() {
-    this.y -= this.speed;
+    this.y += this.speed;
   }
 
   draw() {

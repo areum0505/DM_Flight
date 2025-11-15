@@ -8,6 +8,7 @@ class Player {
     this.speed = CONFIG.PLAYER.SPEED;
     this.health = CONFIG.PLAYER.HEALTH;
     this.shootInterval = CONFIG.PLAYER.SHOOT_INTERVAL;
+    this.bulletSpeed = CONFIG.BULLET.SPEED;
     this.weaponLevel = 1;
   }
 
@@ -22,7 +23,7 @@ class Player {
   }
 
   shoot(bullets) {
-    bullets.push(new Bullet(this.x, this.y));
+    bullets.push(new Bullet(this.x, this.y, -this.bulletSpeed));
   }
 
   takeDamage() {

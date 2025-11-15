@@ -1,7 +1,18 @@
 const WAVES = [
   {
-    // 웨이브 1: 게임 시작 후 2초 뒤 (120프레임)
+    // 웨이브 0: earlyNormal1 테스트
     triggerFrame: 120,
+    enemies: [
+      { type: 'earlyNormal1', x: 0.1, y: -50 },
+      { type: 'earlyNormal1', x: 0.3, y: -50 },
+      { type: 'earlyNormal1', x: 0.5, y: -50 },
+      { type: 'earlyNormal1', x: 0.7, y: -50 },
+      { type: 'earlyNormal1', x: 0.9, y: -50 },
+    ]
+  },
+  {
+    // 웨이브 1: 게임 시작 후 3초 뒤 (180프레임)
+    triggerFrame: 180,
     enemies: [
       { type: 'small', x: 0.2, y: -50 },
       { type: 'small', x: 0.8, y: -50 },
