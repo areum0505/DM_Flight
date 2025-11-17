@@ -26,3 +26,5 @@ DM_Flight/
     │   ├───GameScene.js        # 실제 게임 플레이가 이루어지는 화면의 로직을 담당
     │   └───StartScene.js       # 게임 시작 화면의 UI와 로직을 담당
     └───ui/                     # UI 관련 요소들을 보관할 수 있는 곳
+
+    ffff
