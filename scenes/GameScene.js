@@ -1,3 +1,11 @@
+const GameState = {
+  LEVEL_1: 'LEVEL_1',
+  LEVEL_2: 'LEVEL_2',
+  BOSS_1: 'BOSS_1',
+  LEVEL_3: 'LEVEL_3',
+  BOSS_2: 'BOSS_2',
+};
+
 class GameScene {
   constructor(sceneManager) {
     this.sceneManager = sceneManager;
@@ -6,26 +14,27 @@ class GameScene {
     this.enemyBullets = [];
     this.enemies = [];
     
-    // SpawnManager 인스턴스 생성
     this.spawnManager = new SpawnManager();
+    this.boss = null;
+
+    this.state = GameState.LEVEL_1;
+    this.spawnManager.loadWaves(LEVEL1_WAVES);
   }
 
   draw() {
-    // 모든 게임 요소 그리기
     this.player.draw();
     this.bullets.forEach(b => b.draw());
     this.enemyBullets.forEach(b => b.draw());
     this.enemies.forEach(e => e.draw());
+    if (this.boss) this.boss.draw();
     
-    this.drawHealthUI(); // 체력 UI 그리기
-
-    // 게임 로직 업데이트
+    this.drawHealthUI();
     this.update();
   }
 
   drawHealthUI() {
     noStroke();
-    fill(255, 105, 180); // 분홍색
+    fill(255, 105, 180);
     for (let i = 0; i < this.player.health; i++) {
       rect(20 + (i * 30), 20, 25, 25);
     }
@@ -33,112 +42,148 @@ class GameScene {
   
   update() {
     this.player.move();
+    this.handleBullets();
+    this.handleEnemies();
+    this.handleShooting();
+    this.updateGameState();
+    
+    this.spawnManager.update(this.enemies);
+    if (this.boss) this.boss.update(this.player, this.enemyBullets);
 
-    // 플레이어 총알 이동 및 화면 밖 총알 제거
+    this.checkCollisions();
+
+    if (this.player.health <= 0) {
+      this.sceneManager.goTo('gameOver');
+    }
+  }
+
+  updateGameState() {
+    switch (this.state) {
+      case GameState.LEVEL_1:
+        if (this.spawnManager.isComplete()) {
+          this.state = GameState.LEVEL_2;
+          this.spawnManager.loadWaves(LEVEL2_WAVES);
+        }
+        break;
+      case GameState.LEVEL_2:
+        if (this.spawnManager.isComplete()) {
+          this.state = GameState.BOSS_1;
+          this.spawnManager.stop();
+          this.boss = new Overload(width / 2, 150);
+        }
+        break;
+      case GameState.BOSS_1:
+        if (this.boss && this.boss.health <= 0) {
+          this.boss = null;
+          this.state = GameState.LEVEL_3;
+          this.spawnManager.loadWaves(LEVEL3_WAVES);
+        }
+        break;
+      case GameState.LEVEL_3:
+        if (this.spawnManager.isComplete()) {
+          this.state = GameState.BOSS_2;
+          this.spawnManager.stop();
+          // 임시로 같은 보스를 다시 생성합니다.
+          // 나중에 새로운 보스 클래스로 교체할 수 있습니다.
+          this.boss = new Overload(width / 2, 150); 
+        }
+        break;
+      case GameState.BOSS_2:
+        if (this.boss && this.boss.health <= 0) {
+          this.boss = null;
+          // 모든 레벨 클리어! 다음 단계(예: 무한 모드, 게임 클리어 씬)를 여기에 추가
+          console.log("Game Clear!");
+          // 일단은 더 이상 진행하지 않도록 spawnManager를 멈춥니다.
+          this.spawnManager.stop();
+        }
+        break;
+    }
+  }
+
+  handleBullets() {
     for (let i = this.bullets.length - 1; i >= 0; i--) {
       this.bullets[i].move();
-      if (this.bullets[i].y < 0) {
-        this.bullets.splice(i, 1);
-      }
+      if (this.bullets[i].y < 0) this.bullets.splice(i, 1);
     }
-
-    // 적 총알 이동 및 화면 밖 총알 제거
     for (let i = this.enemyBullets.length - 1; i >= 0; i--) {
       this.enemyBullets[i].move();
-      if (this.enemyBullets[i].y > height) {
-        this.enemyBullets.splice(i, 1);
-      }
+      if (this.enemyBullets[i].y > height) this.enemyBullets.splice(i, 1);
     }
+  }
 
-    // 적 이동 및 화면 밖 적 제거
+  handleEnemies() {
     for (let i = this.enemies.length - 1; i >= 0; i--) {
       this.enemies[i].update(this.enemyBullets);
       if (this.enemies[i].y > height + this.enemies[i].size) {
         this.enemies.splice(i, 1);
       }
     }
+  }
 
-    // 기본 공격 (자동 발사)
+  handleShooting() {
     if (frameCount % this.player.shootInterval === 0) {
       this.player.shoot(this.bullets);
-    }
-
-    // SpawnManager를 통해 새로운 적 생성
-    this.spawnManager.update(this.enemies);
-
-    // 충돌 판정
-    this.checkCollisions();
-
-    // 게임 오버 확인
-    if (this.player.health <= 0) {
-      this.sceneManager.goTo('gameOver');
     }
   }
 
   checkCollisions() {
-    // 플레이어 총알과 적의 충돌
+    // Player bullets vs Enemies
     for (let i = this.bullets.length - 1; i >= 0; i--) {
       for (let j = this.enemies.length - 1; j >= 0; j--) {
-        const bullet = this.bullets[i];
-        const enemy = this.enemies[j];
-
-        if (this.isColliding(bullet, enemy)) {
+        if (this.isColliding(this.bullets[i], this.enemies[j])) {
+          this.enemies[j].takeDamage();
+          if (this.enemies[j].health <= 0) this.enemies.splice(j, 1);
           this.bullets.splice(i, 1);
-          enemy.takeDamage();
-
-          if (enemy.health <= 0) {
-            this.enemies.splice(j, 1);
-          }
-          break; 
+          break;
         }
       }
     }
 
-    // 적 총알과 플레이어의 충돌
-    for (let i = this.enemyBullets.length - 1; i >= 0; i--) {
-      const bullet = this.enemyBullets[i];
-      if (this.isCollidingCircles(this.player, bullet)) {
-        this.enemyBullets.splice(i, 1);
-        this.player.takeDamage();
+    // Player bullets vs Boss
+    if (this.boss) {
+      for (let i = this.bullets.length - 1; i >= 0; i--) {
+        if (this.boss.isHit(this.bullets[i])) {
+          this.bullets.splice(i, 1);
+          break;
+        }
       }
     }
 
-    // 플레이어와 적의 충돌
-    for (let i = this.enemies.length - 1; i >= 0; i--) {
-      const enemy = this.enemies[i];
-      if (this.isColliding(this.player, enemy)) {
-        this.enemies.splice(i, 1); // 적 제거
-        this.player.takeDamage();   // 플레이어 체력 감소
+    // Enemy bullets vs Player
+    for (let i = this.enemyBullets.length - 1; i >= 0; i--) {
+      if (this.isCollidingCircles(this.player, this.enemyBullets[i])) {
+        this.player.takeDamage();
+        this.enemyBullets.splice(i, 1);
       }
+    }
+
+    // Player vs Enemies
+    for (let i = this.enemies.length - 1; i >= 0; i--) {
+      if (this.isColliding(this.player, this.enemies[i])) {
+        this.player.takeDamage();
+        this.enemies.splice(i, 1);
+      }
+    }
+    
+    // Player vs Boss
+    if (this.boss && this.isColliding(this.player, this.boss)) {
+      this.player.takeDamage();
     }
   }
 
-  // 원과 사각형의 충돌 판정 헬퍼 함수
   isColliding(circle, rect) {
-    const circleDistance = {
-      x: abs(circle.x - rect.x),
-      y: abs(circle.y - rect.y)
-    };
-
-    if (circleDistance.x > (rect.size / 2 + circle.size / 2)) { return false; }
-    if (circleDistance.y > (rect.size / 2 + circle.size / 2)) { return false; }
-
-    if (circleDistance.x <= (rect.size / 2)) { return true; }
-    if (circleDistance.y <= (rect.size / 2)) { return true; }
-
-    const cornerDistance_sq = pow(circleDistance.x - rect.size / 2, 2) +
-                               pow(circleDistance.y - rect.size / 2, 2);
-
+    const circleDistance = { x: abs(circle.x - rect.x), y: abs(circle.y - rect.y) };
+    if (circleDistance.x > (rect.size / 2 + circle.size / 2)) return false;
+    if (circleDistance.y > (rect.size / 2 + circle.size / 2)) return false;
+    if (circleDistance.x <= (rect.size / 2)) return true;
+    if (circleDistance.y <= (rect.size / 2)) return true;
+    const cornerDistance_sq = pow(circleDistance.x - rect.size / 2, 2) + pow(circleDistance.y - rect.size / 2, 2);
     return (cornerDistance_sq <= pow(circle.size / 2, 2));
   }
 
-  // 원과 원의 충돌 판정 헬퍼 함수
   isCollidingCircles(circle1, circle2) {
-    const distance = dist(circle1.x, circle1.y, circle2.x, circle2.y);
-    return distance < (circle1.size / 2 + circle2.size / 2);
+    return dist(circle1.x, circle1.y, circle2.x, circle2.y) < (circle1.size / 2 + circle2.size / 2);
   }
 
-  handleInput(keyCode) {
-    // 키 입력 (일시정지 등)
-  }
+  handleInput(keyCode) {}
 }
