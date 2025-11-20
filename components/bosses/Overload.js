@@ -58,7 +58,7 @@ class Overload extends Boss {
     for (let i = 0; i < count; i++) {
         const angle = angleToPlayer + (i - floor(count/2)) * 0.2;
         const vel = p5.Vector.fromAngle(angle, 4);
-        const bullet = new Bullet(this.x, this.y, null, vel);
+        const bullet = new Bullet(this.x, this.y, 'default', vel);
         bullet.size = 30;
         enemyBullets.push(bullet);
     }
@@ -101,7 +101,7 @@ class Overload extends Boss {
     this.turrets.forEach(turret => turret.draw());
   }
 
-  isHit(bullet) {
+  isHit(bullet, enemyBullets, player) {
     if (this.isVulnerable) {
       if (dist(bullet.x, bullet.y, this.x, this.y) < this.size / 2) {
         this.health--;
@@ -143,7 +143,7 @@ class Turret {
     for (let i = -1; i <= 1; i++) {
       const angle = angleToPlayer + i * 0.25;
       const vel = p5.Vector.fromAngle(angle, 5);
-      const bullet = new Bullet(this.x, this.y, null, vel);
+      const bullet = new Bullet(this.x, this.y, 'default', vel);
       enemyBullets.push(bullet);
     }
   }
