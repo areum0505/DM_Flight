@@ -16,7 +16,7 @@ class Boss {
     console.error("Draw method must be implemented by subclass");
   }
 
-  isHit(bullet) {
+  isHit(bullet, enemyBullets, player) {
     // 각 보스 클래스에서 구체적인 로직을 구현해야 합니다.
     console.error("isHit method must be implemented by subclass");
     return false;

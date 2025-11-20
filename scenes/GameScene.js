@@ -83,15 +83,13 @@ class GameScene {
         if (this.spawnManager.isComplete()) {
           this.state = GameState.BOSS_2;
           this.spawnManager.stop();
-          // 임시로 같은 보스를 다시 생성합니다.
-          // 나중에 새로운 보스 클래스로 교체할 수 있습니다.
-          this.boss = new Overload(width / 2, 150); 
+          this.boss = new CarrierShield(width / 2, 150); 
         }
         break;
       case GameState.BOSS_2:
         if (this.boss && this.boss.health <= 0) {
           this.boss = null;
-          // 모든 레벨 클리어! 다음 단계(예: 무한 모드, 게임 클리어 씬)를 여기에 추가
+          // 모든 레벨 클리어! 다음 단계(게임 클리어 씬)를 여기에 추가
           console.log("Game Clear!");
           // 일단은 더 이상 진행하지 않도록 spawnManager를 멈춥니다.
           this.spawnManager.stop();
@@ -142,7 +140,7 @@ class GameScene {
     // Player bullets vs Boss
     if (this.boss) {
       for (let i = this.bullets.length - 1; i >= 0; i--) {
-        if (this.boss.isHit(this.bullets[i])) {
+        if (this.boss.isHit(this.bullets[i], this.enemyBullets, this.player)) {
           this.bullets.splice(i, 1);
           break;
         }

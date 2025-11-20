@@ -28,7 +28,7 @@ class Enemy {
 
   shoot(enemyBullets) {
     if (this.bulletSpeed) {
-      enemyBullets.push(new Bullet(this.x, this.y, this.bulletSpeed));
+      enemyBullets.push(new Bullet(this.x, this.y, 'default', null, null, this.bulletSpeed));
     }
   }
 
