@@ -2,30 +2,50 @@ class SpawnManager {
   constructor() {
     this.waves = [];
     this.currentWaveIndex = 0;
-    this.lastFrameCount = 0;
+    this.waveTimer = 0;
     this.active = false;
   }
 
   loadWaves(waveData) {
     this.waves = waveData;
     this.currentWaveIndex = 0;
-    this.lastFrameCount = frameCount;
+    this.waveTimer = 0;
     this.active = true;
   }
 
-  update(enemies) {
-    if (!this.active || this.isComplete()) {
+  update(enemies, scene) {
+    if (!this.active) {
       return;
     }
 
-    const currentWave = this.waves[this.currentWaveIndex];
-    if (frameCount - this.lastFrameCount >= currentWave.triggerFrame) {
-      for (const enemyData of currentWave.enemies) {
-        const xPos = enemyData.x * width;
-        const yPos = enemyData.y;
-        enemies.push(new Enemy(xPos, yPos, enemyData.type));
+    this.waveTimer++;
+
+    // Check if we have more waves to process
+    if (this.currentWaveIndex < this.waves.length) {
+      const currentWave = this.waves[this.currentWaveIndex];
+
+      if (this.waveTimer >= currentWave.triggerFrame) {
+
+        if (currentWave.type === 'BOSS') {
+          this.active = false; // Pause spawning
+          if (scene && scene.startBossBattle) {
+            scene.startBossBattle(currentWave.bossType);
+          }
+          this.currentWaveIndex++;
+          return;
+        }
+
+        if (currentWave.enemies) {
+          for (const enemyData of currentWave.enemies) {
+            const xPos = enemyData.x * width;
+            const yPos = enemyData.y;
+            enemies.push(new Enemy(xPos, yPos, enemyData.type));
+          }
+        }
+        this.currentWaveIndex++;
       }
-      this.currentWaveIndex++;
+    } else {
+
     }
   }
 
@@ -35,5 +55,9 @@ class SpawnManager {
 
   stop() {
     this.active = false;
+  }
+
+  resume() {
+    this.active = true;
   }
 }

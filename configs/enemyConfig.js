@@ -24,7 +24,7 @@ const ShootSPD_normal = 150
 const ShootSPD_fast = 100
 const ShootSPD_very_fast = 50
 
-const bulletSpeed_low = 0.5
+const bulletSpeed_low = 1
 const bulletSpeed_normal = 2
 const bulletSpeed_fast = 3
 
@@ -73,6 +73,8 @@ const ENEMY_STATS = {
     health: HP_very_low,
     speed: SPD_low,
     color: [200, 120, 50],
+    shootInterval: ShootSPD_normal, // Added default
+    bulletSpeed: bulletSpeed_normal, // Added default
     points: 100,
     ultimateGauge: 10,
   },
@@ -82,10 +84,12 @@ const ENEMY_STATS = {
     health: HP_low,
     speed: SPD_high,
     color: [50, 0, 255],
+    shootInterval: ShootSPD_fast, // Added default
+    bulletSpeed: bulletSpeed_fast, // Added default
     points: 100,
     ultimateGauge: 10,
   },
-  
+
   /** 중반부 몹 설정 **/
 
   midNormal_simple: {
@@ -104,7 +108,7 @@ const ENEMY_STATS = {
     health: HP_very_low,
     speed: SPD_very_low,
     color: [200, 200, 255],
-    shootInterval: ShootSPD_normal, 
+    shootInterval: ShootSPD_normal,
     bulletSpeed: bulletSpeed_low,
     points: 100,
     ultimateGauge: 10,
@@ -126,10 +130,12 @@ const ENEMY_STATS = {
     health: HP_very_low,
     speed: SPD_very_high,
     color: [200, 200, 255],
+    shootInterval: ShootSPD_fast, // Added default
+    bulletSpeed: bulletSpeed_fast, // Added default
     points: 100,
     ultimateGauge: 10,
   },
-  
+
   midNamed_simple: {
     size: 30,
     health: HP_medium,
@@ -152,6 +158,17 @@ const ENEMY_STATS = {
     ultimateGauge: 10,
   },
 
+  midNamed_flock: { // Added missing type
+    size: 30,
+    health: HP_low,
+    speed: SPD_very_high,
+    color: [100, 100, 255],
+    shootInterval: ShootSPD_fast,
+    bulletSpeed: bulletSpeed_fast,
+    points: 100,
+    ultimateGauge: 10,
+  },
+
   /** 후반부 몹 설정 **/
 
   endNormal_simple: { //*********** 보충 필요
@@ -170,6 +187,8 @@ const ENEMY_STATS = {
     health: HP_high,
     speed: SPD_very_low,
     color: [200, 200, 255],
+    shootInterval: ShootSPD_normal, // Added default
+    bulletSpeed: bulletSpeed_low, // Added default
     points: 100,
     ultimateGauge: 10,
   },
@@ -186,6 +205,50 @@ const ENEMY_STATS = {
   },
 
   endNormal_flock: { //*********** 보충 필요
+    size: 30,
+    health: HP_very_low,
+    speed: SPD_very_high,
+    color: [200, 200, 255],
+    shootInterval: ShootSPD_normal,
+    bulletSpeed: bulletSpeed_normal,
+    points: 100,
+    ultimateGauge: 10,
+  },
+
+  endNamed_simple: {  //*********** 보충 필요
+    size: 30,
+    health: HP_medium,
+    speed: SPD_medium,
+    color: [200, 200, 255],
+    shootInterval: ShootSPD_fast,
+    bulletSpeed: bulletSpeed_normal,
+    points: 100,
+    ultimateGauge: 10,
+  },
+
+  endNamed_tank: { //*********** 보충 필요
+    size: 30,
+    health: HP_very_high,
+    speed: SPD_low,
+    color: [200, 200, 255],
+    shootInterval: ShootSPD_normal,
+    bulletSpeed: bulletSpeed_low,
+    points: 100,
+    ultimateGauge: 10,
+  },
+
+  endNamed_special: { //*********** 보충 필요
+    size: 30,
+    health: HP_medium,
+    speed: SPD_medium,
+    color: [200, 200, 255],
+    shootInterval: ShootSPD_fast,
+    bulletSpeed: bulletSpeed_normal,
+    points: 100,
+    ultimateGauge: 10,
+  },
+
+  endNamed_flock: { //*********** 보충 필요
     size: 30,
     health: HP_very_low,
     speed: SPD_very_high,
@@ -223,6 +286,8 @@ const ENEMY_STATS = {
     health: HP_very_high,
     speed: SPD_low,
     color: [200, 200, 255],
+    shootInterval: ShootSPD_normal, // Added default
+    bulletSpeed: bulletSpeed_low, // Added default
     points: 100,
     ultimateGauge: 10,
   }
@@ -230,30 +295,30 @@ const ENEMY_STATS = {
 };
 
 const early_ENEMY_TYPES = [
-    'earlyNormal_simple',
-    'earlyNormal_tank',
-    'earlyNormal_special',
-    'earlyNormal_flock',
-    'earlyNamed_flock'
+  'earlyNormal_simple',
+  'earlyNormal_tank',
+  'earlyNormal_special',
+  'earlyNormal_flock',
+  'earlyNamed_flock'
 ];
 
 const mid_ENEMY_TYPES = [
-    'midNormal_simple',
-    'midNormal_tank',
-    'midNormal_special',
-    'midNormal_flock',
-    'midNamed_simple',
-    'midNamed_flock'
+  'midNormal_simple',
+  'midNormal_tank',
+  'midNormal_special',
+  'midNormal_flock',
+  'midNamed_simple',
+  'midNamed_flock'
 ];
 
 const end_ENEMY_TYPES = [
-    'endNamed_simple',
-    'endNamed_tank',
-    'endNamed_special',
-    'endNamed_flock',
-    'endNamed_special_1',
-    'endNamed_special_2',
-    'endNamed_tank'
+  'endNamed_simple',
+  'endNamed_tank',
+  'endNamed_special',
+  'endNamed_flock',
+  'endNamed_special_1',
+  'endNamed_special_2',
+  'endNamed_tank'
 ];
 
 const early_randomEnemyType = early_ENEMY_TYPES[Math.floor(Math.random() * early_ENEMY_TYPES.length)];

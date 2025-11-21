@@ -12,13 +12,13 @@ class Bullet {
     this.color = color(255, 204, 0); // Default yellow
 
     if (this.type === 'laser') {
-        this.size = 60;
+      this.size = 60;
     }
     if (this.type === 'homing') {
       this.size = 15; // Larger size
       this.color = color(148, 0, 211); // Purple color
     }
-    
+
     if (this.type === 'homing' && this.target) {
       const angle = atan2(this.target.y - this.y, this.target.x - this.x);
       this.vel = p5.Vector.fromAngle(angle, this.speed);
@@ -31,9 +31,8 @@ class Bullet {
         const angle = atan2(this.target.y - this.y, this.target.x - this.x);
         this.vel = p5.Vector.fromAngle(angle, this.speed);
       }
-      // console.log('Homing bullet moving:', this.x, this.y, this.vel);
     }
-    
+
     if (this.vel) {
       this.x += this.vel.x;
       this.y += this.vel.y;
@@ -44,15 +43,19 @@ class Bullet {
 
   draw() {
     if (this.type === 'laser') {
-        push();
-        stroke(255, 0, 0);
-        strokeWeight(4);
+      push();
+      stroke(255, 0, 0);
+      strokeWeight(4);
+      if (this.vel) {
         line(this.x, this.y, this.x - this.vel.x * 10, this.y - this.vel.y * 10);
-        pop();
+      } else {
+        line(this.x, this.y, this.x, this.y - 10);
+      }
+      pop();
     } else {
-        fill(this.color);
-        noStroke();
-        ellipse(this.x, this.y, this.size);
+      fill(this.color);
+      noStroke();
+      ellipse(this.x, this.y, this.size);
     }
   }
 }

@@ -1,9 +1,6 @@
 const GameState = {
-  LEVEL_1: 'LEVEL_1',
-  LEVEL_2: 'LEVEL_2',
-  BOSS_1: 'BOSS_1',
-  LEVEL_3: 'LEVEL_3',
-  BOSS_2: 'BOSS_2',
+  PLAYING: 'PLAYING',
+  GAME_OVER: 'GAME_OVER'
 };
 
 class GameScene {
@@ -13,12 +10,12 @@ class GameScene {
     this.bullets = [];
     this.enemyBullets = [];
     this.enemies = [];
-    
+
     this.spawnManager = new SpawnManager();
     this.boss = null;
 
-    this.state = GameState.LEVEL_1;
-    this.spawnManager.loadWaves(LEVEL1_WAVES);
+    this.state = GameState.PLAYING;
+    this.spawnManager.loadWaves(WAVES);
   }
 
   draw() {
@@ -27,9 +24,17 @@ class GameScene {
     this.enemyBullets.forEach(b => b.draw());
     this.enemies.forEach(e => e.draw());
     if (this.boss) this.boss.draw();
-    
+
     this.drawHealthUI();
     this.update();
+
+    // Draw Frame Count (Last to ensure visibility)
+    push();
+    fill(0);
+    textSize(12);
+    textAlign(LEFT, TOP);
+    text(`Frame: ${frameCount}`, 10, 50);
+    pop();
   }
 
   drawHealthUI() {
@@ -39,15 +44,15 @@ class GameScene {
       rect(20 + (i * 30), 20, 25, 25);
     }
   }
-  
+
   update() {
     this.player.move();
     this.handleBullets();
     this.handleEnemies();
     this.handleShooting();
     this.updateGameState();
-    
-    this.spawnManager.update(this.enemies);
+
+    this.spawnManager.update(this.enemies, this);
     if (this.boss) this.boss.update(this.player, this.enemyBullets);
 
     this.checkCollisions();
@@ -57,44 +62,24 @@ class GameScene {
     }
   }
 
+  startBossBattle(bossType) {
+    if (bossType === 'OVERLOAD') {
+      this.boss = new Overload(width / 2, 150);
+    } else if (bossType === 'CARRIER_SHIELD') {
+      this.boss = new CarrierShield(width / 2, 150);
+    }
+  }
+
   updateGameState() {
-    switch (this.state) {
-      case GameState.LEVEL_1:
-        if (this.spawnManager.isComplete()) {
-          this.state = GameState.LEVEL_2;
-          this.spawnManager.loadWaves(LEVEL2_WAVES);
-        }
-        break;
-      case GameState.LEVEL_2:
-        if (this.spawnManager.isComplete()) {
-          this.state = GameState.BOSS_1;
-          this.spawnManager.stop();
-          this.boss = new Overload(width / 2, 150);
-        }
-        break;
-      case GameState.BOSS_1:
-        if (this.boss && this.boss.health <= 0) {
-          this.boss = null;
-          this.state = GameState.LEVEL_3;
-          this.spawnManager.loadWaves(LEVEL3_WAVES);
-        }
-        break;
-      case GameState.LEVEL_3:
-        if (this.spawnManager.isComplete()) {
-          this.state = GameState.BOSS_2;
-          this.spawnManager.stop();
-          this.boss = new CarrierShield(width / 2, 150); 
-        }
-        break;
-      case GameState.BOSS_2:
-        if (this.boss && this.boss.health <= 0) {
-          this.boss = null;
-          // 모든 레벨 클리어! 다음 단계(게임 클리어 씬)를 여기에 추가
-          console.log("Game Clear!");
-          // 일단은 더 이상 진행하지 않도록 spawnManager를 멈춥니다.
-          this.spawnManager.stop();
-        }
-        break;
+    // Check boss death
+    if (this.boss && this.boss.health <= 0) {
+      this.boss = null;
+      this.spawnManager.resume();
+    }
+
+    if (this.spawnManager.isComplete() && !this.boss && this.enemies.length === 0) {
+      // Game Clear logic could go here
+      console.log("Game Clear!");
     }
   }
 
@@ -162,7 +147,7 @@ class GameScene {
         this.enemies.splice(i, 1);
       }
     }
-    
+
     // Player vs Boss
     if (this.boss && this.isColliding(this.player, this.boss)) {
       this.player.takeDamage();
@@ -183,5 +168,5 @@ class GameScene {
     return dist(circle1.x, circle1.y, circle2.x, circle2.y) < (circle1.size / 2 + circle2.size / 2);
   }
 
-  handleInput(keyCode) {}
+  handleInput(keyCode) { }
 }
