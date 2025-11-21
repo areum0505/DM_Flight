@@ -23,7 +23,7 @@ class Player {
   }
 
   shoot(bullets) {
-    bullets.push(new Bullet(this.x, this.y, -this.bulletSpeed));
+    bullets.push(new Bullet(this.x, this.y, 'default', null, null, -this.bulletSpeed));
   }
 
   takeDamage() {
