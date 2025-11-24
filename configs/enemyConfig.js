@@ -33,7 +33,7 @@ const ENEMY_STATS = {
     size: 25,
     health: HP_very_low,
     speed: SPD_medium,
-    color: [200, 100, 255],
+    color: [255, 0, 0], // red
     shootInterval: ShootSPD_low,
     bulletSpeed: bulletSpeed_normal,
     points: 100,
@@ -44,7 +44,7 @@ const ENEMY_STATS = {
     size: 25,
     health: HP_medium,
     speed: SPD_very_low,
-    color: [125, 200, 255],
+    color: [255, 150, 0], // orange
     shootInterval: ShootSPD_fast,
     bulletSpeed: bulletSpeed_normal,
     points: 100,
@@ -55,7 +55,7 @@ const ENEMY_STATS = {
     size: 25,
     health: HP_medium,
     speed: SPD_low,
-    color: [200, 200, 0],
+    color: [255, 255, 0], // yellow
     shootInterval: ShootSPD_normal,
     bulletSpeed: bulletSpeed_fast,
     points: 100,
@@ -66,7 +66,7 @@ const ENEMY_STATS = {
     size: 25,
     health: HP_very_low,
     speed: SPD_low,
-    color: [200, 120, 50],
+    color: [0, 255, 0], // green
     shootInterval: ShootSPD_low, // Added default
     bulletSpeed: bulletSpeed_normal, // Added default
     points: 100,
@@ -77,7 +77,7 @@ const ENEMY_STATS = {
     size: 25,
     health: HP_low,
     speed: SPD_high,
-    color: [50, 0, 255],
+    color: [0, 0, 255], // blue
     shootInterval: ShootSPD_fast, // Added default
     bulletSpeed: bulletSpeed_fast, // Added default
     points: 100,
