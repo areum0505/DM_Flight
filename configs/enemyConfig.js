@@ -7,25 +7,19 @@ const HP_high = 7
 const HP_very_high = 10
 const HP_infinite = 10000
 
-// const ATK_very_low = 1
-// const ATK_low = 2
-// const ATK_medium = 3
-// const ATK_high = 4
-// const ATK_very_high = 5
-
 const SPD_very_low = 0.5
 const SPD_low = 0.7
 const SPD_medium = 1
 const SPD_high = 1.25
 const SPD_very_high = 1.5
 
-const ShootSPD_low = 180
-const ShootSPD_normal = 150
-const ShootSPD_fast = 100
+const ShootSPD_low = 120
+const ShootSPD_normal = 105
+const ShootSPD_fast = 85
 const ShootSPD_very_fast = 50
 
-const bulletSpeed_low = 1
-const bulletSpeed_normal = 2
+const bulletSpeed_low = 2
+const bulletSpeed_normal = 2.5
 const bulletSpeed_fast = 3
 
 
@@ -36,51 +30,51 @@ const ENEMY_STATS = {
 
   /** 초반부 몹 설정 **/
   earlyNormal_simple: {
-    size: 15,
+    size: 25,
     health: HP_very_low,
     speed: SPD_medium,
     color: [200, 100, 255],
-    shootInterval: ShootSPD_normal,
+    shootInterval: ShootSPD_low,
     bulletSpeed: bulletSpeed_normal,
     points: 100,
     ultimateGauge: 10,
   },
 
   earlyNormal_tank: {
-    size: 30,
+    size: 25,
     health: HP_medium,
     speed: SPD_very_low,
     color: [125, 200, 255],
-    shootInterval: ShootSPD_very_fast,
-    bulletSpeed: bulletSpeed_low,
-    points: 100,
-    ultimateGauge: 10,
-  },
-
-  earlyNormal_special: {
-    size: 30,
-    health: HP_medium,
-    speed: SPD_low,
-    color: [200, 200, 0],
-    shootInterval: ShootSPD_normal,
+    shootInterval: ShootSPD_fast,
     bulletSpeed: bulletSpeed_normal,
     points: 100,
     ultimateGauge: 10,
   },
 
+  earlyNormal_special: {
+    size: 25,
+    health: HP_medium,
+    speed: SPD_low,
+    color: [200, 200, 0],
+    shootInterval: ShootSPD_normal,
+    bulletSpeed: bulletSpeed_fast,
+    points: 100,
+    ultimateGauge: 10,
+  },
+
   earlyNormal_flock: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_very_low,
     speed: SPD_low,
     color: [200, 120, 50],
-    shootInterval: ShootSPD_normal, // Added default
+    shootInterval: ShootSPD_low, // Added default
     bulletSpeed: bulletSpeed_normal, // Added default
     points: 100,
     ultimateGauge: 10,
   },
 
   earlyNamed_flock: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_low,
     speed: SPD_high,
     color: [50, 0, 255],
@@ -93,7 +87,7 @@ const ENEMY_STATS = {
   /** 중반부 몹 설정 **/
 
   midNormal_simple: {
-    size: 30,
+    size: 25,
     health: HP_low,
     speed: SPD_medium,
     color: [200, 200, 255],
@@ -104,7 +98,7 @@ const ENEMY_STATS = {
   },
 
   midNormal_tank: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_very_low,
     speed: SPD_very_low,
     color: [200, 200, 255],
@@ -126,7 +120,7 @@ const ENEMY_STATS = {
   },
 
   midNormal_flock: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_very_low,
     speed: SPD_very_high,
     color: [200, 200, 255],
@@ -137,7 +131,7 @@ const ENEMY_STATS = {
   },
 
   midNamed_simple: {
-    size: 30,
+    size: 25,
     health: HP_medium,
     speed: SPD_low,
     color: [200, 200, 255],
@@ -159,7 +153,7 @@ const ENEMY_STATS = {
   },
 
   midNamed_flock: { // Added missing type
-    size: 30,
+    size: 25,
     health: HP_low,
     speed: SPD_very_high,
     color: [100, 100, 255],
@@ -172,7 +166,7 @@ const ENEMY_STATS = {
   /** 후반부 몹 설정 **/
 
   endNormal_simple: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_medium,
     speed: SPD_medium,
     color: [200, 200, 255],
@@ -183,7 +177,7 @@ const ENEMY_STATS = {
   },
 
   endNormal_tank: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_high,
     speed: SPD_very_low,
     color: [200, 200, 255],
@@ -194,7 +188,7 @@ const ENEMY_STATS = {
   },
 
   endNormal_special: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_medium,
     speed: SPD_medium,
     color: [200, 200, 255],
@@ -205,7 +199,7 @@ const ENEMY_STATS = {
   },
 
   endNormal_flock: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_very_low,
     speed: SPD_very_high,
     color: [200, 200, 255],
@@ -227,7 +221,7 @@ const ENEMY_STATS = {
   },
 
   endNamed_tank: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_very_high,
     speed: SPD_low,
     color: [200, 200, 255],
@@ -238,7 +232,7 @@ const ENEMY_STATS = {
   },
 
   endNamed_special: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_medium,
     speed: SPD_medium,
     color: [200, 200, 255],
@@ -249,7 +243,7 @@ const ENEMY_STATS = {
   },
 
   endNamed_flock: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_very_low,
     speed: SPD_very_high,
     color: [200, 200, 255],
@@ -260,7 +254,7 @@ const ENEMY_STATS = {
   },
 
   endNamed_special_1: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_infinite,
     speed: SPD_very_low,
     color: [200, 200, 255],
@@ -271,7 +265,7 @@ const ENEMY_STATS = {
   },
 
   endNamed_special_2: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_high,
     speed: SPD_medium,
     color: [200, 200, 255],
@@ -282,7 +276,7 @@ const ENEMY_STATS = {
   },
 
   endNamed_tank: { //*********** 보충 필요
-    size: 30,
+    size: 25,
     health: HP_very_high,
     speed: SPD_low,
     color: [200, 200, 255],
