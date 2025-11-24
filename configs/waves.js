@@ -5,7 +5,8 @@ const WAVES = [
   /********* 초반부: 0 ~ 7,200프레임 (2분) *********/
   ...(() => {
     const arr = [];
-    for (let frameCount = 0; frameCount <= 7200; frameCount++) {
+    //for (let frameCount = 0; frameCount <= 7200; frameCount++) {
+    for (let frameCount = 0; frameCount <= 1200; frameCount++) {
       if (frameCount % 350 === 0) {
         arr.push({
           triggerFrame: frameCount,
@@ -25,7 +26,7 @@ const WAVES = [
   // Boss Battle 1 (Overlord)
   {
     //triggerFrame: 7200,
-    triggerFrame: 2800,
+    triggerFrame: 1200,
     type: 'BOSS',
     bossType: 'OVERLOAD'
   },
@@ -33,7 +34,8 @@ const WAVES = [
   /********* 중반부 1: 7,200 ~ 10,800프레임 (1분) *********/
   ...(() => {
     const arr = [];
-    for (let frameCount = 7200; frameCount <= 10800; frameCount++) {
+    //for (let frameCount = 7200; frameCount <= 10800; frameCount++) {
+    for (let frameCount = 1200; frameCount <= 10800; frameCount++) {
       if (frameCount % 350 === 0) {
         arr.push({
           triggerFrame: frameCount,
