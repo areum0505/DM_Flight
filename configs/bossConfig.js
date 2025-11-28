@@ -33,5 +33,10 @@ const BOSS_STATS = {
       SIZE: 40,
       SHOOT_INTERVAL: 180, // 3초
     },
+  },
+  CANYON_ROCKER: { // 후반 보스 1 - 캐니언 록커
+    HEALTH: 100,
+    SIZE: 120,
+    ATTACK_COOLDOWN: 180, // 3초
   }
 };

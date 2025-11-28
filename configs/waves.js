@@ -6,7 +6,7 @@ const WAVES = [
   ...(() => {
     const arr = [];
     //for (let frameCount = 0; frameCount <= 7200; frameCount++) {
-    for (let frameCount = 0; frameCount <= 1200; frameCount++) {
+    for (let frameCount = 0; frameCount <= 900; frameCount++) {
       if (frameCount % 350 === 0) {
         arr.push({
           triggerFrame: frameCount,
@@ -26,16 +26,16 @@ const WAVES = [
   // Boss Battle 1 (Overlord)
   {
     //triggerFrame: 7200,
-    triggerFrame: 1200,
+    triggerFrame: 900,
     type: 'BOSS',
-    bossType: 'OVERLOAD'
+    bossType: 'CANYON_ROCKER'
   },
 
   /********* 중반부 1: 7,200 ~ 10,800프레임 (1분) *********/
   ...(() => {
     const arr = [];
     //for (let frameCount = 7200; frameCount <= 10800; frameCount++) {
-    for (let frameCount = 1200; frameCount <= 10800; frameCount++) {
+    for (let frameCount = 900; frameCount <= 1800; frameCount++) {
       if (frameCount % 350 === 0) {
         arr.push({
           triggerFrame: frameCount,
@@ -53,7 +53,7 @@ const WAVES = [
 
   // Boss Battle 2 (Carrier Shield)
   {
-    triggerFrame: 10800,
+    triggerFrame: 1800,
     type: 'BOSS',
     bossType: 'CARRIER_SHIELD'
   },
@@ -62,7 +62,7 @@ const WAVES = [
   ...(() => {
     const arr = [];
     // 보스 클리어 후 타이머가 10800부터 다시 시작되므로, 여기서부터 웨이브를 배치합니다.
-    for (let frameCount = 10800; frameCount <= 14400; frameCount++) {
+    for (let frameCount = 1800; frameCount <= 2700; frameCount++) {
       if (frameCount % 350 === 0) {
         arr.push({
           triggerFrame: frameCount,
@@ -79,10 +79,17 @@ const WAVES = [
     return arr;
   })(),
 
+  // 후반 보스 1 (Canyon Rocker)
+  {
+    triggerFrame: 2700,
+    type: 'BOSS',
+    bossType: 'CANYON_ROCKER'
+  },
+
   /********* 후반부: 14,400 ~ 18,000프레임 *********/
   ...(() => {
     const arr = [];
-    for (let frameCount = 14400; frameCount <= 18000; frameCount++) {
+    for (let frameCount = 2700; frameCount <= 3600; frameCount++) {
       if (frameCount % 500 === 0) {
         arr.push({
           triggerFrame: frameCount,

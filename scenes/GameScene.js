@@ -67,6 +67,9 @@ class GameScene {
       this.boss = new Overload(width / 2, 150);
     } else if (bossType === 'CARRIER_SHIELD') {
       this.boss = new CarrierShield(width / 2, 150);
+    } else if (bossType === 'CANYON_ROCKER') {
+      this.boss = new CanyonRocker(width / 2, 100);
+      this.player.x = width / 2;
     }
   }
 
