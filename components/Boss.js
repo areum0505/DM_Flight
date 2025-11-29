@@ -3,6 +3,7 @@ class Boss {
     this.x = x;
     this.y = y;
     this.health = health;
+    this.maxHealth = health;
     this.size = size;
   }
 
