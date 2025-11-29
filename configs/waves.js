@@ -23,12 +23,12 @@ const WAVES = [
     return arr;
   })(),
 
-  // Boss Battle 1 (Overlord)
+  // Boss Battle 1 (Overload)
   {
     //triggerFrame: 7200,
     triggerFrame: 900,
     type: 'BOSS',
-    bossType: 'OVERLORD'
+    bossType: 'OVERLOAD'
   },
 
   /********* 중반부 1: 7,200 ~ 10,800프레임 (1분) *********/
