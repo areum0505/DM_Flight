@@ -10,9 +10,19 @@ class Player {
     this.shootInterval = CONFIG.PLAYER.SHOOT_INTERVAL;
     this.bulletSpeed = CONFIG.BULLET.SPEED;
     this.weaponLevel = 1;
+
+    // Invincibility
+    this.isInvincible = false;
+    this.invincibilityDuration = 90; // 1.5 seconds at 60fps
+    this.invincibilityEndTime = 0;
   }
 
   move() {
+    // Handle invincibility timeout
+    if (this.isInvincible && frameCount > this.invincibilityEndTime) {
+      this.isInvincible = false;
+    }
+
     if (keyIsDown(LEFT_ARROW)) {
       this.x -= this.speed;
     }
@@ -27,10 +37,21 @@ class Player {
   }
 
   takeDamage() {
+    if (this.isInvincible) {
+      return;
+    }
+
     this.health--;
+    this.isInvincible = true;
+    this.invincibilityEndTime = frameCount + this.invincibilityDuration;
   }
 
   draw() {
+    // Blinking effect when invincible
+    if (this.isInvincible && frameCount % 10 < 5) {
+      return; // Skip drawing every few frames to create a blink effect
+    }
+
     fill(0);
     noStroke();
     ellipse(this.x, this.y, this.size);
