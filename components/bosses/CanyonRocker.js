@@ -5,9 +5,10 @@ class CanyonRocker extends Boss {
 
     this.phase = 1;
     this.isVulnerable = true;
-    this.attackCooldown = stats.ATTACK_COOLDOWN;
-    this.lastAttackFrame = 0;
     this.phase2StartTime = 0;
+
+    // Rockfall attack
+    this.lastRockfallFrame = 0;
 
     // 1페이즈: 협곡
     this.canyon = {
@@ -34,12 +35,15 @@ class CanyonRocker extends Boss {
     this.canyonY += this.canyonScrollSpeed;
     this.generateCanyon(this.phase === 2);
 
-    if (this.phase === 1) {
-      // 공격과 협곡 생성 패턴
-      if (frameCount - this.lastAttackFrame > this.attackCooldown) {
-        this.lastAttackFrame = frameCount;
-      }
-    } else if (this.phase === 2) {
+    // Rockfall attack logic
+    const currentRockfallCooldown = this.phase === 1 ? 90 : 45; // Faster rockfall in phase 2
+    if (frameCount - this.lastRockfallFrame > currentRockfallCooldown) {
+        this.lastRockfallFrame = frameCount;
+        this.rockfallAttack(enemyBullets);
+    }
+
+    // Phase-specific logic
+    if (this.phase === 2) {
       // 무적 상태 잠시 유지
       if (!this.isVulnerable && frameCount > this.phase2StartTime + 120) {
         this.isVulnerable = true;
@@ -48,6 +52,13 @@ class CanyonRocker extends Boss {
 
     // 협곡과 플레이어 충돌 처리
     this.checkCanyonCollision(player);
+  }
+
+  rockfallAttack(enemyBullets) {
+    const rockSize = this.phase === 1 ? 20 : 30; // Small rocks in P1, large in P2
+    const rockX = random(width); // Random X position at the top
+    const rock = new FallingRock(rockX, 0, rockSize);
+    enemyBullets.push(rock);
   }
 
   // 협곡 생성
@@ -162,4 +173,3 @@ class CanyonRocker extends Boss {
     return false;
   }
 }
-
