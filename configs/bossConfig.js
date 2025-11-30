@@ -38,5 +38,14 @@ const BOSS_STATS = {
     HEALTH: 100,
     SIZE: 120,
     ATTACK_COOLDOWN: 180, // 3초
+  },
+  OMEGA_SYSTEM: { // 후반 보스 2 - 오메가 시스템
+    HEALTH: 150,
+    SIZE: 150, // Added for consistency with Boss constructor
+    WIDTH: 150,
+    HEIGHT: 150,
+    SMALL_PLANE_HEALTH: 5,
+    SMALL_PLANE_SIZE: 20, // Added for consistency
+    SHIELD_HEALTH: 100,
   }
 };

@@ -69,14 +69,24 @@ class GameScene {
       this.boss = new CarrierShield(width / 2, 150);
     } else if (bossType === 'CANYON_ROCKER') {
       this.boss = new CanyonRocker(width / 2, 100);
+    } else if (bossType === 'OMEGA_SYSTEM') {
+      this.boss = new OmegaSystem(this, width / 2, 100);
     }
   }
 
   updateGameState() {
     // Check boss death
-    if (this.boss && this.boss.health <= 0) {
-      this.boss = null;
-      this.spawnManager.resume();
+    if (this.boss && this.boss.isDefeated) {
+      // Check if the defeated boss is the final boss
+      if (this.boss instanceof OmegaSystem) {
+        this.boss = null;
+        this.sceneManager.goTo('gameClear');
+      } else {
+        // It's a normal boss, so resume the waves
+        this.boss = null;
+        this.spawnManager.resume();
+      }
+      return; // Stop further game state updates this frame
     }
 
     if (this.spawnManager.isComplete() && !this.boss && this.enemies.length === 0) {
