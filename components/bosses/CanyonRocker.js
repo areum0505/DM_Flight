@@ -3,6 +3,7 @@ class CanyonRocker extends Boss {
     const stats = BOSS_STATS.CANYON_ROCKER;
     super(x, y, stats.HEALTH, stats.SIZE);
 
+    this.isDefeated = false;
     this.phase = 1; // 현재 보스 페이즈 (1 또는 2)
     this.isVulnerable = true; // 현재 무적 상태 여부 (true: 피격 가능, false: 무적)
     this.phase2StartTime = 0; // 2페이즈 시작 시간 (프레임)
@@ -214,6 +215,9 @@ class CanyonRocker extends Boss {
       bullet.y < this.y + halfSize
     ) {
       this.health--;
+      if (this.health <= 0) {
+          this.isDefeated = true;
+      }
       return true;
     }
 

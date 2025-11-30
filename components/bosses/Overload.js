@@ -3,6 +3,7 @@ class Overload extends Boss {
     const stats = BOSS_STATS.OVERLOAD;
     super(x, y, stats.HEALTH, stats.SIZE);
 
+    this.isDefeated = false;
     this.isVulnerable = false;
     this.phase = 1;
     this.turrets = [];
@@ -105,6 +106,9 @@ class Overload extends Boss {
     if (this.isVulnerable) {
       if (dist(bullet.x, bullet.y, this.x, this.y) < this.size / 2) {
         this.health--;
+        if (this.health <= 0) {
+            this.isDefeated = true;
+        }
         return true;
       }
     } else {

@@ -12,5 +12,6 @@ const CONFIG = {
   BULLET: {
     SIZE: 20,
     SPEED: 10,
+    DAMAGE: 1, // Default damage for bullets
   },
 };

@@ -24,7 +24,7 @@ class CarrierShield extends Boss {
     this.lastAttackFrame = 0;
     this.speed = stats.SPEED;
     this.direction = createVector(this.speed, 0);
-    this.isDead = false;
+    this.isDefeated = false;
     this.y = this.height / 2; // Set initial y position
   }
 
@@ -52,8 +52,8 @@ class CarrierShield extends Boss {
       this.lastAttackFrame = frameCount;
     }
     
-    if (this.health <= 0 && !this.isDead) {
-        this.isDead = true;
+    if (this.health <= 0 && !this.isDefeated) {
+        this.isDefeated = true;
         this.onDeath(enemyBullets, player);
     }
   }

@@ -7,6 +7,7 @@ class Bullet {
     this.vel = vel;
     this.target = target;
     this.speed = speed;
+    this.damage = CONFIG.BULLET.DAMAGE; // Added damage property
     this.homingDuration = 60; // Homing for 1 second
     this.creationTime = frameCount;
     this.color = color(255, 204, 0); // Default yellow
