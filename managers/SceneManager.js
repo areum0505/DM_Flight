@@ -4,6 +4,7 @@ class SceneManager {
     this.scenes = {
       start: new StartScene(this, ASSETS),
       game: new GameScene(this, ASSETS),
+      tutorial: new TutorialScene(this, ASSETS), // Add tutorial scene here
       gameOver: new GameOverScene(this, ASSETS),
       gameClear: new GameClearScene(this, ASSETS),
     };
