@@ -4,17 +4,23 @@ const GameState = {
 };
 
 class GameScene {
-  constructor(sceneManager, backgroundImages) {
+  constructor(sceneManager, backgroundImages, itemImages, playerImage, playerBulletImage, enemyBulletImage) {
     this.sceneManager = sceneManager;
     this.backgroundImages = backgroundImages;
+    this.itemImages = itemImages;
+    this.playerImage = playerImage;
+    this.playerBulletImage = playerBulletImage;
+    this.enemyBulletImage = enemyBulletImage;
     this.reset();
   }
 
   reset() {
-    this.player = new Player(width / 2, height - (CONFIG.PLAYER.SIZE + 20));
+    this.player = new Player(width / 2, height - (CONFIG.PLAYER.SIZE + 20), this.playerImage, this.playerBulletImage);
     this.bullets = [];
     this.enemyBullets = [];
     this.enemies = [];
+    this.items = [];
+    this.score = 0;
 
     this.spawnManager = new SpawnManager();
     this.boss = null;
@@ -25,6 +31,8 @@ class GameScene {
 
   draw() {
     this.drawBackground();
+
+    this.items.forEach(i => i.draw());
     this.player.draw();
     this.bullets.forEach(b => b.draw());
     this.enemyBullets.forEach(b => b.draw());
@@ -32,15 +40,35 @@ class GameScene {
     if (this.boss) this.boss.draw();
 
     this.drawHealthUI();
+    this.drawScore();
     this.update();
 
     // Draw Frame Count (Last to ensure visibility)
-    push();
-    fill(0);
-    textSize(12);
-    textAlign(LEFT, TOP);
-    text(`Frame: ${frameCount}`, 10, 50);
-    pop();
+    // push();
+    // fill(0);
+    // textSize(12);
+    // textAlign(LEFT, TOP);
+    // text(`Frame: ${this.spawnManager.waveTimer}`, 10, 50);
+    // pop();
+  }
+
+  update() {
+    this.player.move();
+    this.handleBullets();
+    this.handleEnemies();
+    this.handleShooting();
+    this.updateItems();
+    this.updateGameState();
+
+    this.spawnManager.update(this.enemies, this);
+    if (this.boss) this.boss.update(this.player, this.enemyBullets, this.enemyBulletImage);
+
+    this.checkCollisions();
+    this.checkItemCollisions();
+
+    if (this.player.health <= 0) {
+      this.sceneManager.goTo('gameOver');
+    }
   }
 
   drawBackground() {
@@ -62,20 +90,49 @@ class GameScene {
     }
   }
 
-  update() {
-    this.player.move();
-    this.handleBullets();
-    this.handleEnemies();
-    this.handleShooting();
-    this.updateGameState();
+  drawScore() {
+    fill(0);
+    textSize(20);
+    textAlign(RIGHT, TOP);
+    text(`Score: ${this.score}`, width - 20, 20);
+  }
 
-    this.spawnManager.update(this.enemies, this);
-    if (this.boss) this.boss.update(this.player, this.enemyBullets);
+  updateItems() {
+    for (let i = this.items.length - 1; i >= 0; i--) {
+      this.items[i].move();
+      if (this.items[i].isOffScreen()) {
+        this.items.splice(i, 1);
+      }
+    }
+  }
 
-    this.checkCollisions();
+  spawnItems(deadEnemy) {
+    const { x, y, type } = deadEnemy;
 
-    if (this.player.health <= 0) {
-      this.sceneManager.goTo('gameOver');
+    // Power-up spawn (50% chance for testing)
+    if (random() < 0.5) {
+      this.items.push(new PowerUpItem(x, y, this.itemImages.powerup));
+      return; // Only spawn one item type at a time
+    }
+
+    // Coin spawn
+    const timer = this.spawnManager.waveTimer;
+    let coinChance;
+    if (timer < 900) coinChance = 0.7;
+    else if (timer < 2700) coinChance = 0.5;
+    else coinChance = 0.4;
+
+    if (random() < coinChance) {
+      let coinCount = 0;
+      if (type.includes('Normal')) coinCount = 1;
+      else if (type.includes('Named')) coinCount = 3;
+
+      for (let i = 0; i < coinCount; i++) {
+        // Spawn coins with a slight random offset
+        const offsetX = x + random(-15, 15);
+        const offsetY = y + random(-15, 15);
+        this.items.push(new Coin(offsetX, offsetY, this.itemImages.coin));
+      }
     }
   }
 
@@ -92,23 +149,27 @@ class GameScene {
   }
 
   updateGameState() {
-    // Check boss death
     if (this.boss && this.boss.isDefeated) {
-      // Check if the defeated boss is the final boss
+      // Spawn items for defeating a boss
+      this.items.push(new HealthItem(this.boss.x, this.boss.y, this.itemImages.health));
+      for (let i = 0; i < 5; i++) {
+        const offsetX = this.boss.x + random(-25, 25);
+        const offsetY = this.boss.y + random(-25, 25);
+        this.items.push(new Coin(offsetX, offsetY, this.itemImages.coin));
+      }
+      
       if (this.boss instanceof OmegaSystem) {
         this.boss = null;
         this.sceneManager.goTo('gameClear');
       } else {
-        // It's a normal boss, so resume the waves
         this.boss = null;
         this.spawnManager.resume();
       }
-      return; // Stop further game state updates this frame
+      return; 
     }
 
     if (this.spawnManager.isComplete() && !this.boss && this.enemies.length === 0) {
-      // Game Clear logic could go here
-      console.log("Game Clear!");
+      console.log("Wave Clear!");
     }
   }
 
@@ -125,7 +186,7 @@ class GameScene {
 
   handleEnemies() {
     for (let i = this.enemies.length - 1; i >= 0; i--) {
-      this.enemies[i].update(this.enemyBullets);
+      this.enemies[i].update(this.enemyBullets, this.enemyBulletImage);
       if (this.enemies[i].y > height + this.enemies[i].size) {
         this.enemies.splice(i, 1);
       }
@@ -142,9 +203,12 @@ class GameScene {
     // Player bullets vs Enemies
     for (let i = this.bullets.length - 1; i >= 0; i--) {
       for (let j = this.enemies.length - 1; j >= 0; j--) {
-        if (this.isColliding(this.bullets[i], this.enemies[j])) {
+        if (this.isCollidingCircles(this.bullets[i], this.enemies[j])) {
           this.enemies[j].takeDamage();
-          if (this.enemies[j].health <= 0) this.enemies.splice(j, 1);
+          if (this.enemies[j].health <= 0) {
+            this.spawnItems(this.enemies[j]); // Spawn items
+            this.enemies.splice(j, 1);
+          }
           this.bullets.splice(i, 1);
           break;
         }
@@ -163,7 +227,7 @@ class GameScene {
 
     // Enemy bullets vs Player
     for (let i = this.enemyBullets.length - 1; i >= 0; i--) {
-      if (this.isCollidingCircles(this.player, this.enemyBullets[i])) {
+      if (this.isCollidingRectCircle(this.player, this.enemyBullets[i])) {
         this.player.takeDamage();
         this.enemyBullets.splice(i, 1);
       }
@@ -171,30 +235,56 @@ class GameScene {
 
     // Player vs Enemies
     for (let i = this.enemies.length - 1; i >= 0; i--) {
-      if (this.isColliding(this.player, this.enemies[i])) {
+      if (this.isCollidingRectCircle(this.player, this.enemies[i])) {
         this.player.takeDamage();
         this.enemies.splice(i, 1);
       }
     }
 
     // Player vs Boss
-    if (this.boss && this.isColliding(this.player, this.boss)) {
+    if (this.boss && this.isCollidingRectCircle(this.player, this.boss)) {
       this.player.takeDamage();
     }
   }
-
-  isColliding(circle, rect) {
-    const circleDistance = { x: abs(circle.x - rect.x), y: abs(circle.y - rect.y) };
-    if (circleDistance.x > (rect.size / 2 + circle.size / 2)) return false;
-    if (circleDistance.y > (rect.size / 2 + circle.size / 2)) return false;
-    if (circleDistance.x <= (rect.size / 2)) return true;
-    if (circleDistance.y <= (rect.size / 2)) return true;
-    const cornerDistance_sq = pow(circleDistance.x - rect.size / 2, 2) + pow(circleDistance.y - rect.size / 2, 2);
-    return (cornerDistance_sq <= pow(circle.size / 2, 2));
+  
+  checkItemCollisions() {
+      for (let i = this.items.length - 1; i >= 0; i--) {
+          const item = this.items[i];
+          if (this.isCollidingRectCircle(this.player, item)) {
+              // Apply item effect
+              switch(item.type) {
+                  case 'coin':
+                      this.score += item.value;
+                      break;
+                  case 'health':
+                      if (this.player.health < CONFIG.PLAYER.HEALTH) {
+                          this.player.health += item.healthValue;
+                      }
+                      break;
+                  case 'powerup':
+                      this.player.increasePower();
+                      break;
+              }
+              // Remove item
+              this.items.splice(i, 1);
+          }
+      }
   }
 
   isCollidingCircles(circle1, circle2) {
     return dist(circle1.x, circle1.y, circle2.x, circle2.y) < (circle1.size / 2 + circle2.size / 2);
+  }
+
+  isCollidingRectCircle(rect, circle) {
+    // Find the closest point on the rect to the center of the circle
+    const closestX = constrain(circle.x, rect.x - rect.width / 2, rect.x + rect.width / 2);
+    const closestY = constrain(circle.y, rect.y - rect.height / 2, rect.y + rect.height / 2);
+
+    // Calculate the distance between the closest point and the circle's center
+    const distance = dist(circle.x, circle.y, closestX, closestY);
+
+    // If the distance is less than the circle's radius, they are colliding
+    return distance < circle.size / 2;
   }
 
   handleInput(keyCode) { }

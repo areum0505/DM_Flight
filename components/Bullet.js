@@ -1,9 +1,12 @@
 class Bullet {
-  constructor(x, y, type = 'default', vel = null, target = null, speed = CONFIG.BULLET.SPEED) {
+  constructor(x, y, type = 'default', bulletImage = null, vel = null, target = null, speed = CONFIG.BULLET.SPEED) {
     this.x = x;
     this.y = y;
     this.type = type;
-    this.size = CONFIG.BULLET.SIZE;
+    this.bulletImage = bulletImage; // Store the image
+    this.size = CONFIG.BULLET.SIZE; // Default size for circle collision
+    this.width = 10; // Default width for image
+    this.height = 20; // Default height for image
     this.vel = vel;
     this.target = target;
     this.speed = speed;
@@ -19,6 +22,12 @@ class Bullet {
       this.size = 15; // Larger size
       this.color = color(148, 0, 211); // Purple color
     }
+    if (this.type === 'player' || this.type === 'enemy') {
+      // Adjust size for collision if needed, but 'size' is used for circle collision
+      // For image drawing, width and height will be used
+      this.size = 10; // Making image-based bullets a small circle for collision purposes
+    }
+
 
     if (this.type === 'homing' && this.target) {
       const angle = atan2(this.target.y - this.y, this.target.x - this.x);
@@ -43,7 +52,13 @@ class Bullet {
   }
 
   draw() {
-    if (this.type === 'laser') {
+    if ((this.type === 'player' || this.type === 'enemy') && this.bulletImage) {
+      push();
+      imageMode(CENTER);
+      image(this.bulletImage, this.x, this.y, this.width, this.height);
+      pop();
+    }
+    else if (this.type === 'laser') {
       push();
       stroke(255, 0, 0);
       strokeWeight(4);

@@ -61,7 +61,7 @@ class CarrierShield extends Boss {
   onDeath(enemyBullets, player) {
     // Fires 5 fast homing missiles
     for (let i = 0; i < 5; i++) {
-        const bullet = new Bullet(this.x, this.y, 'homing', null, player, 7);
+        const bullet = new Bullet(this.x, this.y, 'homing', null, null, player, 7);
         enemyBullets.push(bullet);
     }
   }
@@ -75,7 +75,7 @@ class CarrierShield extends Boss {
     for (let i = -1; i <= 1; i++) {
       const angle = angleToPlayer + i * 0.2;
       const vel = p5.Vector.fromAngle(angle, 4);
-      const bullet = new Bullet(this.x, this.y, 'default', vel);
+      const bullet = new Bullet(this.x, this.y, 'default', null, vel);
       enemyBullets.push(bullet);
     }
   }
@@ -83,7 +83,7 @@ class CarrierShield extends Boss {
   onTurretDestroyed(enemyBullets, player) {
     // Fires 2 fast homing missiles
     for (let i = 0; i < 2; i++) {
-        const bullet = new Bullet(this.x, this.y, 'homing', null, player, 7);
+        const bullet = new Bullet(this.x, this.y, 'homing', null, null, player, 7);
         enemyBullets.push(bullet);
     }
   }
@@ -175,7 +175,7 @@ class CarrierTurret {
 
   fireLaser(enemyBullets) {
     const vel = p5.Vector.fromAngle(this.laserInfo.targetAngle, 10);
-    const bullet = new Bullet(this.x, this.y, 'laser', vel);
+    const bullet = new Bullet(this.x, this.y, 'laser', null, vel);
     enemyBullets.push(bullet);
   }
 

@@ -2,6 +2,9 @@ let sceneManager;
 let backgroundImages = {};
 let itemImages = {};
 let playerImage;
+let playerBulletImage;
+
+let enemyBulletImage;
 
 function preload() {
   backgroundImages.start = loadImage('ui/images/background/background_early.jpeg');
@@ -13,11 +16,13 @@ function preload() {
   itemImages.powerup = loadImage('ui/images/item/item_powerup.png');
 
   playerImage = loadImage('ui/images/player/player.png');
+  playerBulletImage = loadImage('ui/images/player/bullet.png');
+  enemyBulletImage = loadImage('ui/images/enemy/bullet.png');
 }
 
 function setup() {
   createCanvas(CONFIG.CANVAS.WIDTH, CONFIG.CANVAS.HEIGHT);
-  sceneManager = new SceneManager(backgroundImages, itemImages, playerImage);
+  sceneManager = new SceneManager(backgroundImages, itemImages, playerImage, playerBulletImage, enemyBulletImage);
 }
 
 function draw() {
