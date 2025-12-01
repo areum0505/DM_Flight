@@ -1,9 +1,10 @@
 class Enemy {
-  constructor(x, y, type) {
+  constructor(x, y, type, ASSETS) {
     const stats = ENEMY_STATS[type];
     this.x = x;
     this.y = y;
     this.type = type;
+    this.ASSETS = ASSETS; // Store ASSETS object
     this.size = stats.size;
     this.health = stats.health;
     this.speed = stats.speed;
@@ -14,7 +15,7 @@ class Enemy {
     this.ultimateGauge = stats.ultimateGauge;
   }
 
-  update(enemyBullets) {
+  update(enemyBullets) { // Removed enemyBulletImage from parameter
     this.move();
     if (this.shootInterval && frameCount % this.shootInterval === 0) {
       this.shoot(enemyBullets);
@@ -26,9 +27,9 @@ class Enemy {
     this.y += this.speed;
   }
 
-  shoot(enemyBullets) {
+  shoot(enemyBullets) { // Removed enemyBulletImage from parameter
     if (this.bulletSpeed) {
-      enemyBullets.push(new Bullet(this.x, this.y, this.bulletSpeed));
+      enemyBullets.push(new Bullet(this.x, this.y, 'enemy', this.ASSETS.enemyBulletImage, null, null, this.bulletSpeed));
     }
   }
 

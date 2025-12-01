@@ -1,3 +1,4 @@
+
 // 색상 정의 (전역 사용)
 const COLOR_BG_DARK = '#1f283c'; 
 const COLOR_NEON_BLUE = '#00f2ff'; 
@@ -50,9 +51,9 @@ function mouseMoved() {
    ========================================================================== */
 
 class StartScene {
-  constructor(sceneManager) {
+  constructor(sceneManager, ASSETS) {
     this.sceneManager = sceneManager;
-    
+
     const btnW = 140; 
     const btnH = 50; 
     const btnGap = 15;
@@ -118,13 +119,10 @@ class StartScene {
     this._drawButton(this.buttons.start);
     this._drawButton(this.buttons.tutorial);
     this._drawButton(this.buttons.options);
+
+    this.ASSETS = ASSETS; 
   }
 
-  handleInput(keyCode) {
-    if (keyCode === 32) { // SPACE
-      this.sceneManager.goTo('game');
-    }
-  }
 
   handleMousePressed() {
     for (let key in this.buttons) {
