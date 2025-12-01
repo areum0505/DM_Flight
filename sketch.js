@@ -5,7 +5,8 @@ function preload() {
   ASSETS.backgrounds = {
     start: loadImage('ui/images/background/background_early.jpeg'),
     mid: loadImage('ui/images/background/background_mid.jpeg'),
-    end: loadImage('ui/images/background/background_late.jpeg')
+    end: loadImage('ui/images/background/background_late.jpeg'),
+    main: loadImage('ui/images/background/main.png') // Added this line
   };
 
   ASSETS.items = {
@@ -44,31 +45,79 @@ function preload() {
 
 function setup() {
   createCanvas(CONFIG.CANVAS.WIDTH, CONFIG.CANVAS.HEIGHT);
-  pixelDensity(1); 
-  sceneManager = new SceneManager(ASSETS);
-  textAlign(CENTER, CENTER); 
-  textSize(16);             
-  noSmooth();               
+  pixelDensity(1);
+
+  // Add try-catch block for sceneManager initialization
+  try {
+    sceneManager = new SceneManager(ASSETS);
+
+  } catch (error) {
+
+    // Optionally display an error message on screen
+    // textSize(20);
+    // fill(255, 0, 0);
+    // text("Error: SceneManager failed to initialize. Check console.", width / 2, height / 2);
+    // noLoop(); // Stop draw loop if critical error
+  }
+
+  textAlign(CENTER, CENTER);
+  textSize(16);
+  noSmooth();
 }
 
 function draw() {
-  sceneManager.draw();
+  // Check if sceneManager is valid before using it
+  if (sceneManager) {
+    sceneManager.draw();
+  } else {
+    // Fallback if sceneManager is not initialized
+    background(0); // Black background
+    fill(255, 0, 0); // Red text
+    textSize(20);
+    text("Error: Game not initialized. Check console.", width / 2, height / 2);
+  }
 }
 
 function keyPressed() {
-  sceneManager.handleInput(keyCode);
+  // Check if sceneManager is valid
+  if (sceneManager && sceneManager.handleInput) {
+    sceneManager.handleInput(keyCode);
+  } else {
+
+  }
 }
 
 function mousePressed() {
-  if (sceneManager.currentScene && sceneManager.currentScene.handleMousePressed) {
-    sceneManager.currentScene.handleMousePressed();
+  if (!sceneManager) {
+
+    return;
   }
+  if (!sceneManager.currentScene) {
+
+    return;
+  }
+  if (typeof sceneManager.currentScene.handleMousePressed !== 'function') {
+
+    return;
+  }
+  sceneManager.currentScene.handleMousePressed();
 }
 
 function mouseMoved() {
-  if (sceneManager.currentScene && sceneManager.currentScene.handleMouseMoved) {
-    sceneManager.currentScene.handleMouseMoved();
-  } else {
+  if (!sceneManager) {
+
     cursor(ARROW);
+    return;
   }
+  if (!sceneManager.currentScene) {
+
+    cursor(ARROW);
+    return;
+  }
+  if (typeof sceneManager.currentScene.handleMouseMoved !== 'function') {
+
+    cursor(ARROW);
+    return;
+  }
+  sceneManager.currentScene.handleMouseMoved();
 }

@@ -1,13 +1,18 @@
 class SceneManager {
   constructor(ASSETS) {
     this.ASSETS = ASSETS; // Store ASSETS globally for the manager and scenes
-    this.scenes = {
-      start: new StartScene(this, ASSETS),
-      game: new GameScene(this, ASSETS),
-      tutorial: new TutorialScene(this, ASSETS), // Add tutorial scene here
-      gameOver: new GameOverScene(this, ASSETS),
-      gameClear: new GameClearScene(this, ASSETS),
-    };
+    try {
+      this.scenes = {
+        start: new StartScene(this, ASSETS),
+        game: new GameScene(this, ASSETS),
+        tutorial: new TutorialScene(this, ASSETS),
+        options: new OptionsScene(this, ASSETS),
+        gameOver: new GameOverScene(this, ASSETS),
+        gameClear: new GameClearScene(this, ASSETS),
+      };
+    } catch (error) {
+      console.error("Error instantiating a scene in SceneManager constructor:", error);
+    }
     this.currentScene = this.scenes.start; // 시작은 'start' 씬
   }
 

@@ -26,6 +26,8 @@ class GameScene {
   }
 
   draw() {
+    background(0); // Explicitly clear the canvas each frame
+    imageMode(CORNER); // Ensure background images are drawn from the top-left corner
     this.drawBackground();
 
     this.items.forEach(i => i.draw());
@@ -164,7 +166,7 @@ class GameScene {
     }
 
     if (this.spawnManager.isComplete() && !this.boss && this.enemies.length === 0) {
-      console.log("Wave Clear!");
+
     }
   }
 
@@ -283,4 +285,14 @@ class GameScene {
   }
 
   handleInput(keyCode) { }
+
+  handleMousePressed() {
+    // GameScene likely doesn't have custom mouse pressed logic, or it's handled by internal components.
+    // For now, an empty method to prevent errors.
+  }
+
+  handleMouseMoved() {
+    // GameScene likely doesn't have custom mouse movement, so default to arrow
+    cursor(ARROW);
+  }
 }

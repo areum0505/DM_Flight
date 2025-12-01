@@ -5,6 +5,7 @@ class GameOverScene {
     }
 
     draw() {
+        background(this.ASSETS.colors.BG_DARK); // Added this
         fill(255, 0, 0);
         textAlign(CENTER, CENTER);
         textSize(50);

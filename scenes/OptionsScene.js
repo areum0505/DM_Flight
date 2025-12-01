@@ -9,4 +9,7 @@ class OptionsScene {
     textSize(16); text('Press ESC to go back to Menu', width / 2, height / 2 + 40);
   }
   handleInput(keyCode) { if (keyCode === ESCAPE) { this.sceneManager.goTo('start'); } }
+  handleMouseMoved() {
+    cursor(ARROW); // Default behavior
+  }
 }

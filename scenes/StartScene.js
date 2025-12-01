@@ -3,28 +3,28 @@ class StartScene {
     this.sceneManager = sceneManager;
     this.ASSETS = ASSETS;
 
-    const btnW = 140; 
-    const btnH = 50; 
-    const btnGap = 15;
+    const btnW = 180; 
+    const btnH = 60; 
+    const btnGap = 20;
 
     this.buttons = {
       start: {
         x: (CONFIG.CANVAS.WIDTH - btnW) / 2,
-        y: 400, w: btnW, h: btnH,
+        y: 450, w: btnW, h: btnH,
         label: 'GAME START',
         baseColor: this.ASSETS.colors.RED_BTN_BASE, textColor: this.ASSETS.colors.RED_BTN_TEXT,
         targetScene: 'game'
       },
       tutorial: {
         x: (CONFIG.CANVAS.WIDTH - btnW) / 2,
-        y: 400 + btnH + btnGap, w: btnW, h: btnH,
+        y: 450 + btnH + btnGap, w: btnW, h: btnH,
         label: 'TUTORIAL',
         baseColor: this.ASSETS.colors.BLUE_BTN_BASE, textColor: this.ASSETS.colors.BLUE_BTN_TEXT,
         targetScene: 'tutorial'
       },
       options: {
         x: (CONFIG.CANVAS.WIDTH - btnW) / 2, 
-        y: 400 + (btnH + btnGap) * 2, w: btnW, h: btnH,
+        y: 450 + (btnH + btnGap) * 2, w: btnW, h: btnH,
         label: 'SETTINGS',
         baseColor: this.ASSETS.colors.BLUE_BTN_BASE, textColor: this.ASSETS.colors.BLUE_BTN_TEXT,
         targetScene: 'options' 
@@ -48,21 +48,11 @@ class StartScene {
     noStroke();
     fill(this.ASSETS.colors.BLUE); 
     textStyle(BOLD);
-    textSize(38); 
-    text('DM FLIGHT', width / 2, 80); 
+    textSize(48); 
+    text('DM FLIGHT', width / 2, 90); 
 
-    fill(this.ASSETS.colors.PREVIEW_BG);
-    stroke(this.ASSETS.colors.PREVIEW_BORDER);
-    strokeWeight(2);
-    rectMode(CENTER); 
-    rect(width / 2, 240, 300, 180, 5); 
-    
-    noStroke();
-    fill(150);
-    textStyle(NORMAL);
-    textSize(14);
-    text('[ Image Placeholder ]', width / 2, 240);
-
+    imageMode(CENTER);
+    image(this.ASSETS.backgrounds.main, width / 2, 270, 350, 210);
     rectMode(CORNER); 
 
     this._drawButton(this.buttons.start);
@@ -122,7 +112,7 @@ class StartScene {
     fill(btn.textColor);
     noStroke();
     textStyle(BOLD); 
-    textSize(14);    
+    textSize(18);    
     text(btn.label, btn.x + btn.w / 2, btn.y + btn.h / 2);
   }
 

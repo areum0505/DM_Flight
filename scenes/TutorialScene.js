@@ -12,14 +12,16 @@ class TutorialScene {
     this.bullets = [];
     this.enemies = [];
     this.lastShotTime = 0;
+    this.spawnEnemies(); // Moved here
     this.shootDelay = 200; 
   }
 
   onEnter() {
-    console.log("TutorialScene 진입!");
     this.playerX = CONFIG.CANVAS.WIDTH / 2;
-    this.bullets = []; 
-    this.spawnEnemies(); 
+    this.bullets = [];
+    this.enemies = []; // Ensure enemies are cleared
+    this.lastShotTime = 0; // Reset shot timer
+    this.spawnEnemies(); // Keep here for re-entering
     cursor(ARROW);
   }
 
@@ -111,7 +113,6 @@ class TutorialScene {
             }
         }
     }
-
     // 5. 완료 메시지
     if (activeEnemiesCount === 0) {
         fill(this.ASSETS.colors.WHITE);
