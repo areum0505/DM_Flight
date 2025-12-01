@@ -1,7 +1,8 @@
 class Overload extends Boss {
-  constructor(x, y) {
+  constructor(x, y, ASSETS) {
     const stats = BOSS_STATS.OVERLOAD;
     super(x, y, stats.HEALTH, stats.SIZE);
+    this.ASSETS = ASSETS; // Store ASSETS
 
     this.isDefeated = false;
     this.isVulnerable = false;
@@ -15,7 +16,7 @@ class Overload extends Boss {
     ];
 
     this.turretPositions.forEach(pos => {
-      this.turrets.push(new Turret(this.x + pos.x, this.y + pos.y, this));
+      this.turrets.push(new Turret(this.x + pos.x, this.y + pos.y, this, this.ASSETS));
     });
 
     this.attackCooldown = stats.ATTACK_COOLDOWN;
@@ -59,7 +60,7 @@ class Overload extends Boss {
     for (let i = 0; i < count; i++) {
         const angle = angleToPlayer + (i - floor(count/2)) * 0.2;
         const vel = p5.Vector.fromAngle(angle, 4);
-        const bullet = new Bullet(this.x, this.y, 'default', null, vel);
+        const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel); // Pass enemyBulletImage
         bullet.size = 30;
         enemyBullets.push(bullet);
     }
@@ -124,13 +125,14 @@ class Overload extends Boss {
 }
 
 class Turret {
-  constructor(x, y, boss) {
+  constructor(x, y, boss, ASSETS) { // Accept ASSETS
     const turretStats = BOSS_STATS.OVERLOAD.TURRETS;
     this.x = x;
     this.y = y;
     this.size = turretStats.SIZE;
     this.health = turretStats.HEALTH;
     this.boss = boss;
+    this.ASSETS = ASSETS; // Store ASSETS
     this.lastShotFrame = 0;
     this.shootInterval = turretStats.SHOOT_INTERVAL;
   }
@@ -147,7 +149,7 @@ class Turret {
     for (let i = -1; i <= 1; i++) {
       const angle = angleToPlayer + i * 0.25;
       const vel = p5.Vector.fromAngle(angle, 5);
-      const bullet = new Bullet(this.x, this.y, 'default', null, vel);
+      const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel); // Pass enemyBulletImage
       enemyBullets.push(bullet);
     }
   }

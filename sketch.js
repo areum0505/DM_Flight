@@ -1,28 +1,28 @@
 let sceneManager;
-let backgroundImages = {};
-let itemImages = {};
-let playerImage;
-let playerBulletImage;
-
-let enemyBulletImage;
+let ASSETS = {}; // Global ASSETS object
 
 function preload() {
-  backgroundImages.start = loadImage('ui/images/background/background_early.jpeg');
-  backgroundImages.mid = loadImage('ui/images/background/background_mid.jpeg');
-  backgroundImages.end = loadImage('ui/images/background/background_late.jpeg');
+  ASSETS.backgrounds = {
+    start: loadImage('ui/images/background/background_early.jpeg'),
+    mid: loadImage('ui/images/background/background_mid.jpeg'),
+    end: loadImage('ui/images/background/background_late.jpeg')
+  };
 
-  itemImages.coin = loadImage('ui/images/item/item_coin.png');
-  itemImages.health = loadImage('ui/images/item/item_health.png');
-  itemImages.powerup = loadImage('ui/images/item/item_powerup.png');
+  ASSETS.items = {
+    coin: loadImage('ui/images/item/item_coin.png'),
+    health: loadImage('ui/images/item/item_health.png'), // This is for the item itself
+    powerup: loadImage('ui/images/item/item_powerup.png')
+  };
 
-  playerImage = loadImage('ui/images/player/player.png');
-  playerBulletImage = loadImage('ui/images/player/bullet.png');
-  enemyBulletImage = loadImage('ui/images/enemy/bullet.png');
+  ASSETS.playerImage = loadImage('ui/images/player/player.png');
+  ASSETS.playerBulletImage = loadImage('ui/images/player/bullet.png');
+  ASSETS.enemyBulletImage = loadImage('ui/images/enemy/bullet.png');
+  ASSETS.heartImage = loadImage('ui/images/item/item_health.png'); // Load for UI display
 }
 
 function setup() {
   createCanvas(CONFIG.CANVAS.WIDTH, CONFIG.CANVAS.HEIGHT);
-  sceneManager = new SceneManager(backgroundImages, itemImages, playerImage, playerBulletImage, enemyBulletImage);
+  sceneManager = new SceneManager(ASSETS);
 }
 
 function draw() {

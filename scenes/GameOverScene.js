@@ -1,6 +1,7 @@
 class GameOverScene {
-    constructor(sceneManager) {
+    constructor(sceneManager, ASSETS) {
         this.sceneManager = sceneManager;
+        this.ASSETS = ASSETS; // Store ASSETS for consistency
     }
 
     draw() {

@@ -1,9 +1,10 @@
 
 
 class OmegaSystem extends Boss {
-    constructor(game, x, y) {
+    constructor(game, x, y, ASSETS) { // Accept ASSETS
         const stats = BOSS_STATS.OMEGA_SYSTEM;
         super(x, y, stats.HEALTH, stats.SIZE); // Boss constructor expects health and size
+        this.ASSETS = ASSETS; // Store ASSETS
 
         this.game = game; // Re-assign this.game
         this.width = stats.WIDTH; // Keep width/height for rectangle drawing and laser
@@ -104,7 +105,7 @@ class OmegaSystem extends Boss {
                 const angleToPlayer = atan2(this.game.player.y - plane.y, this.game.player.x - plane.x);
                 const vx = this.smallPlaneBulletSpeed * cos(angleToPlayer);
                 const vy = this.smallPlaneBulletSpeed * sin(angleToPlayer);
-                this.game.enemyBullets.push(new Bullet(plane.x, plane.y, 'enemy', null, createVector(vx, vy), null, this.smallPlaneBulletSpeed));
+                this.game.enemyBullets.push(new Bullet(plane.x, plane.y, 'enemy', this.ASSETS.enemyBulletImage, createVector(vx, vy), null, this.smallPlaneBulletSpeed));
                 plane.fireTimer = this.smallPlaneFireRate;
             }
         });
@@ -138,7 +139,7 @@ class OmegaSystem extends Boss {
                 const randomType = namedEnemyTypes[Math.floor(Math.random() * namedEnemyTypes.length)];
                 const xPos = Math.random() * width;
                 const yPos = 0;
-                this.game.enemies.push(new Enemy(xPos, yPos, randomType));
+                this.game.enemies.push(new Enemy(xPos, yPos, randomType, this.ASSETS)); // Pass ASSETS
             }
         }
     }
@@ -158,7 +159,7 @@ class OmegaSystem extends Boss {
                 const angle = map(i, 0, 4, -PI / 6 + randomOffset, PI / 6 + randomOffset); // Spread over 30 degrees with random offset
                 const vx = this.mainBodyBulletSpeed * sin(angle);
                 const vy = this.mainBodyBulletSpeed * cos(angle);
-                this.game.enemyBullets.push(new Bullet(this.x, this.y + this.height / 2, 'enemy', null, createVector(vx, vy), null, this.mainBodyBulletSpeed));
+                this.game.enemyBullets.push(new Bullet(this.x, this.y + this.height / 2, 'enemy', this.ASSETS.enemyBulletImage, createVector(vx, vy), null, this.mainBodyBulletSpeed));
             }
         }
 
@@ -221,7 +222,7 @@ class OmegaSystem extends Boss {
                     const angle = (TWO_PI / 10) * j;
                     const vx = 4 * cos(angle); // Speed 4
                     const vy = 4 * sin(angle);
-                    this.game.enemyBullets.push(new Bullet(attack.x, attack.y, 'enemy', null, createVector(vx, vy), null, 4));
+                    this.game.enemyBullets.push(new Bullet(attack.x, attack.y, 'enemy', this.ASSETS.enemyBulletImage, createVector(vx, vy), null, 4));
                 }
 
                 attack.burstsLeft--;

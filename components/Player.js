@@ -1,9 +1,8 @@
 class Player {
-  constructor(x, y, playerImage, playerBulletImage) {
+  constructor(x, y, ASSETS) {
     this.x = x;
     this.y = y;
-    this.image = playerImage;
-    this.playerBulletImage = playerBulletImage;
+    this.ASSETS = ASSETS; // Store ASSETS object
     this.width = 40;
     this.height = 60;
 
@@ -43,7 +42,7 @@ class Player {
 
       for (let i = 0; i < this.weaponLevel; i++) {
         const bulletX = this.weaponLevel === 1 ? this.x : startX + i * 10;
-        bullets.push(new Bullet(bulletX, this.y - this.height / 2, 'player', this.playerBulletImage, null, null, -this.bulletSpeed));
+        bullets.push(new Bullet(bulletX, this.y - this.height / 2, 'player', this.ASSETS.playerBulletImage, null, null, -this.bulletSpeed));
       }
     } else {
       // Logic for levels 6+: Mixed parallel and diagonal spread
@@ -54,7 +53,7 @@ class Player {
       const startX = this.x - spreadWidth / 2;
       for (let i = 0; i < baseWeaponLevel; i++) {
         const bulletX = baseWeaponLevel === 1 ? this.x : startX + i * 10;
-        bullets.push(new Bullet(bulletX, this.y - this.height / 2, 'player', this.playerBulletImage, null, null, -this.bulletSpeed));
+        bullets.push(new Bullet(bulletX, this.y - this.height / 2, 'player', this.ASSETS.playerBulletImage, null, null, -this.bulletSpeed));
       }
 
       // Fire the additional diagonal bullets
@@ -71,7 +70,7 @@ class Player {
             angle = initialAngle + (i / (diagonalBulletsCount - 1)) * totalDiagonalSpreadAngle;
           }
           const vel = p5.Vector.fromAngle(angle, this.bulletSpeed);
-          bullets.push(new Bullet(this.x, this.y - this.height / 2, 'player', this.playerBulletImage, vel, null, null));
+          bullets.push(new Bullet(this.x, this.y - this.height / 2, 'player', this.ASSETS.playerBulletImage, vel, null, null));
         }
       }
     }
@@ -99,7 +98,7 @@ class Player {
 
     push();
     imageMode(CENTER);
-    image(this.image, this.x, this.y, this.width, this.height);
+    image(this.ASSETS.playerImage, this.x, this.y, this.width, this.height);
     pop();
   }
 }

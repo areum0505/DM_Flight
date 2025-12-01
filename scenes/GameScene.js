@@ -4,25 +4,21 @@ const GameState = {
 };
 
 class GameScene {
-  constructor(sceneManager, backgroundImages, itemImages, playerImage, playerBulletImage, enemyBulletImage) {
+  constructor(sceneManager, ASSETS) {
     this.sceneManager = sceneManager;
-    this.backgroundImages = backgroundImages;
-    this.itemImages = itemImages;
-    this.playerImage = playerImage;
-    this.playerBulletImage = playerBulletImage;
-    this.enemyBulletImage = enemyBulletImage;
+    this.ASSETS = ASSETS; // Store ASSETS object
     this.reset();
   }
 
   reset() {
-    this.player = new Player(width / 2, height - (CONFIG.PLAYER.SIZE + 20), this.playerImage, this.playerBulletImage);
+    this.player = new Player(width / 2, height - (CONFIG.PLAYER.SIZE + 20), this.ASSETS);
     this.bullets = [];
     this.enemyBullets = [];
     this.enemies = [];
     this.items = [];
     this.score = 0;
 
-    this.spawnManager = new SpawnManager();
+    this.spawnManager = new SpawnManager(this.ASSETS);
     this.boss = null;
 
     this.state = GameState.PLAYING;
@@ -61,7 +57,7 @@ class GameScene {
     this.updateGameState();
 
     this.spawnManager.update(this.enemies, this);
-    if (this.boss) this.boss.update(this.player, this.enemyBullets, this.enemyBulletImage);
+    if (this.boss) this.boss.update(this.player, this.enemyBullets, this.ASSETS.enemyBulletImage);
 
     this.checkCollisions();
     this.checkItemCollisions();
@@ -74,19 +70,20 @@ class GameScene {
   drawBackground() {
     const timer = this.spawnManager.waveTimer;
     if (timer < 900) {
-      image(this.backgroundImages.start, 0, 0, width, height);
+      image(this.ASSETS.backgrounds.start, 0, 0, width, height);
     } else if (timer >= 900 && timer < 2700) {
-      image(this.backgroundImages.mid, 0, 0, width, height);
+      image(this.ASSETS.backgrounds.mid, 0, 0, width, height);
     } else {
-      image(this.backgroundImages.end, 0, 0, width, height);
+      image(this.ASSETS.backgrounds.end, 0, 0, width, height);
     }
   }
 
   drawHealthUI() {
-    noStroke();
-    fill(255, 105, 180);
     for (let i = 0; i < this.player.health; i++) {
-      rect(20 + (i * 30), 20, 25, 25);
+      push();
+      imageMode(CENTER); // Use CENTER mode for consistent image positioning
+      image(this.ASSETS.heartImage, 35 + (i * 30), 32, 25, 25); // Position and size the hearts
+      pop();
     }
   }
 
@@ -111,7 +108,7 @@ class GameScene {
 
     // Power-up spawn (50% chance for testing)
     if (random() < 0.5) {
-      this.items.push(new PowerUpItem(x, y, this.itemImages.powerup));
+      this.items.push(new PowerUpItem(x, y, this.ASSETS.items.powerup));
       return; // Only spawn one item type at a time
     }
 
@@ -131,31 +128,31 @@ class GameScene {
         // Spawn coins with a slight random offset
         const offsetX = x + random(-15, 15);
         const offsetY = y + random(-15, 15);
-        this.items.push(new Coin(offsetX, offsetY, this.itemImages.coin));
+        this.items.push(new Coin(offsetX, offsetY, this.ASSETS.items.coin));
       }
     }
   }
 
   startBossBattle(bossType) {
     if (bossType === 'OVERLOAD') {
-      this.boss = new Overload(width / 2, 150);
+      this.boss = new Overload(width / 2, 150, this.ASSETS);
     } else if (bossType === 'CARRIER_SHIELD') {
-      this.boss = new CarrierShield(width / 2, 150);
+      this.boss = new CarrierShield(width / 2, 150, this.ASSETS);
     } else if (bossType === 'CANYON_ROCKER') {
-      this.boss = new CanyonRocker(width / 2, 100);
+      this.boss = new CanyonRocker(width / 2, 100, this.ASSETS);
     } else if (bossType === 'OMEGA_SYSTEM') {
-      this.boss = new OmegaSystem(this, width / 2, 100);
+      this.boss = new OmegaSystem(this, width / 2, 100, this.ASSETS);
     }
   }
 
   updateGameState() {
     if (this.boss && this.boss.isDefeated) {
       // Spawn items for defeating a boss
-      this.items.push(new HealthItem(this.boss.x, this.boss.y, this.itemImages.health));
+      this.items.push(new HealthItem(this.boss.x, this.boss.y, this.ASSETS.items.health));
       for (let i = 0; i < 5; i++) {
         const offsetX = this.boss.x + random(-25, 25);
         const offsetY = this.boss.y + random(-25, 25);
-        this.items.push(new Coin(offsetX, offsetY, this.itemImages.coin));
+        this.items.push(new Coin(offsetX, offsetY, this.ASSETS.items.coin));
       }
       
       if (this.boss instanceof OmegaSystem) {
@@ -186,7 +183,7 @@ class GameScene {
 
   handleEnemies() {
     for (let i = this.enemies.length - 1; i >= 0; i--) {
-      this.enemies[i].update(this.enemyBullets, this.enemyBulletImage);
+      this.enemies[i].update(this.enemyBullets, this.ASSETS.enemyBulletImage);
       if (this.enemies[i].y > height + this.enemies[i].size) {
         this.enemies.splice(i, 1);
       }

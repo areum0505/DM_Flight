@@ -1,5 +1,6 @@
 class SpawnManager {
-  constructor() {
+  constructor(ASSETS) {
+    this.ASSETS = ASSETS; // Store ASSETS
     this.waves = [];
     this.currentWaveIndex = 0;
     this.waveTimer = 0;
@@ -39,7 +40,7 @@ class SpawnManager {
           for (const enemyData of currentWave.enemies) {
             const xPos = enemyData.x * width;
             const yPos = enemyData.y;
-            enemies.push(new Enemy(xPos, yPos, enemyData.type));
+            enemies.push(new Enemy(xPos, yPos, enemyData.type, this.ASSETS)); // Pass ASSETS
           }
         }
         this.currentWaveIndex++;

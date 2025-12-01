@@ -1,6 +1,7 @@
 class GameClearScene {
-    constructor(sceneManager) {
+    constructor(sceneManager, ASSETS) {
         this.sceneManager = sceneManager;
+        this.ASSETS = ASSETS; // Store ASSETS for consistency
         this.credits = [
             'GAME CLEAR!',
             '',
@@ -50,7 +51,7 @@ class GameClearScene {
 
     resetScene() {
         // To ensure a fresh start, we can reinstantiate the game scene
-        this.sceneManager.scenes.game = new GameScene(this.sceneManager);
+        this.sceneManager.scenes.game = new GameScene(this.sceneManager, this.sceneManager.ASSETS); // Pass ASSETS here
         this.sceneManager.goTo('start'); // Go to start scene
         this.creditsY = height + 30; // Reset credits position for next time
     }

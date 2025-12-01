@@ -1,8 +1,9 @@
 
 class CarrierShield extends Boss {
-  constructor(x, y) {
+  constructor(x, y, ASSETS) {
     const stats = BOSS_STATS.CARRIER_SHIELD;
     super(x, y, stats.HEALTH, stats.WIDTH); // Pass width as size for now
+    this.ASSETS = ASSETS; // Store ASSETS
     this.width = stats.WIDTH;
     this.height = stats.HEIGHT;
 
@@ -17,7 +18,7 @@ class CarrierShield extends Boss {
     
     this.turretPositions.forEach((pos, index) => {
       const isAttackable = index === 0;
-      this.turrets.push(new CarrierTurret(this.x + pos.x, this.y + pos.y, this, index, isAttackable));
+      this.turrets.push(new CarrierTurret(this.x + pos.x, this.y + pos.y, this, index, isAttackable, this.ASSETS));
     });
 
     this.attackCooldown = stats.ATTACK_COOLDOWN;
@@ -61,7 +62,7 @@ class CarrierShield extends Boss {
   onDeath(enemyBullets, player) {
     // Fires 5 fast homing missiles
     for (let i = 0; i < 5; i++) {
-        const bullet = new Bullet(this.x, this.y, 'homing', null, null, player, 7);
+        const bullet = new Bullet(this.x, this.y, 'homing', this.ASSETS.enemyBulletImage, null, player, 7);
         enemyBullets.push(bullet);
     }
   }
@@ -75,7 +76,7 @@ class CarrierShield extends Boss {
     for (let i = -1; i <= 1; i++) {
       const angle = angleToPlayer + i * 0.2;
       const vel = p5.Vector.fromAngle(angle, 4);
-      const bullet = new Bullet(this.x, this.y, 'default', null, vel);
+      const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel);
       enemyBullets.push(bullet);
     }
   }
@@ -83,7 +84,7 @@ class CarrierShield extends Boss {
   onTurretDestroyed(enemyBullets, player) {
     // Fires 2 fast homing missiles
     for (let i = 0; i < 2; i++) {
-        const bullet = new Bullet(this.x, this.y, 'homing', null, null, player, 7);
+        const bullet = new Bullet(this.x, this.y, 'homing', this.ASSETS.enemyBulletImage, null, player, 7);
         enemyBullets.push(bullet);
     }
   }
@@ -133,7 +134,7 @@ class CarrierShield extends Boss {
 }
 
 class CarrierTurret {
-  constructor(x, y, boss, index, isAttackable = false) {
+  constructor(x, y, boss, index, isAttackable = false, ASSETS) { // Accept ASSETS
     const turretStats = BOSS_STATS.CARRIER_SHIELD.TURRETS;
     this.x = x;
     this.y = y;
@@ -142,6 +143,7 @@ class CarrierTurret {
     this.boss = boss;
     this.index = index;
     this.isAttackable = isAttackable;
+    this.ASSETS = ASSETS; // Store ASSETS
     
     this.laserInfo = {
       isCharging: false,
@@ -175,7 +177,7 @@ class CarrierTurret {
 
   fireLaser(enemyBullets) {
     const vel = p5.Vector.fromAngle(this.laserInfo.targetAngle, 10);
-    const bullet = new Bullet(this.x, this.y, 'laser', null, vel);
+    const bullet = new Bullet(this.x, this.y, 'laser', this.ASSETS.enemyBulletImage, vel); // Pass enemyBulletImage
     enemyBullets.push(bullet);
   }
 
