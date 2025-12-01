@@ -106,8 +106,14 @@ class GameScene {
   spawnItems(deadEnemy) {
     const { x, y, type } = deadEnemy;
 
-    // Power-up spawn (5% chance)
-    if (random() < 0.05) {
+    // Health pack spawn (3% chance)
+    if (random() < 0.03) {
+      this.items.push(new HealthItem(x, y, this.ASSETS.items.health));
+      return; // Only spawn one item type at a time
+    }
+
+    // Power-up spawn (3% chance)
+    if (random() < 0.03) {
       this.items.push(new PowerUpItem(x, y, this.ASSETS.items.powerup));
       return; // Only spawn one item type at a time
     }
@@ -146,15 +152,7 @@ class GameScene {
   }
 
   updateGameState() {
-    if (this.boss && this.boss.isDefeated) {
-      // Spawn items for defeating a boss
-      this.items.push(new HealthItem(this.boss.x, this.boss.y, this.ASSETS.items.health));
-      for (let i = 0; i < 5; i++) {
-        const offsetX = this.boss.x + random(-25, 25);
-        const offsetY = this.boss.y + random(-25, 25);
-        this.items.push(new Coin(offsetX, offsetY, this.ASSETS.items.coin));
-      }
-      
+    if (this.boss && this.boss.isDefeated) {      
       if (this.boss instanceof OmegaSystem) {
         this.boss = null;
         this.sceneManager.goTo('gameClear');
