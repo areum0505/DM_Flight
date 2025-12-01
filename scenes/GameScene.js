@@ -7,6 +7,8 @@ class GameScene {
   constructor(sceneManager, ASSETS) {
     this.sceneManager = sceneManager;
     this.ASSETS = ASSETS; // Store ASSETS object
+    this.transitionEffect = null; // Initialize transition effect
+    this.lastBackgroundState = null; // Track last background state
     this.reset();
   }
 
@@ -23,6 +25,10 @@ class GameScene {
 
     this.state = GameState.PLAYING;
     this.spawnManager.loadWaves(WAVES);
+
+    // Reset transition effect on game reset
+    this.transitionEffect = null;
+    this.lastBackgroundState = null;
   }
 
   draw() {
@@ -40,6 +46,15 @@ class GameScene {
     this.drawHealthUI();
     this.drawScore();
     this.update();
+
+    // Draw transition effect if active
+    if (this.transitionEffect) {
+      this.transitionEffect.update();
+      this.transitionEffect.draw();
+      if (this.transitionEffect.isFinished()) {
+        this.transitionEffect = null; // Clear effect when finished
+      }
+    }
 
     // Draw Frame Count (Last to ensure visibility)
     // push();
@@ -71,13 +86,29 @@ class GameScene {
 
   drawBackground() {
     const timer = this.spawnManager.waveTimer;
+    let currentBackground;
+    let currentBackgroundState;
+
     if (timer < 900) {
-      image(this.ASSETS.backgrounds.start, 0, 0, width, height);
+      currentBackground = this.ASSETS.backgrounds.start;
+      currentBackgroundState = 'start';
     } else if (timer >= 900 && timer < 2700) {
-      image(this.ASSETS.backgrounds.mid, 0, 0, width, height);
+      currentBackground = this.ASSETS.backgrounds.mid;
+      currentBackgroundState = 'mid';
     } else {
-      image(this.ASSETS.backgrounds.end, 0, 0, width, height);
+      currentBackground = this.ASSETS.backgrounds.end;
+      currentBackgroundState = 'end';
     }
+
+    image(currentBackground, 0, 0, width, height);
+
+    // Trigger transition when background state changes
+    if (this.lastBackgroundState !== null && this.lastBackgroundState !== currentBackgroundState) {
+      if (!this.transitionEffect) { // Only create if not already active
+        this.transitionEffect = new TransitionEffect(this.ASSETS.backgrounds.transition);
+      }
+    }
+    this.lastBackgroundState = currentBackgroundState;
   }
 
   drawHealthUI() {

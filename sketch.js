@@ -6,7 +6,8 @@ function preload() {
     start: loadImage('ui/images/background/background_early.jpeg'),
     mid: loadImage('ui/images/background/background_mid.jpeg'),
     end: loadImage('ui/images/background/background_late.jpeg'),
-    main: loadImage('ui/images/background/main.png') // Added this line
+    main: loadImage('ui/images/background/main.png'),
+    transition: loadImage('ui/images/background/change.png') // Added this line
   };
 
   ASSETS.items = {
