@@ -1,8 +1,8 @@
 class SceneManager {
-  constructor(backgroundImages) {
+  constructor(backgroundImages, itemImages, playerImage) {
     this.scenes = {
       start: new StartScene(this),
-      game: new GameScene(this, backgroundImages),
+      game: new GameScene(this, backgroundImages, itemImages, playerImage),
       gameOver: new GameOverScene(this),
       gameClear: new GameClearScene(this),
     };
