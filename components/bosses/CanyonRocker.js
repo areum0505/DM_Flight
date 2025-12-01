@@ -34,7 +34,6 @@ class CanyonRocker extends Boss {
       this.phase = 2;
       this.isVulnerable = false;
       this.phase2StartTime = frameCount;
-      player.x = width / 2;
       this.widthAtTransitionStart = this.canyon.pathWidth; // 전환 직전의 너비를 저장
       console.log("Canyon Rocker: Phase 2 initiated. Boss is invincible.");
     }

@@ -14,10 +14,10 @@ class Enemy {
     this.ultimateGauge = stats.ultimateGauge;
   }
 
-  update(enemyBullets) {
+  update(enemyBullets, enemyBulletImage) {
     this.move();
     if (this.shootInterval && frameCount % this.shootInterval === 0) {
-      this.shoot(enemyBullets);
+      this.shoot(enemyBullets, enemyBulletImage);
     }
   }
 
@@ -26,9 +26,9 @@ class Enemy {
     this.y += this.speed;
   }
 
-  shoot(enemyBullets) {
+  shoot(enemyBullets, enemyBulletImage) {
     if (this.bulletSpeed) {
-      enemyBullets.push(new Bullet(this.x, this.y, 'default', null, null, this.bulletSpeed));
+      enemyBullets.push(new Bullet(this.x, this.y, 'enemy', enemyBulletImage, null, null, this.bulletSpeed));
     }
   }
 
