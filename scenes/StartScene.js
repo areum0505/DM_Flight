@@ -1,9 +1,3 @@
-let sceneManager;
-
-// 캔버스 크기
-const CANVAS_WIDTH = 360;
-const CANVAS_HEIGHT = 640;
-
 // 색상 정의 (전역 사용)
 const COLOR_BG_DARK = '#1f283c'; 
 const COLOR_NEON_BLUE = '#00f2ff'; 
@@ -27,25 +21,9 @@ const COLOR_BLUE_BTN_TEXT = '#FFFFFF';
 const COLOR_BUTTON_BORDER = '#2c3e50';
 
 function setup() {
-  createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
   pixelDensity(1); 
-
-  sceneManager = new SceneManager();
-  
-  // 씬 등록
-  sceneManager.add('start', new StartScene(sceneManager));
-  sceneManager.add('game', new GameScene(sceneManager)); 
-  sceneManager.add('tutorial', new TutorialScene(sceneManager)); 
-  sceneManager.add('options', new OptionsScene(sceneManager)); 
-
-  sceneManager.goTo('start');
-  textAlign(CENTER, CENTER);
   textSize(16);
   noSmooth();
-}
-
-function draw() {
-  sceneManager.draw();
 }
 
 function keyPressed() {
@@ -66,54 +44,6 @@ function mouseMoved() {
   }
 }
 
-class SceneManager {
-    constructor() {
-        this.scenes = {};
-        this.currentScene = null;
-    }
-
-    add(sceneName, scene) {
-        this.scenes[sceneName] = scene;
-    }
-
-    goTo(sceneName) {
-        if (this.scenes[sceneName]) {
-            this.currentScene = this.scenes[sceneName];
-            cursor(ARROW); 
-            if (this.currentScene.onEnter) {
-              this.currentScene.onEnter();
-            }
-        } else {
-            console.error(`씬 '${sceneName}'을(를) 찾을 수 없습니다.`);
-        }
-    }
-
-    draw() {
-        if (this.currentScene) {
-            this.currentScene.draw();
-        }
-    }
-
-    handleInput(keyCode) {
-        if (this.currentScene && this.currentScene.handleInput) {
-            this.currentScene.handleInput(keyCode);
-        }
-    }
-
-    handleMousePressed() {
-        if (this.currentScene && this.currentScene.handleMousePressed) {
-            this.currentScene.handleMousePressed();
-        }
-    }
-
-    handleMouseMoved() {
-        if (this.currentScene && this.currentScene.handleMouseMoved) {
-            this.currentScene.handleMouseMoved();
-        }
-    }
-}
-
-
 /* ==========================================================================
    [PART 2] START SCENE (메인 화면)
    - 나중에 'StartScene.js'로 분리하세요.
@@ -129,21 +59,21 @@ class StartScene {
 
     this.buttons = {
       start: {
-        x: (CANVAS_WIDTH - btnW) / 2,
+        x: (CONFIG.CANVAS.WIDTH - btnW) / 2,
         y: 400, w: btnW, h: btnH,
         label: 'GAME START',
         baseColor: COLOR_RED_BTN_BASE, textColor: COLOR_RED_BTN_TEXT,
         targetScene: 'game'
       },
       tutorial: {
-        x: (CANVAS_WIDTH - btnW) / 2,
+        x: (CONFIG.CANVAS.WIDTH - btnW) / 2,
         y: 400 + btnH + btnGap, w: btnW, h: btnH,
         label: 'TUTORIAL',
         baseColor: COLOR_BLUE_BTN_BASE, textColor: COLOR_BLUE_BTN_TEXT,
         targetScene: 'tutorial'
       },
       options: {
-        x: (CANVAS_WIDTH - btnW) / 2, 
+        x: (CONFIG.CANVAS.WIDTH - btnW) / 2, 
         y: 400 + (btnH + btnGap) * 2, w: btnW, h: btnH,
         label: 'SETTINGS',
         baseColor: COLOR_BLUE_BTN_BASE, textColor: COLOR_BLUE_BTN_TEXT,
@@ -157,6 +87,8 @@ class StartScene {
   }
 
   draw() {
+    textAlign(CENTER, CENTER);
+    
     background(COLOR_BG_DARK);
     stroke(COLOR_NEON_BLUE);
     strokeWeight(4);
@@ -261,7 +193,7 @@ class TutorialScene {
   constructor(sceneManager) {
     this.sceneManager = sceneManager;
     
-    this.playerX = CANVAS_WIDTH / 2;
+    this.playerX = CONFIG.CANVAS.WIDTH / 2;
     this.playerY = CANVAS_HEIGHT * 0.75;
     this.speed = 5;
 
@@ -273,7 +205,7 @@ class TutorialScene {
 
   onEnter() {
     console.log("TutorialScene 진입!");
-    this.playerX = CANVAS_WIDTH / 2;
+    this.playerX = CONFIG.CANVAS.WIDTH / 2;
     this.bullets = []; 
     this.spawnEnemies(); 
     cursor(ARROW);
@@ -283,7 +215,7 @@ class TutorialScene {
     this.enemies = [];
     for (let i = 0; i < 3; i++) {
         this.enemies.push({
-            x: CANVAS_WIDTH * 0.25 * (i + 1),
+            x: CONFIG.CANVAS.WIDTH * 0.25 * (i + 1),
             y: 150,
             size: 40,
             active: true
@@ -415,22 +347,6 @@ class TutorialScene {
         this.spawnEnemies(); 
     }
   }
-}
-
-
-/* ==========================================================================
-   [PART 4] OTHER SCENES (게임, 옵션 등)
-   - 나중에 각각 'GameScene.js', 'OptionsScene.js'로 분리하세요.
-   ========================================================================== */
-
-class GameScene {
-  constructor(sceneManager) { this.sceneManager = sceneManager; }
-  onEnter() { console.log("GameScene 진입!"); }
-  draw() {
-    background(0, 50, 0); fill(255); textStyle(NORMAL); textSize(30); text('게임 플레이 중...', width/2, height/2);
-    textSize(16); text('Press ESC to go back to Menu', width / 2, height / 2 + 40);
-  }
-  handleInput(keyCode) { if (keyCode === ESCAPE) { this.sceneManager.goTo('start'); } }
 }
 
 class OptionsScene {
