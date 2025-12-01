@@ -27,7 +27,7 @@ const WAVES = [
 
   // Boss Battle 1
   {
-    //triggerFrame: 7200,
+    //triggerFrame: 7199,
     triggerFrame: 900,
     type: 'BOSS',
     bossType: 'OVERLOAD'  

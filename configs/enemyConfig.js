@@ -288,6 +288,7 @@ const ENEMY_STATS = {
 
 };
 
+// 초반부 몹 유형 배열
 const early_ENEMY_TYPES = [
   'earlyNormal_simple',
   'earlyNormal_tank',
@@ -296,6 +297,7 @@ const early_ENEMY_TYPES = [
   'earlyNamed_flock'
 ];
 
+// 중반부 몹 유형 배열
 const mid_ENEMY_TYPES = [
   'midNormal_simple',
   'midNormal_tank',
@@ -305,6 +307,7 @@ const mid_ENEMY_TYPES = [
   'midNamed_flock'
 ];
 
+// 후반부 몹 유형 배열
 const end_ENEMY_TYPES = [
   'endNamed_simple',
   'endNamed_tank',
@@ -315,6 +318,7 @@ const end_ENEMY_TYPES = [
   'endNamed_tank'
 ];
 
+// Random enemy type selections for each stage
 const early_randomEnemyType = early_ENEMY_TYPES[Math.floor(Math.random() * early_ENEMY_TYPES.length)];
 const mid_randomEnemyType = mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)];
 const end_randomEnemyType = end_ENEMY_TYPES[Math.floor(Math.random() * end_ENEMY_TYPES.length)];
