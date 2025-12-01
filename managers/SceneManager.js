@@ -1,8 +1,8 @@
 class SceneManager {
-  constructor() {
+  constructor(backgroundImages) {
     this.scenes = {
       start: new StartScene(this),
-      game: new GameScene(this),
+      game: new GameScene(this, backgroundImages),
       gameOver: new GameOverScene(this),
       gameClear: new GameClearScene(this),
     };
@@ -11,6 +11,9 @@ class SceneManager {
 
   // 씬 전환
   goTo(sceneName) {
+    if (sceneName === 'game') {
+      this.scenes.game.reset();
+    }
     this.currentScene = this.scenes[sceneName];
   }
 

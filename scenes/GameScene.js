@@ -4,8 +4,13 @@ const GameState = {
 };
 
 class GameScene {
-  constructor(sceneManager) {
+  constructor(sceneManager, backgroundImages) {
     this.sceneManager = sceneManager;
+    this.backgroundImages = backgroundImages;
+    this.reset();
+  }
+
+  reset() {
     this.player = new Player(width / 2, height - (CONFIG.PLAYER.SIZE + 20));
     this.bullets = [];
     this.enemyBullets = [];
@@ -19,6 +24,7 @@ class GameScene {
   }
 
   draw() {
+    this.drawBackground();
     this.player.draw();
     this.bullets.forEach(b => b.draw());
     this.enemyBullets.forEach(b => b.draw());
@@ -35,6 +41,17 @@ class GameScene {
     textAlign(LEFT, TOP);
     text(`Frame: ${frameCount}`, 10, 50);
     pop();
+  }
+
+  drawBackground() {
+    const timer = this.spawnManager.waveTimer;
+    if (timer < 900) {
+      image(this.backgroundImages.start, 0, 0, width, height);
+    } else if (timer >= 900 && timer < 2700) {
+      image(this.backgroundImages.mid, 0, 0, width, height);
+    } else {
+      image(this.backgroundImages.end, 0, 0, width, height);
+    }
   }
 
   drawHealthUI() {
