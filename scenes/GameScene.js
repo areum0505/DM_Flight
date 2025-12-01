@@ -107,7 +107,7 @@ class GameScene {
     const { x, y, type } = deadEnemy;
 
     // Power-up spawn (5% chance)
-    if (random() < 0.05) {
+    if (random() < 0.03) {
       this.items.push(new PowerUpItem(x, y, this.ASSETS.items.powerup));
       return; // Only spawn one item type at a time
     }
