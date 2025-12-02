@@ -11,7 +11,8 @@ const Boss_ATTACK_COOLDOWN_fast = 100;
 const BOSS_STATS = {
   OVERLOAD: { // 중간 보스 1 - 오버로드
     HEALTH: Boss_HP_medium,
-    SIZE: 100,
+    WIDTH: 300,
+    HEIGHT: 200,
     ATTACK_COOLDOWN: Boss_ATTACK_COOLDOWN_slow,
     CHARGE_SPEED: 15,
 
@@ -46,7 +47,8 @@ const BOSS_STATS = {
 
   OMEGA_SYSTEM: { // 후반 보스 2 - 오메가 시스템
     HEALTH: Boss_HP_extreme,
-    SIZE: 150, // Added for consistency with Boss constructor
+    WIDTH: 200,
+    HEIGHT: 135, // Added for consistency with Boss constructor
     WIDTH: 150,
     HEIGHT: 150,
 

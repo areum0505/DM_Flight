@@ -1,18 +1,22 @@
 class Overload extends Boss {
   constructor(x, y, ASSETS) {
     const stats = BOSS_STATS.OVERLOAD;
-    super(x, y, stats.HEALTH, stats.SIZE);
+    super(x, y, stats.HEALTH, max(stats.WIDTH, stats.HEIGHT)); // Pass max of width/height to base Boss constructor
     this.ASSETS = ASSETS; // Store ASSETS
+    this.width = stats.WIDTH;
+    this.height = stats.HEIGHT;
 
     this.isDefeated = false;
     this.isVulnerable = false;
     this.phase = 1;
     this.turrets = [];
     this.turretPositions = [
-      { x: -60, y: 0 },
-      { x: 60, y: 0 },
-      { x: -30, y: -40 },
-      { x: 30, y: -40 },
+      // Bottom row
+      { x: -75, y: 55 },
+      { x: 75, y: 55 },
+      // Top row
+      { x: -35, y: -45 },
+      { x: 35, y: -45 },
     ];
 
     this.turretPositions.forEach(pos => {
@@ -89,15 +93,14 @@ class Overload extends Boss {
     if (this.chargeInfo.isCharging) {
         rotate(radians(this.chargeInfo.angle));
     }
-    fill(this.isVulnerable ? '#ff6347' : '#808080');
-    rectMode(CENTER);
-    rect(0, 0, this.size, this.size);
+    imageMode(CENTER);
+    image(this.ASSETS.overloadBossImage, 0, 0, this.width, this.height);
     
     // 체력 표시
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(20);
-    text(this.health, 0, 0);
+    // fill(255);
+    // textAlign(CENTER, CENTER);
+    // textSize(20);
+    // text(this.health, 0, 0);
     pop();
 
     this.turrets.forEach(turret => turret.draw());
@@ -105,7 +108,13 @@ class Overload extends Boss {
 
   isHit(bullet, enemyBullets, player) {
     if (this.isVulnerable) {
-      if (dist(bullet.x, bullet.y, this.x, this.y) < this.size / 2) {
+      const bulletRadius = bullet.size / 2 || 5; // Default bullet size if not defined
+      if (
+        bullet.x + bulletRadius > this.x - this.width / 2 &&
+        bullet.x - bulletRadius < this.x + this.width / 2 &&
+        bullet.y + bulletRadius > this.y - this.height / 2 &&
+        bullet.y - bulletRadius < this.y + this.height / 2
+      ) {
         this.health--;
         if (this.health <= 0) {
             this.isDefeated = true;
@@ -155,16 +164,17 @@ class Turret {
   }
 
   draw() {
+    imageMode(CENTER);
     if (this.health > 0) {
-      fill('#add8e6');
-      rectMode(CENTER);
-      rect(this.x, this.y, this.size, this.size);
+      image(this.ASSETS.overloadTurretImage, this.x, this.y, this.size, this.size);
 
       // 체력 표시
       fill(0);
       textAlign(CENTER, CENTER);
       textSize(14);
       text(this.health, this.x, this.y);
+    } else {
+      image(this.ASSETS.overloadTurretDestroyedImage, this.x, this.y, this.size, this.size);
     }
   }
 }

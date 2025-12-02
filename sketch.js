@@ -21,6 +21,11 @@ function preload() {
   ASSETS.enemyBulletImage = loadImage('ui/images/enemy/bullet.png');
   ASSETS.heartImage = loadImage('ui/images/item/item_health.png'); // Load for UI display
 
+  // Overload Boss Images
+  ASSETS.overloadBossImage = loadImage('ui/images/boss/Overload.png');
+  ASSETS.overloadTurretImage = loadImage('ui/images/boss/Overload_turret.png');
+  ASSETS.overloadTurretDestroyedImage = loadImage('ui/images/boss/Overload_turret_destroyed.png');
+
   // Move color definitions into ASSETS.colors
   ASSETS.colors = {
     BG_DARK: '#1f283c',
