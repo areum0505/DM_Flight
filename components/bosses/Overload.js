@@ -1,8 +1,8 @@
 class Overload extends Boss {
   constructor(x, y, ASSETS) {
     const stats = BOSS_STATS.OVERLOAD;
-    super(x, y, stats.HEALTH, max(stats.WIDTH, stats.HEIGHT)); // Pass max of width/height to base Boss constructor
-    this.ASSETS = ASSETS; // Store ASSETS
+    super(x, y, stats.HEALTH, max(stats.WIDTH, stats.HEIGHT)); 
+    this.ASSETS = ASSETS; 
     this.width = stats.WIDTH;
     this.height = stats.HEIGHT;
 
@@ -64,7 +64,7 @@ class Overload extends Boss {
     for (let i = 0; i < count; i++) {
         const angle = angleToPlayer + (i - floor(count/2)) * 0.2;
         const vel = p5.Vector.fromAngle(angle, 4);
-        const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel); // Pass enemyBulletImage
+        const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel); 
         bullet.size = 30;
         enemyBullets.push(bullet);
     }
@@ -108,7 +108,7 @@ class Overload extends Boss {
 
   isHit(bullet, enemyBullets, player) {
     if (this.isVulnerable) {
-      const bulletRadius = bullet.size / 2 || 5; // Default bullet size if not defined
+      const bulletRadius = bullet.size / 2 || 5; 
       if (
         bullet.x + bulletRadius > this.x - this.width / 2 &&
         bullet.x - bulletRadius < this.x + this.width / 2 &&
@@ -134,14 +134,14 @@ class Overload extends Boss {
 }
 
 class Turret {
-  constructor(x, y, boss, ASSETS) { // Accept ASSETS
+  constructor(x, y, boss, ASSETS) { 
     const turretStats = BOSS_STATS.OVERLOAD.TURRETS;
     this.x = x;
     this.y = y;
     this.size = turretStats.SIZE;
     this.health = turretStats.HEALTH;
     this.boss = boss;
-    this.ASSETS = ASSETS; // Store ASSETS
+    this.ASSETS = ASSETS; 
     this.lastShotFrame = 0;
     this.shootInterval = turretStats.SHOOT_INTERVAL;
   }
@@ -158,7 +158,7 @@ class Turret {
     for (let i = -1; i <= 1; i++) {
       const angle = angleToPlayer + i * 0.25;
       const vel = p5.Vector.fromAngle(angle, 5);
-      const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel); // Pass enemyBulletImage
+      const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel); 
       enemyBullets.push(bullet);
     }
   }
