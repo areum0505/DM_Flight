@@ -31,7 +31,7 @@ const WAVES = [
     triggerFrame: 900,
     type: 'BOSS',
     //bossType: 'OVERLOAD'
-    bossType: 'CARRIER_SHIELD'  
+    bossType: 'CANYON_ROCKER'  
     },
 
   /********* 중반부 1: 7,200 ~ 10,800프레임 (1분) *********/

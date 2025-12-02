@@ -39,6 +39,11 @@ class GameScene {
     this.items.forEach(i => i.draw());
     this.player.draw();
     this.bullets.forEach(b => b.draw());
+    // If the boss is CanyonRocker, draw its canyon walls before drawing enemies.
+    if (this.boss && this.boss instanceof CanyonRocker) {
+      this.boss.drawCanyon();
+    }
+
     this.enemies.forEach(e => e.draw());
     if (this.boss) this.boss.draw();
 

@@ -32,6 +32,11 @@ function preload() {
   ASSETS.carrierShieldTurretDestroyedImage = loadImage('ui/images/boss/CarrierShield_turret_destroyed.png');
   ASSETS.carrierShieldTurretEnabledImage = loadImage('ui/images/boss/CarrierShield_turret_enabled.png');
 
+  // CanyonRocker Boss Images
+  ASSETS.canyonRockerImage = loadImage('ui/images/boss/CanyonRocker.png');
+  ASSETS.canyonRockerWallImage = loadImage('ui/images/boss/CanyonRocker_wall.png');
+  ASSETS.canyonRockerRockImage = loadImage('ui/images/boss/CanyonRocker_rock.png');
+
   // Move color definitions into ASSETS.colors
   ASSETS.colors = {
     BG_DARK: '#1f283c',

@@ -1,10 +1,10 @@
 class FallingRock {
-  constructor(x, y, size) {
+  constructor(x, y, size, ASSETS) {
     this.x = x;
     this.y = y;
     this.size = size;
-    this.speed = 2.5; // Falling speed
-    this.color = color(128, 128, 128); // Gray color for rocks
+    this.speed = 2.5; // 낙하 속도
+    this.ASSETS = ASSETS;
   }
 
   move() {
@@ -12,8 +12,7 @@ class FallingRock {
   }
 
   draw() {
-    fill(this.color);
-    noStroke();
-    ellipse(this.x, this.y, this.size);
+    imageMode(CENTER);
+    image(this.ASSETS.canyonRockerRockImage, this.x, this.y, this.size, this.size);
   }
 }
