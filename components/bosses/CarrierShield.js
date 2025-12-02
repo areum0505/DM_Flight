@@ -10,10 +10,12 @@ class CarrierShield extends Boss {
     this.isVulnerable = false;
     this.turrets = [];
     this.turretPositions = [
-      { x: -this.width * 0.3, y: 0 },
-      { x: this.width * 0.3, y: 0 },
-      { x: -this.width * 0.15, y: this.height * 0.25 },
-      { x: this.width * 0.15, y: this.height * 0.25 },
+      // Top Center turret
+      { x: 0, y: -20 },
+      // triangle formation below turret
+      { x: 0, y: 90 },
+      { x: -75, y: 230 },
+      { x: 75, y: 230 },
     ];
     
     this.turretPositions.forEach((pos, index) => {
@@ -26,7 +28,10 @@ class CarrierShield extends Boss {
     this.speed = stats.SPEED;
     this.direction = createVector(this.speed, 0);
     this.isDefeated = false;
-    this.y = this.height / 2; // Set initial y position
+    this.y = y; // Use the y position passed from GameScene
+    if (this.y === undefined) { // Fallback if y is not passed (shouldn't happen with current setup)
+      this.y = this.height / 2;
+    }
   }
 
   update(player, enemyBullets) {
@@ -91,15 +96,13 @@ class CarrierShield extends Boss {
 
   draw() {
     push();
-    // Main Body
-    fill(this.isVulnerable ? '#ff6347' : '#808080');
-    rectMode(CENTER);
-    rect(this.x, this.y, this.width, this.height);
+    imageMode(CENTER);
+    image(this.ASSETS.carrierShieldImage, this.x, this.y, this.width, this.height);
     
     fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(20);
-    text(this.health, this.x, this.y);
+    // textAlign(CENTER, CENTER);
+    // textSize(20);
+    // text(this.health, this.x, this.y);
     pop();
 
     // Turrets
@@ -182,31 +185,34 @@ class CarrierTurret {
   }
 
   draw() {
+    push();
+    imageMode(CENTER);
+
     if (this.health > 0) {
-      push();
       if (this.isAttackable) {
-        fill('#add8e6'); // Light blue for attackable
+        image(this.ASSETS.carrierShieldTurretEnabledImage, this.x, this.y, this.size, this.size);
       } else {
-        fill('#a9a9a9'); // Dark gray for non-attackable
+        image(this.ASSETS.carrierShieldTurretImage, this.x, this.y, this.size, this.size);
       }
-      rectMode(CENTER);
-      rect(this.x, this.y, this.size, this.size);
-
+      
+      // 체력 표시
       fill(0);
-      textAlign(CENTER, CENTER);
-      textSize(14);
-      text(this.health, this.x, this.y);
-      pop();
+      // textAlign(CENTER, CENTER);
+      // textSize(14);
+      // text(this.health, this.x, this.y);
+    } else {
+      image(this.ASSETS.carrierShieldTurretDestroyedImage, this.x, this.y, this.size, this.size);
+    }
+    pop();
 
-      if (this.laserInfo.isCharging) {
-        push();
-        stroke(255, 0, 0, 150);
-        strokeWeight(2);
-        translate(this.x, this.y);
-        rotate(this.laserInfo.targetAngle);
-        line(0, 0, width, 0); // Draw a line across the screen
-        pop();
-      }
+    if (this.laserInfo.isCharging && this.health > 0) { // Laser only charges if turret is active
+      push();
+      stroke(255, 0, 0, 150);
+      strokeWeight(5); // Increased thickness
+      translate(this.x, this.y);
+      rotate(this.laserInfo.targetAngle);
+      line(0, 0, width * 1.5, 0); // Increased length
+      pop();
     }
   }
 }

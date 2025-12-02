@@ -26,6 +26,12 @@ function preload() {
   ASSETS.overloadTurretImage = loadImage('ui/images/boss/Overload_turret.png');
   ASSETS.overloadTurretDestroyedImage = loadImage('ui/images/boss/Overload_turret_destroyed.png');
 
+  // CarrierShield Boss Images
+  ASSETS.carrierShieldImage = loadImage('ui/images/boss/CarrierShield.png');
+  ASSETS.carrierShieldTurretImage = loadImage('ui/images/boss/CarrierShield_turret.png');
+  ASSETS.carrierShieldTurretDestroyedImage = loadImage('ui/images/boss/CarrierShield_turret_destroyed.png');
+  ASSETS.carrierShieldTurretEnabledImage = loadImage('ui/images/boss/CarrierShield_turret_enabled.png');
+
   // Move color definitions into ASSETS.colors
   ASSETS.colors = {
     BG_DARK: '#1f283c',

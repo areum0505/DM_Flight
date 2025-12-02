@@ -39,9 +39,10 @@ class GameScene {
     this.items.forEach(i => i.draw());
     this.player.draw();
     this.bullets.forEach(b => b.draw());
-    this.enemyBullets.forEach(b => b.draw());
     this.enemies.forEach(e => e.draw());
     if (this.boss) this.boss.draw();
+
+    this.enemyBullets.forEach(b => b.draw());
 
     this.drawHealthUI();
     this.drawScore();
@@ -176,7 +177,7 @@ class GameScene {
     if (bossType === 'OVERLOAD') {
       this.boss = new Overload(width / 2, 150, this.ASSETS);
     } else if (bossType === 'CARRIER_SHIELD') {
-      this.boss = new CarrierShield(width / 2, 150, this.ASSETS);
+      this.boss = new CarrierShield(width / 2, 70, this.ASSETS);
     } else if (bossType === 'CANYON_ROCKER') {
       this.boss = new CanyonRocker(width / 2, 100, this.ASSETS);
     } else if (bossType === 'OMEGA_SYSTEM') {

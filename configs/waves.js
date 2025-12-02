@@ -30,7 +30,8 @@ const WAVES = [
     //triggerFrame: 7199,
     triggerFrame: 900,
     type: 'BOSS',
-    bossType: 'OVERLOAD'  
+    //bossType: 'OVERLOAD'
+    bossType: 'CARRIER_SHIELD'  
     },
 
   /********* 중반부 1: 7,200 ~ 10,800프레임 (1분) *********/

@@ -26,13 +26,12 @@ const BOSS_STATS = {
 
   CARRIER_SHIELD: { // 중간 보스 2 - 캐리어 쉴드
     HEALTH: Boss_HP_high,
-    WIDTH: 420,
-    HEIGHT: 200,
-    ATTACK_COOLDOWN: Boss_ATTACK_COOLDOWN_slow,
-
+    WIDTH: 400,
+    HEIGHT: 700,
+    ATTACK_COOLDOWN: Boss_ATTACK_COOLDOWN_fast,
     TURRETS: {
       HEALTH: Boss_HP_medium,
-      SIZE: 40,
+      SIZE: 95,
       SHOOT_INTERVAL: Boss_ATTACK_COOLDOWN_normal,
     },
   },
