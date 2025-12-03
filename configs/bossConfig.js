@@ -11,7 +11,8 @@ const Boss_ATTACK_COOLDOWN_fast = 100;
 const BOSS_STATS = {
   OVERLOAD: { // 중간 보스 1 - 오버로드
     HEALTH: Boss_HP_medium,
-    SIZE: 100,
+    WIDTH: 300,
+    HEIGHT: 200,
     ATTACK_COOLDOWN: Boss_ATTACK_COOLDOWN_slow,
     CHARGE_SPEED: 15,
 
@@ -25,13 +26,12 @@ const BOSS_STATS = {
 
   CARRIER_SHIELD: { // 중간 보스 2 - 캐리어 쉴드
     HEALTH: Boss_HP_high,
-    WIDTH: 420,
-    HEIGHT: 200,
-    ATTACK_COOLDOWN: Boss_ATTACK_COOLDOWN_slow,
-
+    WIDTH: 400,
+    HEIGHT: 700,
+    ATTACK_COOLDOWN: Boss_ATTACK_COOLDOWN_fast,
     TURRETS: {
       HEALTH: Boss_HP_medium,
-      SIZE: 40,
+      SIZE: 95,
       SHOOT_INTERVAL: Boss_ATTACK_COOLDOWN_normal,
     },
   },
@@ -39,20 +39,19 @@ const BOSS_STATS = {
 
   CANYON_ROCKER: { // 후반 보스 1 - 캐니언 록커
     HEALTH: Boss_HP_very_high,
-    SIZE: 120,
+    WIDTH: 200,
+    HEIGHT: 150,
     ATTACK_COOLDOWN: Boss_ATTACK_COOLDOWN_normal,
   },
 
 
   OMEGA_SYSTEM: { // 후반 보스 2 - 오메가 시스템
     HEALTH: Boss_HP_extreme,
-    SIZE: 150, // Added for consistency with Boss constructor
-    WIDTH: 150,
-    HEIGHT: 150,
-
+    WIDTH: 170,
+    HEIGHT: 170,
+    SIZE: 170,
     SMALL_PLANE_HEALTH: Boss_HP_medium,
-    SMALL_PLANE_SIZE: 20, // Added for consistency
-    
+    SMALL_PLANE_SIZE: 40, 
     SHIELD_HEALTH: Boss_HP_high,
   }
 };

@@ -39,9 +39,15 @@ class GameScene {
     this.items.forEach(i => i.draw());
     this.player.draw();
     this.bullets.forEach(b => b.draw());
-    this.enemyBullets.forEach(b => b.draw());
+    // If the boss is CanyonRocker, draw its canyon walls before drawing enemies.
+    if (this.boss && this.boss instanceof CanyonRocker) {
+      this.boss.drawCanyon();
+    }
+
     this.enemies.forEach(e => e.draw());
     if (this.boss) this.boss.draw();
+
+    this.enemyBullets.forEach(b => b.draw());
 
     this.drawHealthUI();
     this.drawScore();
@@ -74,7 +80,7 @@ class GameScene {
     this.updateGameState();
 
     this.spawnManager.update(this.enemies, this);
-    if (this.boss) this.boss.update(this.player, this.enemyBullets, this.ASSETS.enemyBulletImage);
+    if (this.boss) this.boss.update(this.player, this.enemyBullets, this.enemies);
 
     this.checkCollisions();
     this.checkItemCollisions();
@@ -176,11 +182,11 @@ class GameScene {
     if (bossType === 'OVERLOAD') {
       this.boss = new Overload(width / 2, 150, this.ASSETS);
     } else if (bossType === 'CARRIER_SHIELD') {
-      this.boss = new CarrierShield(width / 2, 150, this.ASSETS);
+      this.boss = new CarrierShield(width / 2, 70, this.ASSETS);
     } else if (bossType === 'CANYON_ROCKER') {
       this.boss = new CanyonRocker(width / 2, 100, this.ASSETS);
     } else if (bossType === 'OMEGA_SYSTEM') {
-      this.boss = new OmegaSystem(this, width / 2, 100, this.ASSETS);
+      this.boss = new OmegaSystem(width / 2, 100, this.ASSETS);
     }
   }
 

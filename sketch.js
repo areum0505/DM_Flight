@@ -21,6 +21,27 @@ function preload() {
   ASSETS.enemyBulletImage = loadImage('ui/images/enemy/bullet.png');
   ASSETS.heartImage = loadImage('ui/images/item/item_health.png'); // Load for UI display
 
+  // Overload Boss Images
+  ASSETS.overloadBossImage = loadImage('ui/images/boss/Overload.png');
+  ASSETS.overloadTurretImage = loadImage('ui/images/boss/Overload_turret.png');
+  ASSETS.overloadTurretDestroyedImage = loadImage('ui/images/boss/Overload_turret_destroyed.png');
+
+  // CarrierShield Boss Images
+  ASSETS.carrierShieldImage = loadImage('ui/images/boss/CarrierShield.png');
+  ASSETS.carrierShieldTurretImage = loadImage('ui/images/boss/CarrierShield_turret.png');
+  ASSETS.carrierShieldTurretDestroyedImage = loadImage('ui/images/boss/CarrierShield_turret_destroyed.png');
+  ASSETS.carrierShieldTurretEnabledImage = loadImage('ui/images/boss/CarrierShield_turret_enabled.png');
+
+  // CanyonRocker Boss Images
+  ASSETS.canyonRockerImage = loadImage('ui/images/boss/CanyonRocker.png');
+  ASSETS.canyonRockerWallImage = loadImage('ui/images/boss/CanyonRocker_wall.png');
+  ASSETS.canyonRockerRockImage = loadImage('ui/images/boss/CanyonRocker_rock.png');
+
+  // OmegaSystem Boss Images
+  ASSETS.omegaSystemBossImage = loadImage('ui/images/boss/OmegaSystem.png');
+  ASSETS.omegaSystemLaserImage = loadImage('ui/images/boss/OmegaSystem_laser.png');
+  ASSETS.omegaSystemSmallPlaneImage = loadImage('ui/images/boss/OmegaSystem_smallPlane.png');
+
   // Move color definitions into ASSETS.colors
   ASSETS.colors = {
     BG_DARK: '#1f283c',
