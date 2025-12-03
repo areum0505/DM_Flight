@@ -60,6 +60,7 @@ class CarrierShield extends Boss {
     
     if (this.health <= 0 && !this.isDefeated) {
         this.isDefeated = true;
+        this.ASSETS.sounds.enemyExplosion.play();
         this.onDeath(enemyBullets, player);
     }
   }
@@ -122,6 +123,7 @@ class CarrierShield extends Boss {
         if (turret.isAttackable && turret.health > 0 && dist(bullet.x, bullet.y, turret.x, turret.y) < turret.size / 2) {
           turret.health--;
           if (turret.health <= 0) {
+            this.ASSETS.sounds.enemyExplosion.play();
             this.onTurretDestroyed(enemyBullets, player);
             // 다음 포탑 활성화
             if (i + 1 < this.turrets.length) {

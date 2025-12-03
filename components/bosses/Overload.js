@@ -118,6 +118,7 @@ class Overload extends Boss {
         this.health--;
         if (this.health <= 0) {
             this.isDefeated = true;
+            this.ASSETS.sounds.enemyExplosion.play();
         }
         return true;
       }
@@ -125,6 +126,9 @@ class Overload extends Boss {
       for (const turret of this.turrets) {
         if (turret.health > 0 && dist(bullet.x, bullet.y, turret.x, turret.y) < turret.size / 2) {
           turret.health--;
+          if (turret.health === 0) {
+            this.ASSETS.sounds.enemyExplosion.play();
+          }
           return true;
         }
       }

@@ -51,6 +51,7 @@ function preload() {
     gameClear: loadSound('assets/sounds/EndingCredit.mp3'),
     getItem: loadSound('assets/sounds/GetItem.mp3'),
     shoot: loadSound('assets/sounds/ShootSound.mp3'),
+    enemyExplosion: loadSound('assets/sounds/EnemyExplosion.wav'),
   };
 
   ASSETS.music = {

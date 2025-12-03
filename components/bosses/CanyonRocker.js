@@ -251,6 +251,7 @@ class CanyonRocker extends Boss {
       this.health--;
       if (this.health <= 0) {
           this.isDefeated = true;
+          this.ASSETS.sounds.enemyExplosion.play();
       }
       return true;
     }

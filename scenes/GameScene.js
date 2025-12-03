@@ -242,6 +242,7 @@ class GameScene {
           this.enemies[j].takeDamage();
           if (this.enemies[j].health <= 0) {
             this.spawnItems(this.enemies[j]); // Spawn items
+            this.ASSETS.sounds.enemyExplosion.play();
             this.enemies.splice(j, 1);
           }
           this.bullets.splice(i, 1);
@@ -272,7 +273,6 @@ class GameScene {
     for (let i = this.enemies.length - 1; i >= 0; i--) {
       if (this.isCollidingRectCircle(this.player, this.enemies[i])) {
         this.player.takeDamage();
-        this.enemies.splice(i, 1);
       }
     }
 
