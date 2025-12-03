@@ -3,44 +3,44 @@ let ASSETS = {}; // Global ASSETS object
 
 function preload() {
   ASSETS.backgrounds = {
-    start: loadImage('ui/images/background/background_early.jpeg'),
-    mid: loadImage('ui/images/background/background_mid.jpeg'),
-    end: loadImage('ui/images/background/background_late.jpeg'),
-    main: loadImage('ui/images/background/main.png'),
-    transition: loadImage('ui/images/background/change.png') // Added this line
+    start: loadImage('assets/images/background/background_early.jpeg'),
+    mid: loadImage('assets/images/background/background_mid.jpeg'),
+    end: loadImage('assets/images/background/background_late.jpeg'),
+    main: loadImage('assets/images/background/main.png'),
+    transition: loadImage('assets/images/background/change.png') // Added this line
   };
 
   ASSETS.items = {
-    coin: loadImage('ui/images/item/item_coin.png'),
-    health: loadImage('ui/images/item/item_health.png'), // This is for the item itself
-    powerup: loadImage('ui/images/item/item_powerup.png')
+    coin: loadImage('assets/images/item/item_coin.png'),
+    health: loadImage('assets/images/item/item_health.png'), // This is for the item itself
+    powerup: loadImage('assets/images/item/item_powerup.png')
   };
 
-  ASSETS.playerImage = loadImage('ui/images/player/player.png');
-  ASSETS.playerBulletImage = loadImage('ui/images/player/bullet.png');
-  ASSETS.enemyBulletImage = loadImage('ui/images/enemy/bullet.png');
-  ASSETS.heartImage = loadImage('ui/images/item/item_health.png'); // Load for UI display
+  ASSETS.playerImage = loadImage('assets/images/player/player.png');
+  ASSETS.playerBulletImage = loadImage('assets/images/player/bullet.png');
+  ASSETS.enemyBulletImage = loadImage('assets/images/enemy/bullet.png');
+  ASSETS.heartImage = loadImage('assets/images/item/item_health.png'); // Load for UI display
 
   // Overload Boss Images
-  ASSETS.overloadBossImage = loadImage('ui/images/boss/Overload.png');
-  ASSETS.overloadTurretImage = loadImage('ui/images/boss/Overload_turret.png');
-  ASSETS.overloadTurretDestroyedImage = loadImage('ui/images/boss/Overload_turret_destroyed.png');
+  ASSETS.overloadBossImage = loadImage('assets/images/boss/Overload.png');
+  ASSETS.overloadTurretImage = loadImage('assets/images/boss/Overload_turret.png');
+  ASSETS.overloadTurretDestroyedImage = loadImage('assets/images/boss/Overload_turret_destroyed.png');
 
   // CarrierShield Boss Images
-  ASSETS.carrierShieldImage = loadImage('ui/images/boss/CarrierShield.png');
-  ASSETS.carrierShieldTurretImage = loadImage('ui/images/boss/CarrierShield_turret.png');
-  ASSETS.carrierShieldTurretDestroyedImage = loadImage('ui/images/boss/CarrierShield_turret_destroyed.png');
-  ASSETS.carrierShieldTurretEnabledImage = loadImage('ui/images/boss/CarrierShield_turret_enabled.png');
+  ASSETS.carrierShieldImage = loadImage('assets/images/boss/CarrierShield.png');
+  ASSETS.carrierShieldTurretImage = loadImage('assets/images/boss/CarrierShield_turret.png');
+  ASSETS.carrierShieldTurretDestroyedImage = loadImage('assets/images/boss/CarrierShield_turret_destroyed.png');
+  ASSETS.carrierShieldTurretEnabledImage = loadImage('assets/images/boss/CarrierShield_turret_enabled.png');
 
   // CanyonRocker Boss Images
-  ASSETS.canyonRockerImage = loadImage('ui/images/boss/CanyonRocker.png');
-  ASSETS.canyonRockerWallImage = loadImage('ui/images/boss/CanyonRocker_wall.png');
-  ASSETS.canyonRockerRockImage = loadImage('ui/images/boss/CanyonRocker_rock.png');
+  ASSETS.canyonRockerImage = loadImage('assets/images/boss/CanyonRocker.png');
+  ASSETS.canyonRockerWallImage = loadImage('assets/images/boss/CanyonRocker_wall.png');
+  ASSETS.canyonRockerRockImage = loadImage('assets/images/boss/CanyonRocker_rock.png');
 
   // OmegaSystem Boss Images
-  ASSETS.omegaSystemBossImage = loadImage('ui/images/boss/OmegaSystem.png');
-  ASSETS.omegaSystemLaserImage = loadImage('ui/images/boss/OmegaSystem_laser.png');
-  ASSETS.omegaSystemSmallPlaneImage = loadImage('ui/images/boss/OmegaSystem_smallPlane.png');
+  ASSETS.omegaSystemBossImage = loadImage('assets/images/boss/OmegaSystem.png');
+  ASSETS.omegaSystemLaserImage = loadImage('assets/images/boss/OmegaSystem_laser.png');
+  ASSETS.omegaSystemSmallPlaneImage = loadImage('assets/images/boss/OmegaSystem_smallPlane.png');
 
   // Move color definitions into ASSETS.colors
   ASSETS.colors = {
