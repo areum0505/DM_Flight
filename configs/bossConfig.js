@@ -47,14 +47,11 @@ const BOSS_STATS = {
 
   OMEGA_SYSTEM: { // 후반 보스 2 - 오메가 시스템
     HEALTH: Boss_HP_extreme,
-    WIDTH: 200,
-    HEIGHT: 135, // Added for consistency with Boss constructor
-    WIDTH: 150,
-    HEIGHT: 150,
-
+    WIDTH: 170,
+    HEIGHT: 170,
+    SIZE: 170,
     SMALL_PLANE_HEALTH: Boss_HP_medium,
-    SMALL_PLANE_SIZE: 20, // Added for consistency
-    
+    SMALL_PLANE_SIZE: 40, 
     SHIELD_HEALTH: Boss_HP_high,
   }
 };

@@ -80,7 +80,7 @@ class GameScene {
     this.updateGameState();
 
     this.spawnManager.update(this.enemies, this);
-    if (this.boss) this.boss.update(this.player, this.enemyBullets, this.ASSETS.enemyBulletImage);
+    if (this.boss) this.boss.update(this.player, this.enemyBullets, this.enemies);
 
     this.checkCollisions();
     this.checkItemCollisions();
@@ -186,7 +186,7 @@ class GameScene {
     } else if (bossType === 'CANYON_ROCKER') {
       this.boss = new CanyonRocker(width / 2, 100, this.ASSETS);
     } else if (bossType === 'OMEGA_SYSTEM') {
-      this.boss = new OmegaSystem(this, width / 2, 100, this.ASSETS);
+      this.boss = new OmegaSystem(width / 2, 100, this.ASSETS);
     }
   }
 

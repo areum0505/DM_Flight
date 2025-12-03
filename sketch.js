@@ -37,6 +37,11 @@ function preload() {
   ASSETS.canyonRockerWallImage = loadImage('ui/images/boss/CanyonRocker_wall.png');
   ASSETS.canyonRockerRockImage = loadImage('ui/images/boss/CanyonRocker_rock.png');
 
+  // OmegaSystem Boss Images
+  ASSETS.omegaSystemBossImage = loadImage('ui/images/boss/OmegaSystem.png');
+  ASSETS.omegaSystemLaserImage = loadImage('ui/images/boss/OmegaSystem_laser.png');
+  ASSETS.omegaSystemSmallPlaneImage = loadImage('ui/images/boss/OmegaSystem_smallPlane.png');
+
   // Move color definitions into ASSETS.colors
   ASSETS.colors = {
     BG_DARK: '#1f283c',
