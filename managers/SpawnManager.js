@@ -93,7 +93,11 @@ class SpawnManager {
             this.currentMusic.stop();
         }
         this.currentMusic = musicTrack;
+        
+        // Fade in new music to avoid overlap with sound effects
+        this.currentMusic.setVolume(0);
         this.currentMusic.loop();
+        this.currentMusic.setVolume(1, 2); // Fade up to full volume over 2 seconds
     }
   }
 

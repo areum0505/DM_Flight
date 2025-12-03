@@ -112,6 +112,7 @@ class GameScene {
     if (this.lastBackgroundState !== null && this.lastBackgroundState !== currentBackgroundState) {
       if (!this.transitionEffect) { // Only create if not already active
         this.transitionEffect = new TransitionEffect(this.ASSETS.backgrounds.transition);
+        this.ASSETS.sounds.stageClear.play();
       }
     }
     this.lastBackgroundState = currentBackgroundState;
@@ -191,7 +192,7 @@ class GameScene {
   }
 
   updateGameState() {
-    if (this.boss && this.boss.isDefeated) {      
+    if (this.boss && this.boss.isDefeated) {
       if (this.boss instanceof OmegaSystem) {
         this.boss = null;
         this.sceneManager.goTo('gameClear');

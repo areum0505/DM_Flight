@@ -44,9 +44,13 @@ function preload() {
 
   ASSETS.backgroundMusic = loadSound('assets/sounds/StartGame.mp3');
 
+  ASSETS.sounds = {
+    stageClear: loadSound('assets/sounds/StageClear.mp3'),
+  };
+
   ASSETS.music = {
     earlyWave: loadSound('assets/sounds/EarlyWave.mp3'),
-    midBoss1: loadSound('assets/sounds/MidBoss1.mp3'),
+    midBoss1: loadSound('assets/sounds/midBoss1.mp3'),
     midWave1: loadSound('assets/sounds/MidWave1.mp3'),
     midBoss2: loadSound('assets/sounds/MidBoss2.mp3'),
     midWave2: loadSound('assets/sounds/MidWave2.mp3'),
