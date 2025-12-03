@@ -49,6 +49,8 @@ function preload() {
     stageClear: loadSound('assets/sounds/StageClear.mp3'),
     gameOver: loadSound('assets/sounds/Gameover.wav'),
     gameClear: loadSound('assets/sounds/EndingCredit.mp3'),
+    getItem: loadSound('assets/sounds/GetItem.mp3'),
+    shoot: loadSound('assets/sounds/ShootSound.mp3'),
   };
 
   ASSETS.music = {
