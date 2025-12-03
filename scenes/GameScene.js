@@ -112,6 +112,7 @@ class GameScene {
     if (this.lastBackgroundState !== null && this.lastBackgroundState !== currentBackgroundState) {
       if (!this.transitionEffect) { // Only create if not already active
         this.transitionEffect = new TransitionEffect(this.ASSETS.backgrounds.transition);
+        this.ASSETS.sounds.stageClear.play();
       }
     }
     this.lastBackgroundState = currentBackgroundState;
@@ -191,7 +192,7 @@ class GameScene {
   }
 
   updateGameState() {
-    if (this.boss && this.boss.isDefeated) {      
+    if (this.boss && this.boss.isDefeated) {
       if (this.boss instanceof OmegaSystem) {
         this.boss = null;
         this.sceneManager.goTo('gameClear');
@@ -241,6 +242,7 @@ class GameScene {
           this.enemies[j].takeDamage();
           if (this.enemies[j].health <= 0) {
             this.spawnItems(this.enemies[j]); // Spawn items
+            this.ASSETS.sounds.enemyExplosion.play();
             this.enemies.splice(j, 1);
           }
           this.bullets.splice(i, 1);
@@ -271,7 +273,6 @@ class GameScene {
     for (let i = this.enemies.length - 1; i >= 0; i--) {
       if (this.isCollidingRectCircle(this.player, this.enemies[i])) {
         this.player.takeDamage();
-        this.enemies.splice(i, 1);
       }
     }
 
@@ -285,6 +286,7 @@ class GameScene {
       for (let i = this.items.length - 1; i >= 0; i--) {
           const item = this.items[i];
           if (this.isCollidingRectCircle(this.player, item)) {
+              this.ASSETS.sounds.getItem.play(); // Play sound on item acquisition
               // Apply item effect
               switch(item.type) {
                   case 'coin':

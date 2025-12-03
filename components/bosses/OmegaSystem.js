@@ -244,9 +244,11 @@ class OmegaSystem extends Boss {
             if (this.phase === 3) {
                 this.health = 0;
                 this.isDefeated = true;
+                this.ASSETS.sounds.enemyExplosion.play();
                 // 참고: 게임 오버/클리어 조건은 GameScene에서 처리
             } else if (this.phase === 2) {
                 // 보호막 파괴, 즉시 3페이즈로 전환
+                this.ASSETS.sounds.enemyExplosion.play();
                 this.shieldActive = false;
                 this.phase = 3;
                 this.startPhase3();
@@ -267,6 +269,7 @@ class OmegaSystem extends Boss {
                         plane.health -= bullet.damage;
                         if (plane.health <= 0) {
                             plane.active = false;
+                            this.ASSETS.sounds.enemyExplosion.play();
                             // 소형 비행기 파괴 시 파열 공격 요청 추가
                             this.burstAttacks.push({
                                 burstsLeft: 4,
