@@ -1,5 +1,6 @@
 let sceneManager;
 let ASSETS = {}; // Global ASSETS object
+let audioStarted = false;
 
 function preload() {
   ASSETS.backgrounds = {
@@ -46,6 +47,8 @@ function preload() {
 
   ASSETS.sounds = {
     stageClear: loadSound('assets/sounds/StageClear.mp3'),
+    gameOver: loadSound('assets/sounds/Gameover.wav'),
+    gameClear: loadSound('assets/sounds/EndingCredit.mp3'),
   };
 
   ASSETS.music = {
@@ -127,6 +130,11 @@ function keyPressed() {
 }
 
 function mousePressed() {
+  if (!audioStarted) {
+    userStartAudio();
+    audioStarted = true;
+  }
+
   if (!sceneManager) {
 
     return;

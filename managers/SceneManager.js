@@ -25,6 +25,14 @@ class SceneManager {
   goTo(sceneName) {
     const previousSceneName = Object.keys(this.scenes).find(key => this.scenes[key] === this.currentScene);
 
+    // Stop sounds from end screens
+    if (previousSceneName === 'gameOver') {
+      this.ASSETS.sounds.gameOver.stop();
+    } else if (previousSceneName === 'gameClear') {
+      this.ASSETS.sounds.gameClear.stop();
+    }
+
+    // Stop game music if leaving game scene
     if (previousSceneName === 'game') {
       this.scenes.game.spawnManager.stopAllMusic();
     }
@@ -47,6 +55,13 @@ class SceneManager {
       if (this.ASSETS.backgroundMusic && !this.ASSETS.backgroundMusic.isPlaying()) {
         this.ASSETS.backgroundMusic.loop();
       }
+    }
+
+    // Play sounds for specific scene changes
+    if (sceneName === 'gameOver') {
+      this.ASSETS.sounds.gameOver.play();
+    } else if (sceneName === 'gameClear') {
+      this.ASSETS.sounds.gameClear.play();
     }
   }
 
