@@ -39,7 +39,8 @@ const BOSS_STATS = {
 
   CANYON_ROCKER: { // 후반 보스 1 - 캐니언 록커
     HEALTH: Boss_HP_very_high,
-    SIZE: 120,
+    WIDTH: 200,
+    HEIGHT: 150,
     ATTACK_COOLDOWN: Boss_ATTACK_COOLDOWN_normal,
   },
 

@@ -1,8 +1,10 @@
 class CanyonRocker extends Boss {
   constructor(x, y, ASSETS) {
     const stats = BOSS_STATS.CANYON_ROCKER;
-    super(x, y, stats.HEALTH, stats.SIZE);
+    super(x, y, stats.HEALTH, max(stats.WIDTH, stats.HEIGHT));
     this.ASSETS = ASSETS;
+    this.width = stats.WIDTH;
+    this.height = stats.HEIGHT;
 
     this.isDefeated = false;
     this.phase = 1; // 현재 보스 페이즈 (1 또는 2)
@@ -21,7 +23,6 @@ class CanyonRocker extends Boss {
     this.canyon = {
       leftPath: [], // 협곡 왼쪽 벽의 경로 점들
       rightPath: [], // 협곡 오른쪽 벽의 경로 점들
-      width: 150, // (현재 사용 안함)
       pathWidth: width, // 플레이어가 지나갈 수 있는 길의 너비
       segmentLength: 10 // 협곡 곡선을 구성하는 선분의 길이 (작을수록 부드러움)
     };
@@ -160,7 +161,7 @@ class CanyonRocker extends Boss {
     push();
     translate(this.x, this.y);
     imageMode(CENTER);
-    image(this.ASSETS.canyonRockerImage, 0, 0, this.size, this.size);
+    image(this.ASSETS.canyonRockerImage, 0, 0, this.width, this.height);
 
     // 체력 표시
     // fill(255);
