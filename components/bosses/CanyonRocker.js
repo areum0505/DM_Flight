@@ -31,13 +31,14 @@ class CanyonRocker extends Boss {
   }
 
   update(player, enemyBullets) {
+    super.update(player, enemyBullets);
+    
     // 페이즈 전환 로직
     if (this.health <= this.maxHealth / 2 && this.phase === 1) {
       this.phase = 2;
       this.isVulnerable = false;
       this.phase2StartTime = frameCount;
       this.widthAtTransitionStart = this.canyon.pathWidth; // 전환 직전의 너비를 저장
-      console.log("Canyon Rocker: Phase 2 initiated. Boss is invincible.");
     }
 
     // 협곡 너비 관리 로직
@@ -72,7 +73,7 @@ class CanyonRocker extends Boss {
     this.generateCanyon(this.phase === 2);
 
     // 낙석 공격 로직 (인트로 중에는 실행 안함)
-    if (!this.isIntroAnimation) {
+    if (!this.isIntroAnimation && !this.isIntro) {
       const currentRockfallCooldown = this.phase === 1 ? 135 : 70; // 현재 낙석 공격 주기
       if (frameCount - this.lastRockfallFrame > currentRockfallCooldown) {
           this.lastRockfallFrame = frameCount;

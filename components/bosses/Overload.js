@@ -34,18 +34,34 @@ class Overload extends Boss {
   }
 
   update(player, enemyBullets) {
+    super.update(player, enemyBullets);
+
+    // 보스를 따라 포탑 위치를 계속 업데이트
+    for (let i = 0; i < this.turrets.length; i++) {
+      this.turrets[i].x = this.x + this.turretPositions[i].x;
+      this.turrets[i].y = this.y + this.turretPositions[i].y;
+    }
+
+    // 등장 애니메이션 중에는 공격 로직을 실행하지 않음
+    if (this.isIntro) {
+        return;
+    }
+
+    // 1페이즈: 포탑 공격
     if (this.phase === 1) {
       this.turrets.forEach(turret => turret.update(player, enemyBullets));
+      // 모든 포탑이 파괴되면 2페이즈로 전환
       if (this.turrets.every(t => t.health <= 0)) {
         this.phase = 2;
         this.isVulnerable = true;
         this.lastAttackFrame = frameCount;
         this.fireGiantBullets(3, player, enemyBullets);
       }
-    } else if (this.phase === 2) {
+    } else if (this.phase === 2) { // 2페이즈: 본체 돌진 공격
       if (this.chargeInfo.isCharging) {
         this.executeCharge();
       } else {
+        // 일정 시간마다 돌진 공격 준비
         if (frameCount - this.lastAttackFrame > this.attackCooldown * 2) {
           this.prepareCharge(player);
           this.lastAttackFrame = frameCount;
@@ -53,6 +69,7 @@ class Overload extends Boss {
       }
     }
     
+    // 1페이즈에서 주기적으로 거대 총알 발사
     if (this.phase === 1 && frameCount - this.lastAttackFrame > this.attackCooldown) {
         this.fireGiantBullets(1, player, enemyBullets);
         this.lastAttackFrame = frameCount;
@@ -73,6 +90,7 @@ class Overload extends Boss {
   prepareCharge(player) {
     this.chargeInfo.isCharging = true;
     this.chargeInfo.targetX = player.x;
+    // 플레이어 위치를 기준으로 화면 상단에서 다시 나타나 돌진
     this.x = this.chargeInfo.targetX;
     this.y = -this.size;
     this.chargeInfo.angle = 0;
@@ -95,12 +113,6 @@ class Overload extends Boss {
     }
     imageMode(CENTER);
     image(this.ASSETS.overloadBossImage, 0, 0, this.width, this.height);
-    
-    // 체력 표시
-    // fill(255);
-    // textAlign(CENTER, CENTER);
-    // textSize(20);
-    // text(this.health, 0, 0);
     pop();
 
     this.turrets.forEach(turret => turret.draw());
@@ -171,12 +183,6 @@ class Turret {
     imageMode(CENTER);
     if (this.health > 0) {
       image(this.ASSETS.overloadTurretImage, this.x, this.y, this.size, this.size);
-
-      // 체력 표시
-      fill(0);
-      textAlign(CENTER, CENTER);
-      textSize(14);
-      text(this.health, this.x, this.y);
     } else {
       image(this.ASSETS.overloadTurretDestroyedImage, this.x, this.y, this.size, this.size);
     }

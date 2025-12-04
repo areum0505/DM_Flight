@@ -61,7 +61,25 @@ class OmegaSystem extends Boss {
     }
 
     update(player, enemyBullets, enemies) {
+        super.update(player, enemyBullets, enemies);
         if (this.isDefeated) return;
+
+        // 보스 등장 애니메이션 중에는 소형 비행기 위치만 업데이트
+        if (this.phase === 1) {
+            this.smallPlanes.forEach(plane => {
+                if (!plane.active) return;
+    
+                // 각 비행기가 개별적으로 본체 주변을 공전
+                plane.angle += 0.03;
+                plane.x = this.x + this.smallPlaneRadius * cos(plane.angle);
+                plane.y = this.y + this.smallPlaneRadius * sin(plane.angle);
+            });
+        }
+        
+        // 등장 애니메이션 중에는 공격 로직을 실행하지 않음
+        if (this.isIntro) {
+            return;
+        }
 
         this.updateBurstAttacks(enemyBullets);
 
@@ -88,15 +106,10 @@ class OmegaSystem extends Boss {
         this.smallPlanes.forEach(plane => {
             if (!plane.active) return;
 
-            // 각 비행기가 개별적으로 본체 주변을 공전
-            plane.angle += 0.03;
-            plane.x = this.x + this.smallPlaneRadius * cos(plane.angle);
-            plane.y = this.y + this.smallPlaneRadius * sin(plane.angle);
-
-            // 발사
+            // Firing logic is now separated from position updates
             plane.fireTimer--;
             if (plane.fireTimer <= 0) {
-                // 플레이어를 향하는 방향으로 발사
+                // Fires towards the player
                 const angleToPlayer = atan2(player.y - plane.y, player.x - plane.x);
                 const vx = this.smallPlaneBulletSpeed * cos(angleToPlayer);
                 const vy = this.smallPlaneBulletSpeed * sin(angleToPlayer);
@@ -321,25 +334,23 @@ class OmegaSystem extends Boss {
                 break;
         }
 
-        push(); // 텍스트 스타일 분리
-        fill(255);
-        textSize(16);
-        textAlign(CENTER, CENTER);
+        // push(); // 텍스트 스타일 분리
+        // fill(255);
+        // textSize(16);
+        // textAlign(CENTER, CENTER);
         // 1페이즈의 경우, 활성화된 소형 비행기들의 체력을 합산하여 표시
-        let currentDisplayHealth = this.health;
-        let maxDisplayHealth = this.maxHealth;
-        if (this.phase === 1) {
-            currentDisplayHealth = this.smallPlanes.reduce((sum, plane) => sum + (plane.active ? plane.health : 0), 0);
-            maxDisplayHealth = this.numSmallPlanes * this.smallPlaneHealth;
-            text(`Phase 1: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
-        } else if (this.phase === 2) {
-            text(`Shield: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
-        } else { // Phase 3
-            text(`Health: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
-        }
-        pop(); // 이전 스타일 복원
-
-
+        // let currentDisplayHealth = this.health;
+        // let maxDisplayHealth = this.maxHealth;
+        // if (this.phase === 1) {
+        //     currentDisplayHealth = this.smallPlanes.reduce((sum, plane) => sum + (plane.active ? plane.health : 0), 0);
+        //     maxDisplayHealth = this.numSmallPlanes * this.smallPlaneHealth;
+        //     text(`Phase 1: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
+        // } else if (this.phase === 2) {
+        //     text(`Shield: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
+        // } else { // Phase 3
+        //     text(`Health: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
+        // }
+        // pop(); // 이전 스타일 복원
     }
 
     drawPhase1() {
@@ -349,12 +360,12 @@ class OmegaSystem extends Boss {
             image(this.ASSETS.omegaSystemSmallPlaneImage, plane.x, plane.y, plane.size, plane.size);
 
             // 소형 비행기 체력 표시
-            push();
-            fill(255);
-            textSize(12);
-            textAlign(CENTER, CENTER);
-            text(floor(plane.health), plane.x, plane.y);
-            pop();
+            // push();
+            // fill(255);
+            // textSize(12);
+            // textAlign(CENTER, CENTER);
+            // text(floor(plane.health), plane.x, plane.y);
+            // pop();
         });
     }
 

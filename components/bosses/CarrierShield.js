@@ -19,7 +19,8 @@ class CarrierShield extends Boss {
     ];
     
     this.turretPositions.forEach((pos, index) => {
-      const isAttackable = index === 0;
+      const isAttackable = index === 0; // 첫 번째 포탑만 초기에 공격 가능
+      // The initial y position of the turret will be calculated based on the boss's initial y
       this.turrets.push(new CarrierTurret(this.x + pos.x, this.y + pos.y, this, index, isAttackable, this.ASSETS));
     });
 
@@ -28,32 +29,35 @@ class CarrierShield extends Boss {
     this.speed = stats.SPEED;
     this.direction = createVector(this.speed, 0);
     this.isDefeated = false;
-    this.y = y; // GameScene에서 전달된 y좌표 사용
-    if (this.y === undefined) { // y값이 전달되지 않았을 경우의 예비처리 (현재 구조에선 발생하지 않음)
-      this.y = this.height / 2;
-    }
   }
 
   update(player, enemyBullets) {
+    super.update(player, enemyBullets);
     this.move();
-
 
     let allTurretsDestroyed = true;
     for (let i = 0; i < this.turrets.length; i++) {
       const turret = this.turrets[i];
+      // 보스를 따라 포탑 위치를 계속 업데이트
+      turret.x = this.x + this.turretPositions[i].x;
+      turret.y = this.y + this.turretPositions[i].y;
+      
       if (turret.health > 0) {
         allTurretsDestroyed = false;
-        turret.update(player, enemyBullets);
+        if(!this.isIntro) {
+          turret.update(player, enemyBullets);
+        }
       }
     }
 
+    // 모든 포탑이 파괴되면 보스가 공격 가능 상태가 됨
     if (allTurretsDestroyed && !this.isVulnerable) {
       this.isVulnerable = true;
       this.lastAttackFrame = frameCount; // 본체 공격 타이머 초기화
     }
 
-
-    if (this.isVulnerable && frameCount - this.lastAttackFrame > this.attackCooldown) {
+    // 등장 애니메이션이 끝나고, 공격 가능 상태일 때만 보스가 공격
+    if (!this.isIntro && this.isVulnerable && frameCount - this.lastAttackFrame > this.attackCooldown) {
       this.shoot(player, enemyBullets);
       this.lastAttackFrame = frameCount;
     }
@@ -111,15 +115,17 @@ class CarrierShield extends Boss {
   }
 
   isHit(bullet, enemyBullets, player) {
+    // 보스가 직접 공격받는 상태일 때
     if (this.isVulnerable) {
       if (bullet.x > this.x - this.width / 2 && bullet.x < this.x + this.width / 2 &&
           bullet.y > this.y - this.height / 2 && bullet.y < this.y + this.height / 2) {
         this.health--;
         return true;
       }
-    } else {
+    } else { // 포탑을 먼저 파괴해야 할 때
       for (let i = 0; i < this.turrets.length; i++) {
         const turret = this.turrets[i];
+        // 공격 가능한 포탑만 피격 판정
         if (turret.isAttackable && turret.health > 0 && dist(bullet.x, bullet.y, turret.x, turret.y) < turret.size / 2) {
           turret.health--;
           if (turret.health <= 0) {
@@ -198,7 +204,7 @@ class CarrierTurret {
       }
       
       // 체력 표시
-      fill(0);
+      // fill(0);
       // textAlign(CENTER, CENTER);
       // textSize(14);
       // text(this.health, this.x, this.y);
