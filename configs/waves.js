@@ -4,10 +4,10 @@ const Ypos = -20;
 
 const WAVES = [
 
-  /********* 초반부: 0 ~ 7,200프레임 (2분) *********/
+  /********* 초반부 *********/
   ...(() => {
     const arr = [];
-    for (let frameCount = 0; frameCount <= 7200; frameCount++) {
+    for (let frameCount = CONFIG.PHASES.EARLY_START; frameCount < CONFIG.PHASES.EARLY_END; frameCount++) {
       if (frameCount % 300 === 0) {
         arr.push({
           triggerFrame: frameCount,
@@ -26,16 +26,15 @@ const WAVES = [
 
   // Boss Battle 1
   {
-    triggerFrame: 7199,
+    triggerFrame: CONFIG.PHASES.EARLY_END,
     type: 'BOSS',
     bossType: 'OVERLOAD'
-    },
+  },
 
-  /********* 중반부 1: 7,200 ~ 10,800프레임 (1분) *********/
+  /********* 중반부 1 *********/
   ...(() => {
     const arr = [];
-    // 보스 클리어 후 타이머가 7200부터 다시 시작되므로, 여기서부터 웨이브를 배치합니다.
-    for (let frameCount = 7200; frameCount <= 10800; frameCount++) {
+    for (let frameCount = CONFIG.PHASES.MID_START; frameCount < CONFIG.PHASES.MID_1_END; frameCount++) {
       if (frameCount % 350 === 0) {
         arr.push({
           triggerFrame: frameCount,
@@ -55,16 +54,15 @@ const WAVES = [
 
   // Boss Battle 2
   {
-    triggerFrame: 10799,
+    triggerFrame: CONFIG.PHASES.MID_1_END,
     type: 'BOSS',
     bossType: 'CARRIER_SHIELD'
   },
 
-  /********* 중반부 2: 10,800 ~ 14,400프레임 (1분) *********/
+  /********* 중반부 2 *********/
   ...(() => {
     const arr = [];
-    // 보스 클리어 후 타이머가 10800부터 다시 시작되므로, 여기서부터 웨이브를 배치합니다.
-    for (let frameCount = 10800; frameCount <= 14400; frameCount++) {
+    for (let frameCount = CONFIG.PHASES.MID_1_END; frameCount < CONFIG.PHASES.MID_END; frameCount++) {
       if (frameCount % 350 === 0) {
         arr.push({
           triggerFrame: frameCount,
@@ -85,15 +83,15 @@ const WAVES = [
 
   // Boss Battle 3
   {
-    triggerFrame: 14400,
+    triggerFrame: CONFIG.PHASES.MID_END,
     type: 'BOSS',
     bossType: 'CANYON_ROCKER'
   },
 
-  /********* 후반부: 14,400 ~ 18,000프레임 (2분) *********/
+  /********* 후반부 *********/
   ...(() => {
     const arr = [];
-    for (let frameCount = 14400; frameCount <= 18000; frameCount++) {
+    for (let frameCount = CONFIG.PHASES.LATE_START; frameCount < CONFIG.PHASES.LATE_END; frameCount++) {
       if (frameCount % 380 === 0) {
         arr.push({
           triggerFrame: frameCount,
@@ -115,7 +113,7 @@ const WAVES = [
 
   // Final Boss
   {
-    triggerFrame: 18000,
+    triggerFrame: CONFIG.PHASES.LATE_END,
     type: 'BOSS',
     bossType: 'OMEGA_SYSTEM'
   }

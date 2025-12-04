@@ -95,10 +95,10 @@ class GameScene {
     let currentBackground;
     let currentBackgroundState;
 
-    if (timer < 900) {
+    if (timer < CONFIG.PHASES.EARLY_END) {
       currentBackground = this.ASSETS.backgrounds.start;
       currentBackgroundState = 'start';
-    } else if (timer >= 900 && timer < 2700) {
+    } else if (timer >= CONFIG.PHASES.EARLY_END && timer < CONFIG.PHASES.MID_END) {
       currentBackground = this.ASSETS.backgrounds.mid;
       currentBackgroundState = 'mid';
     } else {
@@ -161,8 +161,8 @@ class GameScene {
     // Coin spawn
     const timer = this.spawnManager.waveTimer;
     let coinChance;
-    if (timer < 900) coinChance = 0.7;
-    else if (timer < 2700) coinChance = 0.5;
+    if (timer < CONFIG.PHASES.EARLY_END) coinChance = 0.7;
+    else if (timer < CONFIG.PHASES.MID_END) coinChance = 0.5;
     else coinChance = 0.4;
 
     if (random() < coinChance) {
