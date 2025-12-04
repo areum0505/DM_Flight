@@ -20,7 +20,7 @@ const CONFIG = {
 };
 
 // 테스트용 시간 설정 사용 여부 (true: 테스트용, false: 실제 플레이용)
-const USE_TEST_TIMINGS = true;
+const USE_TEST_TIMINGS = false;
 const TEST_PHASE_DURATION = 20 * 60; // 테스트용 단계별 지속 시간 (20초)
 
 if (USE_TEST_TIMINGS) {
