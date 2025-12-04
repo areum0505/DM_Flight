@@ -24,7 +24,7 @@ const WAVES = [
     return arr;
   })(),
 
-  // Boss Battle 1
+  // 중간 보스 1 (OVERLOAD)
   {
     triggerFrame: CONFIG.PHASES.EARLY_END,
     type: 'BOSS',
@@ -52,7 +52,7 @@ const WAVES = [
     return arr;
   })(),
 
-  // Boss Battle 2
+  // 중간 보스 2 (CARRIER_SHIELD)
   {
     triggerFrame: CONFIG.PHASES.MID_1_END,
     type: 'BOSS',
@@ -81,7 +81,7 @@ const WAVES = [
     return arr;
   })(),
 
-  // Boss Battle 3
+  // 후반 보스 1 (CANYON_ROCKER)
   {
     triggerFrame: CONFIG.PHASES.MID_END,
     type: 'BOSS',
@@ -111,7 +111,7 @@ const WAVES = [
     return arr;
   })(),
 
-  // Final Boss
+  // 최종 보스 (OMEGA_SYSTEM)
   {
     triggerFrame: CONFIG.PHASES.LATE_END,
     type: 'BOSS',
