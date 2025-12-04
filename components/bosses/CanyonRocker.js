@@ -150,8 +150,8 @@ class CanyonRocker extends Boss {
     const right_pt = this.canyon.rightPath[playerSegmentIndex];
 
     if (
-      player.x - player.size / 2 < left_pt.x ||
-      player.x + player.size / 2 > right_pt.x
+      player.x - player.width / 2 < left_pt.x ||
+      player.x + player.width / 2 > right_pt.x
     ) {
       player.takeDamage();
     }
