@@ -28,12 +28,13 @@ const WAVES = [
   {
     triggerFrame: 7199,
     type: 'BOSS',
-    bossType: 'OVERLOAD'  
+    bossType: 'OVERLOAD'
     },
 
   /********* 중반부 1: 7,200 ~ 10,800프레임 (1분) *********/
   ...(() => {
     const arr = [];
+    // 보스 클리어 후 타이머가 7200부터 다시 시작되므로, 여기서부터 웨이브를 배치합니다.
     for (let frameCount = 7200; frameCount <= 10800; frameCount++) {
       if (frameCount % 350 === 0) {
         arr.push({
@@ -89,7 +90,7 @@ const WAVES = [
     bossType: 'CANYON_ROCKER'
   },
 
-  /********* 후반부: 14,400 ~ 18,000프레임 *********/
+  /********* 후반부: 14,400 ~ 18,000프레임 (2분) *********/
   ...(() => {
     const arr = [];
     for (let frameCount = 14400; frameCount <= 18000; frameCount++) {

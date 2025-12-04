@@ -2,18 +2,20 @@
 class CarrierShield extends Boss {
   constructor(x, y, ASSETS) {
     const stats = BOSS_STATS.CARRIER_SHIELD;
-    super(x, y, stats.HEALTH, stats.WIDTH); // Pass width as size for now
-    this.ASSETS = ASSETS; // Store ASSETS
+    super(x, y, stats.HEALTH, stats.WIDTH); 
+    this.ASSETS = ASSETS; 
     this.width = stats.WIDTH;
     this.height = stats.HEIGHT;
 
     this.isVulnerable = false;
     this.turrets = [];
     this.turretPositions = [
-      { x: -this.width * 0.3, y: 0 },
-      { x: this.width * 0.3, y: 0 },
-      { x: -this.width * 0.15, y: this.height * 0.25 },
-      { x: this.width * 0.15, y: this.height * 0.25 },
+      // Top Center turret
+      { x: 0, y: -20 },
+      // triangle formation below turret
+      { x: 0, y: 90 },
+      { x: -75, y: 230 },
+      { x: 75, y: 230 },
     ];
     
     this.turretPositions.forEach((pos, index) => {
@@ -26,13 +28,16 @@ class CarrierShield extends Boss {
     this.speed = stats.SPEED;
     this.direction = createVector(this.speed, 0);
     this.isDefeated = false;
-    this.y = this.height / 2; // Set initial y position
+    this.y = y; // GameScene에서 전달된 y좌표 사용
+    if (this.y === undefined) { // y값이 전달되지 않았을 경우의 예비처리 (현재 구조에선 발생하지 않음)
+      this.y = this.height / 2;
+    }
   }
 
   update(player, enemyBullets) {
     this.move();
 
-    // Turret updates
+
     let allTurretsDestroyed = true;
     for (let i = 0; i < this.turrets.length; i++) {
       const turret = this.turrets[i];
@@ -44,10 +49,10 @@ class CarrierShield extends Boss {
 
     if (allTurretsDestroyed && !this.isVulnerable) {
       this.isVulnerable = true;
-      this.lastAttackFrame = frameCount; // Reset attack timer for main body
+      this.lastAttackFrame = frameCount; // 본체 공격 타이머 초기화
     }
 
-    // Main body attack
+
     if (this.isVulnerable && frameCount - this.lastAttackFrame > this.attackCooldown) {
       this.shoot(player, enemyBullets);
       this.lastAttackFrame = frameCount;
@@ -55,12 +60,13 @@ class CarrierShield extends Boss {
     
     if (this.health <= 0 && !this.isDefeated) {
         this.isDefeated = true;
+        this.ASSETS.sounds.enemyExplosion.play();
         this.onDeath(enemyBullets, player);
     }
   }
     
   onDeath(enemyBullets, player) {
-    // Fires 5 fast homing missiles
+    // 빠른 유도 미사일 5발 발사
     for (let i = 0; i < 5; i++) {
         const bullet = new Bullet(this.x, this.y, 'homing', this.ASSETS.enemyBulletImage, null, player, 7);
         enemyBullets.push(bullet);
@@ -68,7 +74,7 @@ class CarrierShield extends Boss {
   }
 
   move() {
-    // The carrier is stationary.
+    // 캐리어는 고정되어 움직이지 않음.
   }
 
   shoot(player, enemyBullets) {
@@ -82,7 +88,7 @@ class CarrierShield extends Boss {
   }
   
   onTurretDestroyed(enemyBullets, player) {
-    // Fires 2 fast homing missiles
+    // 빠른 유도 미사일 2발 발사
     for (let i = 0; i < 2; i++) {
         const bullet = new Bullet(this.x, this.y, 'homing', this.ASSETS.enemyBulletImage, null, player, 7);
         enemyBullets.push(bullet);
@@ -91,18 +97,16 @@ class CarrierShield extends Boss {
 
   draw() {
     push();
-    // Main Body
-    fill(this.isVulnerable ? '#ff6347' : '#808080');
-    rectMode(CENTER);
-    rect(this.x, this.y, this.width, this.height);
+    imageMode(CENTER);
+    image(this.ASSETS.carrierShieldImage, this.x, this.y, this.width, this.height);
     
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(20);
-    text(this.health, this.x, this.y);
+    // 체력 표시
+    //fill(255);
+    // textAlign(CENTER, CENTER);
+    // textSize(20);
+    // text(this.health, this.x, this.y);
     pop();
 
-    // Turrets
     this.turrets.forEach(turret => turret.draw());
   }
 
@@ -119,8 +123,9 @@ class CarrierShield extends Boss {
         if (turret.isAttackable && turret.health > 0 && dist(bullet.x, bullet.y, turret.x, turret.y) < turret.size / 2) {
           turret.health--;
           if (turret.health <= 0) {
+            this.ASSETS.sounds.enemyExplosion.play();
             this.onTurretDestroyed(enemyBullets, player);
-            // Activate next turret
+            // 다음 포탑 활성화
             if (i + 1 < this.turrets.length) {
               this.turrets[i + 1].isAttackable = true;
             }
@@ -134,7 +139,7 @@ class CarrierShield extends Boss {
 }
 
 class CarrierTurret {
-  constructor(x, y, boss, index, isAttackable = false, ASSETS) { // Accept ASSETS
+  constructor(x, y, boss, index, isAttackable = false, ASSETS) { 
     const turretStats = BOSS_STATS.CARRIER_SHIELD.TURRETS;
     this.x = x;
     this.y = y;
@@ -143,12 +148,12 @@ class CarrierTurret {
     this.boss = boss;
     this.index = index;
     this.isAttackable = isAttackable;
-    this.ASSETS = ASSETS; // Store ASSETS
+    this.ASSETS = ASSETS; 
     
     this.laserInfo = {
       isCharging: false,
       chargeStartFrame: 0,
-      chargeDuration: 60, // 1 second at 60 FPS
+      chargeDuration: 60, // 60프레임 기준 1초
       targetAngle: 0,
     };
     this.lastShotFrame = 0;
@@ -177,36 +182,39 @@ class CarrierTurret {
 
   fireLaser(enemyBullets) {
     const vel = p5.Vector.fromAngle(this.laserInfo.targetAngle, 10);
-    const bullet = new Bullet(this.x, this.y, 'laser', this.ASSETS.enemyBulletImage, vel); // Pass enemyBulletImage
+    const bullet = new Bullet(this.x, this.y, 'laser', this.ASSETS.enemyBulletImage, vel);
     enemyBullets.push(bullet);
   }
 
   draw() {
+    push();
+    imageMode(CENTER);
+
     if (this.health > 0) {
-      push();
       if (this.isAttackable) {
-        fill('#add8e6'); // Light blue for attackable
+        image(this.ASSETS.carrierShieldTurretEnabledImage, this.x, this.y, this.size, this.size);
       } else {
-        fill('#a9a9a9'); // Dark gray for non-attackable
+        image(this.ASSETS.carrierShieldTurretImage, this.x, this.y, this.size, this.size);
       }
-      rectMode(CENTER);
-      rect(this.x, this.y, this.size, this.size);
-
+      
+      // 체력 표시
       fill(0);
-      textAlign(CENTER, CENTER);
-      textSize(14);
-      text(this.health, this.x, this.y);
-      pop();
+      // textAlign(CENTER, CENTER);
+      // textSize(14);
+      // text(this.health, this.x, this.y);
+    } else {
+      image(this.ASSETS.carrierShieldTurretDestroyedImage, this.x, this.y, this.size, this.size);
+    }
+    pop();
 
-      if (this.laserInfo.isCharging) {
-        push();
-        stroke(255, 0, 0, 150);
-        strokeWeight(2);
-        translate(this.x, this.y);
-        rotate(this.laserInfo.targetAngle);
-        line(0, 0, width, 0); // Draw a line across the screen
-        pop();
-      }
+    if (this.laserInfo.isCharging && this.health > 0) { // 포탑이 활성화된 경우에만 레이저 충전
+      push();
+      stroke(255, 0, 0, 150);
+      strokeWeight(5);
+      translate(this.x, this.y);
+      rotate(this.laserInfo.targetAngle);
+      line(0, 0, width * 1.5, 0);
+      pop();
     }
   }
 }

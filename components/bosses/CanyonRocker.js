@@ -1,7 +1,10 @@
 class CanyonRocker extends Boss {
-  constructor(x, y) {
+  constructor(x, y, ASSETS) {
     const stats = BOSS_STATS.CANYON_ROCKER;
-    super(x, y, stats.HEALTH, stats.SIZE);
+    super(x, y, stats.HEALTH, max(stats.WIDTH, stats.HEIGHT));
+    this.ASSETS = ASSETS;
+    this.width = stats.WIDTH;
+    this.height = stats.HEIGHT;
 
     this.isDefeated = false;
     this.phase = 1; // 현재 보스 페이즈 (1 또는 2)
@@ -20,7 +23,6 @@ class CanyonRocker extends Boss {
     this.canyon = {
       leftPath: [], // 협곡 왼쪽 벽의 경로 점들
       rightPath: [], // 협곡 오른쪽 벽의 경로 점들
-      width: 150, // (현재 사용 안함)
       pathWidth: width, // 플레이어가 지나갈 수 있는 길의 너비
       segmentLength: 10 // 협곡 곡선을 구성하는 선분의 길이 (작을수록 부드러움)
     };
@@ -55,7 +57,7 @@ class CanyonRocker extends Boss {
         }
     } else if (this.phase === 1) {
       this.canyon.pathWidth = phase1Width;
-    } else { // Phase 2
+    } else {
       // 2페이즈 전환: 1페이즈 너비에서 2페이즈 너비로 서서히 좁아짐
       const timeSincePhase2Start = frameCount - this.phase2StartTime;
       if (timeSincePhase2Start >= 0 && timeSincePhase2Start < transitionDuration) {
@@ -93,7 +95,7 @@ class CanyonRocker extends Boss {
   rockfallAttack(enemyBullets) {
     const rockSize = this.phase === 1 ? 20 : 30;
     const rockX = random(width);
-    const rock = new FallingRock(rockX, 0, rockSize);
+    const rock = new FallingRock(rockX, 0, rockSize, this.ASSETS);
     enemyBullets.push(rock);
   }
 
@@ -155,37 +157,26 @@ class CanyonRocker extends Boss {
   }
 
   draw() {
-    this.drawCanyon();
-
+    // 이 메소드는 이제 보스 본체만 그립니다.
     push();
     translate(this.x, this.y);
+    imageMode(CENTER);
+    image(this.ASSETS.canyonRockerImage, 0, 0, this.width, this.height);
 
-    let bossColor;
-    if (this.phase === 1) {
-      bossColor = "#8B4513";
-    } else { 
-      bossColor = "#654321";
-    }
-
-    if (!this.isVulnerable) {
-      bossColor = "#808080";
-    }
-
-    fill(bossColor);
-    rectMode(CENTER);
-    rect(0, 0, this.size, this.size);
-
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(20);
-    text(this.health, 0, 0);
+    // 체력 표시
+    // fill(255);
+    // textAlign(CENTER, CENTER);
+    // textSize(20);
+    // text(this.health, 0, 0);
     pop();
   }
 
   drawCanyon() {
-    fill(101, 67, 33);
-    noStroke();
+    noStroke(); // 벽에는 외곽선이 없어야 함
 
+    // 왼쪽 벽
+    drawingContext.save();
+    
     beginShape();
     vertex(0, 0);
     for (const p of this.canyon.leftPath) {
@@ -193,6 +184,30 @@ class CanyonRocker extends Boss {
     }
     vertex(0, height);
     endShape(CLOSE);
+    
+    drawingContext.clip(); 
+    
+    const img = this.ASSETS.canyonRockerWallImage;
+    if (img && img.width > 0 && img.height > 0) {
+      const stepY = img.height * 0.7; // 70% 겹치기
+      const startY = (this.canyonY % stepY) - stepY;
+      let rowCounter = 0;
+
+      for (let y = startY; y < height; y += stepY) {
+        const isOddRow = (Math.floor(this.canyonY / stepY) + rowCounter) % 2 !== 0;
+        const xOffset = isOddRow ? -img.width / 2 : 0;
+        
+        for (let x = xOffset; x < width; x += img.width) {
+          image(img, x, y);
+        }
+        rowCounter++;
+      }
+    }
+    
+    drawingContext.restore();
+
+    // 오른쪽 벽
+    drawingContext.save();
 
     beginShape();
     vertex(width, 0);
@@ -201,6 +216,26 @@ class CanyonRocker extends Boss {
     }
     vertex(width, height);
     endShape(CLOSE);
+
+    drawingContext.clip();
+
+    if (img && img.width > 0 && img.height > 0) {
+      const stepY = img.height * 0.7; // 70% 겹치기
+      const startY = (this.canyonY % stepY) - stepY;
+      let rowCounter = 0;
+
+      for (let y = startY; y < height; y += stepY) {
+        const isOddRow = (Math.floor(this.canyonY / stepY) + rowCounter) % 2 !== 0;
+        const xOffset = isOddRow ? -img.width / 2 : 0;
+        
+        for (let x = xOffset; x < width; x += img.width) {
+          image(img, x, y);
+        }
+        rowCounter++;
+      }
+    }
+
+    drawingContext.restore();
   }
 
   isHit(bullet) {
@@ -216,6 +251,7 @@ class CanyonRocker extends Boss {
       this.health--;
       if (this.health <= 0) {
           this.isDefeated = true;
+          this.ASSETS.sounds.enemyExplosion.play();
       }
       return true;
     }

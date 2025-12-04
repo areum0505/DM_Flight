@@ -7,6 +7,8 @@ class GameScene {
   constructor(sceneManager, ASSETS) {
     this.sceneManager = sceneManager;
     this.ASSETS = ASSETS; // Store ASSETS object
+    this.transitionEffect = null; // Initialize transition effect
+    this.lastBackgroundState = null; // Track last background state
     this.reset();
   }
 
@@ -23,21 +25,42 @@ class GameScene {
 
     this.state = GameState.PLAYING;
     this.spawnManager.loadWaves(WAVES);
+
+    // Reset transition effect on game reset
+    this.transitionEffect = null;
+    this.lastBackgroundState = null;
   }
 
   draw() {
+    background(0); // Explicitly clear the canvas each frame
+    imageMode(CORNER); // Ensure background images are drawn from the top-left corner
     this.drawBackground();
 
     this.items.forEach(i => i.draw());
     this.player.draw();
     this.bullets.forEach(b => b.draw());
-    this.enemyBullets.forEach(b => b.draw());
+    // If the boss is CanyonRocker, draw its canyon walls before drawing enemies.
+    if (this.boss && this.boss instanceof CanyonRocker) {
+      this.boss.drawCanyon();
+    }
+
     this.enemies.forEach(e => e.draw());
     if (this.boss) this.boss.draw();
+
+    this.enemyBullets.forEach(b => b.draw());
 
     this.drawHealthUI();
     this.drawScore();
     this.update();
+
+    // Draw transition effect if active
+    if (this.transitionEffect) {
+      this.transitionEffect.update();
+      this.transitionEffect.draw();
+      if (this.transitionEffect.isFinished()) {
+        this.transitionEffect = null; // Clear effect when finished
+      }
+    }
 
     // Draw Frame Count (Last to ensure visibility)
     // push();
@@ -57,7 +80,7 @@ class GameScene {
     this.updateGameState();
 
     this.spawnManager.update(this.enemies, this);
-    if (this.boss) this.boss.update(this.player, this.enemyBullets, this.ASSETS.enemyBulletImage);
+    if (this.boss) this.boss.update(this.player, this.enemyBullets, this.enemies);
 
     this.checkCollisions();
     this.checkItemCollisions();
@@ -69,13 +92,30 @@ class GameScene {
 
   drawBackground() {
     const timer = this.spawnManager.waveTimer;
+    let currentBackground;
+    let currentBackgroundState;
+
     if (timer < 900) {
-      image(this.ASSETS.backgrounds.start, 0, 0, width, height);
+      currentBackground = this.ASSETS.backgrounds.start;
+      currentBackgroundState = 'start';
     } else if (timer >= 900 && timer < 2700) {
-      image(this.ASSETS.backgrounds.mid, 0, 0, width, height);
+      currentBackground = this.ASSETS.backgrounds.mid;
+      currentBackgroundState = 'mid';
     } else {
-      image(this.ASSETS.backgrounds.end, 0, 0, width, height);
+      currentBackground = this.ASSETS.backgrounds.end;
+      currentBackgroundState = 'end';
     }
+
+    image(currentBackground, 0, 0, width, height);
+
+    // Trigger transition when background state changes
+    if (this.lastBackgroundState !== null && this.lastBackgroundState !== currentBackgroundState) {
+      if (!this.transitionEffect) { // Only create if not already active
+        this.transitionEffect = new TransitionEffect(this.ASSETS.backgrounds.transition);
+        this.ASSETS.sounds.stageClear.play();
+      }
+    }
+    this.lastBackgroundState = currentBackgroundState;
   }
 
   drawHealthUI() {
@@ -106,7 +146,13 @@ class GameScene {
   spawnItems(deadEnemy) {
     const { x, y, type } = deadEnemy;
 
-    // Power-up spawn
+    // Health pack spawn (3% chance)
+    if (random() < 0.03) {
+      this.items.push(new HealthItem(x, y, this.ASSETS.items.health));
+      return; // Only spawn one item type at a time
+    }
+
+    // Power-up spawn (5% chance)
     if (random() < 0.05) {
       this.items.push(new PowerUpItem(x, y, this.ASSETS.items.powerup));
       return; // Only spawn one item type at a time
@@ -137,24 +183,16 @@ class GameScene {
     if (bossType === 'OVERLOAD') {
       this.boss = new Overload(width / 2, 150, this.ASSETS);
     } else if (bossType === 'CARRIER_SHIELD') {
-      this.boss = new CarrierShield(width / 2, 150, this.ASSETS);
+      this.boss = new CarrierShield(width / 2, 70, this.ASSETS);
     } else if (bossType === 'CANYON_ROCKER') {
       this.boss = new CanyonRocker(width / 2, 100, this.ASSETS);
     } else if (bossType === 'OMEGA_SYSTEM') {
-      this.boss = new OmegaSystem(this, width / 2, 100, this.ASSETS);
+      this.boss = new OmegaSystem(width / 2, 100, this.ASSETS);
     }
   }
 
   updateGameState() {
     if (this.boss && this.boss.isDefeated) {
-      // Spawn items for defeating a boss
-      this.items.push(new HealthItem(this.boss.x, this.boss.y, this.ASSETS.items.health));
-      for (let i = 0; i < 5; i++) {
-        const offsetX = this.boss.x + random(-25, 25);
-        const offsetY = this.boss.y + random(-25, 25);
-        this.items.push(new Coin(offsetX, offsetY, this.ASSETS.items.coin));
-      }
-      
       if (this.boss instanceof OmegaSystem) {
         this.boss = null;
         this.sceneManager.goTo('gameClear');
@@ -166,7 +204,7 @@ class GameScene {
     }
 
     if (this.spawnManager.isComplete() && !this.boss && this.enemies.length === 0) {
-      console.log("Wave Clear!");
+
     }
   }
 
@@ -204,6 +242,7 @@ class GameScene {
           this.enemies[j].takeDamage();
           if (this.enemies[j].health <= 0) {
             this.spawnItems(this.enemies[j]); // Spawn items
+            this.ASSETS.sounds.enemyExplosion.play();
             this.enemies.splice(j, 1);
           }
           this.bullets.splice(i, 1);
@@ -234,7 +273,6 @@ class GameScene {
     for (let i = this.enemies.length - 1; i >= 0; i--) {
       if (this.isCollidingRectCircle(this.player, this.enemies[i])) {
         this.player.takeDamage();
-        this.enemies.splice(i, 1);
       }
     }
 
@@ -248,6 +286,7 @@ class GameScene {
       for (let i = this.items.length - 1; i >= 0; i--) {
           const item = this.items[i];
           if (this.isCollidingRectCircle(this.player, item)) {
+              this.ASSETS.sounds.getItem.play(); // Play sound on item acquisition
               // Apply item effect
               switch(item.type) {
                   case 'coin':
@@ -285,4 +324,14 @@ class GameScene {
   }
 
   handleInput(keyCode) { }
+
+  handleMousePressed() {
+    // GameScene likely doesn't have custom mouse pressed logic, or it's handled by internal components.
+    // For now, an empty method to prevent errors.
+  }
+
+  handleMouseMoved() {
+    // GameScene likely doesn't have custom mouse movement, so default to arrow
+    cursor(ARROW);
+  }
 }
