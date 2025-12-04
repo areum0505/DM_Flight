@@ -81,8 +81,7 @@ class Overload extends Boss {
     for (let i = 0; i < count; i++) {
         const angle = angleToPlayer + (i - floor(count/2)) * 0.2;
         const vel = p5.Vector.fromAngle(angle, 4);
-        const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel); 
-        bullet.size = 30;
+        const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.bossBulletImage, vel, null, undefined, 30); // Pass size 30
         enemyBullets.push(bullet);
     }
   }
@@ -174,7 +173,7 @@ class Turret {
     for (let i = -1; i <= 1; i++) {
       const angle = angleToPlayer + i * 0.25;
       const vel = p5.Vector.fromAngle(angle, 5);
-      const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel); 
+      const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.bossBulletImage, vel); 
       enemyBullets.push(bullet);
     }
   }

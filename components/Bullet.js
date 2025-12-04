@@ -1,12 +1,12 @@
 class Bullet {
-  constructor(x, y, type = 'default', bulletImage = null, vel = null, target = null, speed = CONFIG.BULLET.SPEED) {
+  constructor(x, y, type = 'default', bulletImage = null, vel = null, target = null, speed = CONFIG.BULLET.SPEED, bulletSize = CONFIG.BULLET.SIZE) {
     this.x = x;
     this.y = y;
     this.type = type;
     this.bulletImage = bulletImage; // Store the image
-    this.size = CONFIG.BULLET.SIZE; // Default size for circle collision
-    this.width = 10; // Default width for image
-    this.height = 20; // Default height for image
+    this.size = bulletSize;
+    this.width = 10; // Default width for image drawing
+    this.height = 20; // Default height for image drawing
     this.vel = vel;
     this.target = target;
     this.speed = speed;
@@ -17,21 +17,11 @@ class Bullet {
 
     if (this.type === 'laser') {
       this.size = 60;
-    }
-    if (this.type === 'homing') {
-      this.size = 15; // Larger size
+    } else if (this.type === 'homing') {
+      this.size = 40; // Increased size for homing bullets
       this.color = color(148, 0, 211); // Purple color
-    }
-    if (this.type === 'player' || this.type === 'enemy') {
-      // Adjust size for collision if needed, but 'size' is used for circle collision
-      // For image drawing, width and height will be used
-      this.size = 10; // Making image-based bullets a small circle for collision purposes
-    }
-
-
-    if (this.type === 'homing' && this.target) {
-      const angle = atan2(this.target.y - this.y, this.target.x - this.x);
-      this.vel = p5.Vector.fromAngle(angle, this.speed);
+    } else if (this.type === 'player' || this.type === 'enemy') {
+      this.size = 10; // Revert to original collision size
     }
   }
 
@@ -52,7 +42,15 @@ class Bullet {
   }
 
   draw() {
-    if ((this.type === 'player' || this.type === 'enemy') && this.bulletImage) {
+    // Boss bullets use this.size for dimensions
+    if ((this.type === 'default' || this.type === 'homing') && this.bulletImage) {
+      push();
+      imageMode(CENTER);
+      image(this.bulletImage, this.x, this.y, this.size, this.size);
+      pop();
+    } 
+    // Player and normal enemy bullets use fixed width/height
+    else if ((this.type === 'player' || this.type === 'enemy') && this.bulletImage) {
       push();
       imageMode(CENTER);
       image(this.bulletImage, this.x, this.y, this.width, this.height);

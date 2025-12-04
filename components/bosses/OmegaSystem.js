@@ -109,13 +109,12 @@ class OmegaSystem extends Boss {
             // Firing logic is now separated from position updates
             plane.fireTimer--;
             if (plane.fireTimer <= 0) {
-                // Fires towards the player
-                const angleToPlayer = atan2(player.y - plane.y, player.x - plane.x);
-                const vx = this.smallPlaneBulletSpeed * cos(angleToPlayer);
-                const vy = this.smallPlaneBulletSpeed * sin(angleToPlayer);
-                enemyBullets.push(new Bullet(plane.x, plane.y, 'enemy', this.ASSETS.enemyBulletImage, createVector(vx, vy), null, this.smallPlaneBulletSpeed));
-                plane.fireTimer = this.smallPlaneFireRate;
-            }
+                            // Fires towards the player
+                            const angleToPlayer = atan2(player.y - plane.y, player.x - this.x);
+                            const vx = this.smallPlaneBulletSpeed * cos(angleToPlayer);
+                            const vy = this.smallPlaneBulletSpeed * sin(angleToPlayer);
+                            enemyBullets.push(new Bullet(plane.x, plane.y, 'enemy', this.ASSETS.bossBulletImage, createVector(vx, vy), null, this.smallPlaneBulletSpeed));
+                            plane.fireTimer = this.smallPlaneFireRate;            }
         });
     }
 
@@ -167,7 +166,7 @@ class OmegaSystem extends Boss {
                 const angle = map(i, 0, 4, -PI / 6 + randomOffset, PI / 6 + randomOffset); // 무작위 오프셋으로 30도에 걸쳐 분산
                 const vx = this.mainBodyBulletSpeed * sin(angle);
                 const vy = this.mainBodyBulletSpeed * cos(angle);
-                enemyBullets.push(new Bullet(this.x, this.y + this.height / 2, 'enemy', this.ASSETS.enemyBulletImage, createVector(vx, vy), null, this.mainBodyBulletSpeed));
+                enemyBullets.push(new Bullet(this.x, this.y + this.height / 2, 'enemy', this.ASSETS.bossBulletImage, createVector(vx, vy), null, this.mainBodyBulletSpeed));
             }
         }
 
@@ -226,7 +225,7 @@ class OmegaSystem extends Boss {
                     const angle = (TWO_PI / 10) * j;
                     const vx = 4 * cos(angle); // 속도 4
                     const vy = 4 * sin(angle);
-                    enemyBullets.push(new Bullet(attack.x, attack.y, 'enemy', this.ASSETS.enemyBulletImage, createVector(vx, vy), null, 4));
+                    enemyBullets.push(new Bullet(attack.x, attack.y, 'enemy', this.ASSETS.bossBulletImage, createVector(vx, vy), null, 4));
                 }
 
                 attack.burstsLeft--;
@@ -334,23 +333,23 @@ class OmegaSystem extends Boss {
                 break;
         }
 
-        // push(); // 텍스트 스타일 분리
-        // fill(255);
-        // textSize(16);
-        // textAlign(CENTER, CENTER);
+        push(); // 텍스트 스타일 분리
+        fill(255);
+        textSize(16);
+        textAlign(CENTER, CENTER);
         // 1페이즈의 경우, 활성화된 소형 비행기들의 체력을 합산하여 표시
-        // let currentDisplayHealth = this.health;
-        // let maxDisplayHealth = this.maxHealth;
-        // if (this.phase === 1) {
-        //     currentDisplayHealth = this.smallPlanes.reduce((sum, plane) => sum + (plane.active ? plane.health : 0), 0);
-        //     maxDisplayHealth = this.numSmallPlanes * this.smallPlaneHealth;
-        //     text(`Phase 1: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
-        // } else if (this.phase === 2) {
-        //     text(`Shield: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
-        // } else { // Phase 3
-        //     text(`Health: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
-        // }
-        // pop(); // 이전 스타일 복원
+        let currentDisplayHealth = this.health;
+        let maxDisplayHealth = this.maxHealth;
+        if (this.phase === 1) {
+            currentDisplayHealth = this.smallPlanes.reduce((sum, plane) => sum + (plane.active ? plane.health : 0), 0);
+            maxDisplayHealth = this.numSmallPlanes * this.smallPlaneHealth;
+            text(`Phase 1: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
+        } else if (this.phase === 2) {
+            text(`Shield: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
+        } else { // Phase 3
+            text(`Health: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
+        }
+        pop(); // 이전 스타일 복원
     }
 
     drawPhase1() {
@@ -358,14 +357,6 @@ class OmegaSystem extends Boss {
             if (!plane.active) return;
             imageMode(CENTER);
             image(this.ASSETS.omegaSystemSmallPlaneImage, plane.x, plane.y, plane.size, plane.size);
-
-            // 소형 비행기 체력 표시
-            // push();
-            // fill(255);
-            // textSize(12);
-            // textAlign(CENTER, CENTER);
-            // text(floor(plane.health), plane.x, plane.y);
-            // pop();
         });
     }
 

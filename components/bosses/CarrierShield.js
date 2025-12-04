@@ -72,7 +72,7 @@ class CarrierShield extends Boss {
   onDeath(enemyBullets, player) {
     // 빠른 유도 미사일 5발 발사
     for (let i = 0; i < 5; i++) {
-        const bullet = new Bullet(this.x, this.y, 'homing', this.ASSETS.enemyBulletImage, null, player, 7);
+        const bullet = new Bullet(this.x, this.y, 'homing', this.ASSETS.homingBulletImage, null, player, 7);
         enemyBullets.push(bullet);
     }
   }
@@ -86,7 +86,7 @@ class CarrierShield extends Boss {
     for (let i = -1; i <= 1; i++) {
       const angle = angleToPlayer + i * 0.2;
       const vel = p5.Vector.fromAngle(angle, 4);
-      const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.enemyBulletImage, vel);
+      const bullet = new Bullet(this.x, this.y, 'default', this.ASSETS.bossBulletImage, vel);
       enemyBullets.push(bullet);
     }
   }
@@ -94,7 +94,7 @@ class CarrierShield extends Boss {
   onTurretDestroyed(enemyBullets, player) {
     // 빠른 유도 미사일 2발 발사
     for (let i = 0; i < 2; i++) {
-        const bullet = new Bullet(this.x, this.y, 'homing', this.ASSETS.enemyBulletImage, null, player, 7);
+        const bullet = new Bullet(this.x, this.y, 'homing', this.ASSETS.homingBulletImage, null, player, 7);
         enemyBullets.push(bullet);
     }
   }

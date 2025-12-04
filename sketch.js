@@ -13,14 +13,16 @@ function preload() {
 
   ASSETS.items = {
     coin: loadImage('assets/images/item/item_coin.png'),
-    health: loadImage('assets/images/item/item_health.png'), // This is for the item itself
+    health: loadImage('assets/images/item/item_health.png'),
     powerup: loadImage('assets/images/item/item_powerup.png')
   };
 
   ASSETS.playerImage = loadImage('assets/images/player/player.png');
   ASSETS.playerBulletImage = loadImage('assets/images/player/bullet.png');
   ASSETS.enemyBulletImage = loadImage('assets/images/enemy/bullet.png');
-  ASSETS.heartImage = loadImage('assets/images/item/item_health.png'); // Load for UI display
+  ASSETS.bossBulletImage = loadImage('assets/images/boss/bullet.png'); 
+  ASSETS.homingBulletImage = loadImage('assets/images/boss/homing.png'); 
+  ASSETS.heartImage = loadImage('assets/images/item/item_health.png'); 
 
   // Overload Boss Images
   ASSETS.overloadBossImage = loadImage('assets/images/boss/Overload.png');
