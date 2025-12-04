@@ -14,7 +14,7 @@ const CONFIG = {
     SPEED: 10,
     DAMAGE: 1, // 총알 기본 데미지
   },
-  HIT_EFFECT_DURATION: 5, // 피격 효과 지속 시간 (프레임)
+  HIT_EFFECT_DURATION: 3, // 피격 효과 지속 시간 (프레임)
   // 게임 진행 단계별 시간 설정 (프레임 단위, 1초 = 60프레임)
   PHASES: {},
 };
