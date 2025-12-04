@@ -72,15 +72,14 @@ class SpawnManager {
                 break;
         }
     } else {
-        // Wave music based on frame triggers
-        // The trigger frames are from the config: 900, 1800, 2700, 3600
-        if (frame < 900) {
+        // Wave music based on phase triggers
+        if (frame < CONFIG.PHASES.EARLY_END) {
             musicToPlay = this.ASSETS.music.earlyWave;
-        } else if (frame >= 900 && frame < 1800) {
+        } else if (frame >= CONFIG.PHASES.EARLY_END && frame < CONFIG.PHASES.MID_1_END) {
             musicToPlay = this.ASSETS.music.midWave1;
-        } else if (frame >= 1800 && frame < 2700) {
+        } else if (frame >= CONFIG.PHASES.MID_1_END && frame < CONFIG.PHASES.MID_END) {
             musicToPlay = this.ASSETS.music.midWave2;
-        } else if (frame >= 2700 && frame < 3600) {
+        } else if (frame >= CONFIG.PHASES.MID_END) {
             musicToPlay = this.ASSETS.music.finalWave;
         }
     }
