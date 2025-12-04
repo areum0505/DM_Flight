@@ -7,6 +7,12 @@ class Boss {
     this.maxHealth = health;
     this.size = size;
     this.isIntro = true; // 보스 등장 애니메이션 진행 상태
+    this.hitEffectTimer = 0; // 피격 효과 타이머
+  }
+
+  // 피격 효과를 발동시키는 메소드
+  triggerHitEffect() {
+    this.hitEffectTimer = CONFIG.HIT_EFFECT_DURATION;
   }
 
   updateIntroAnimation() {
@@ -23,6 +29,9 @@ class Boss {
 
   update(player, enemyBullets, enemies) {
     this.updateIntroAnimation();
+    if (this.hitEffectTimer > 0) {
+      this.hitEffectTimer--;
+    }
   }
 
   draw() {

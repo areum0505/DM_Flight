@@ -38,8 +38,10 @@ class Overload extends Boss {
 
     // 보스를 따라 포탑 위치를 계속 업데이트
     for (let i = 0; i < this.turrets.length; i++) {
-      this.turrets[i].x = this.x + this.turretPositions[i].x;
-      this.turrets[i].y = this.y + this.turretPositions[i].y;
+      const turret = this.turrets[i];
+      turret.x = this.x + this.turretPositions[i].x;
+      turret.y = this.y + this.turretPositions[i].y;
+      turret.update(player, enemyBullets);
     }
 
     // 등장 애니메이션 중에는 공격 로직을 실행하지 않음
@@ -49,7 +51,6 @@ class Overload extends Boss {
 
     // 1페이즈: 포탑 공격
     if (this.phase === 1) {
-      this.turrets.forEach(turret => turret.update(player, enemyBullets));
       // 모든 포탑이 파괴되면 2페이즈로 전환
       if (this.turrets.every(t => t.health <= 0)) {
         this.phase = 2;
@@ -111,7 +112,11 @@ class Overload extends Boss {
         rotate(radians(this.chargeInfo.angle));
     }
     imageMode(CENTER);
+    if (this.hitEffectTimer > 0) {
+      tint(255, 0, 0, 150); // Apply red tint
+    }
     image(this.ASSETS.overloadBossImage, 0, 0, this.width, this.height);
+    noTint(); // Reset tint
     pop();
 
     this.turrets.forEach(turret => turret.draw());
@@ -127,6 +132,7 @@ class Overload extends Boss {
         bullet.y - bulletRadius < this.y + this.height / 2
       ) {
         this.health--;
+        this.triggerHitEffect(); // Trigger hit effect
         if (this.health <= 0) {
             this.isDefeated = true;
             this.ASSETS.sounds.enemyExplosion.play();
@@ -135,11 +141,7 @@ class Overload extends Boss {
       }
     } else {
       for (const turret of this.turrets) {
-        if (turret.health > 0 && dist(bullet.x, bullet.y, turret.x, turret.y) < turret.size / 2) {
-          turret.health--;
-          if (turret.health === 0) {
-            this.ASSETS.sounds.enemyExplosion.play();
-          }
+        if (turret.isHit(bullet)) {
           return true;
         }
       }
@@ -159,9 +161,17 @@ class Turret {
     this.ASSETS = ASSETS; 
     this.lastShotFrame = 0;
     this.shootInterval = turretStats.SHOOT_INTERVAL;
+    this.hitEffectTimer = 0;
+  }
+
+  triggerHitEffect() {
+    this.hitEffectTimer = CONFIG.HIT_EFFECT_DURATION;
   }
 
   update(player, enemyBullets) {
+    if (this.hitEffectTimer > 0) {
+      this.hitEffectTimer--;
+    }
     if (this.health > 0 && frameCount - this.lastShotFrame > this.shootInterval) {
       this.shoot(player, enemyBullets);
       this.lastShotFrame = frameCount;
@@ -179,11 +189,29 @@ class Turret {
   }
 
   draw() {
+    push();
     imageMode(CENTER);
+    if (this.hitEffectTimer > 0) {
+      tint(255, 0, 0, 150); // Apply red tint
+    }
     if (this.health > 0) {
       image(this.ASSETS.overloadTurretImage, this.x, this.y, this.size, this.size);
     } else {
       image(this.ASSETS.overloadTurretDestroyedImage, this.x, this.y, this.size, this.size);
     }
+    noTint(); // Reset tint
+    pop();
+  }
+
+  isHit(bullet) {
+    if (this.health > 0 && dist(bullet.x, bullet.y, this.x, this.y) < this.size / 2) {
+      this.health--;
+      this.triggerHitEffect();
+      if (this.health === 0) {
+        this.ASSETS.sounds.enemyExplosion.play();
+      }
+      return true;
+    }
+    return false;
   }
 }

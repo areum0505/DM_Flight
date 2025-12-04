@@ -162,13 +162,11 @@ class CanyonRocker extends Boss {
     push();
     translate(this.x, this.y);
     imageMode(CENTER);
+    if (this.hitEffectTimer > 0) {
+      tint(255, 0, 0, 150); // Apply red tint
+    }
     image(this.ASSETS.canyonRockerImage, 0, 0, this.width, this.height);
-
-    // 체력 표시
-    // fill(255);
-    // textAlign(CENTER, CENTER);
-    // textSize(20);
-    // text(this.health, 0, 0);
+    noTint(); // Reset tint
     pop();
   }
 
@@ -250,6 +248,7 @@ class CanyonRocker extends Boss {
       bullet.y < this.y + halfSize
     ) {
       this.health--;
+      this.triggerHitEffect();
       if (this.health <= 0) {
           this.isDefeated = true;
           this.ASSETS.sounds.enemyExplosion.play();

@@ -56,6 +56,7 @@ class OmegaSystem extends Boss {
                 fireTimer: random(this.smallPlaneFireRate),
                 active: true,
                 size: this.smallPlaneSize,
+                hitEffectTimer: 0,
             });
         }
     }
@@ -73,6 +74,9 @@ class OmegaSystem extends Boss {
                 plane.angle += 0.03;
                 plane.x = this.x + this.smallPlaneRadius * cos(plane.angle);
                 plane.y = this.y + this.smallPlaneRadius * sin(plane.angle);
+                if (plane.hitEffectTimer > 0) {
+                    plane.hitEffectTimer--;
+                }
             });
         }
         
@@ -279,6 +283,7 @@ class OmegaSystem extends Boss {
                     // 원-원 충돌 감지를 위해 dist 사용
                     if (plane.active && dist(bullet.x, bullet.y, plane.x, plane.y) < (bullet.size / 2 + plane.size / 2)) {
                         plane.health -= bullet.damage;
+                        plane.hitEffectTimer = CONFIG.HIT_EFFECT_DURATION;
                         if (plane.health <= 0) {
                             plane.active = false;
                             this.ASSETS.sounds.enemyExplosion.play();
@@ -299,6 +304,7 @@ class OmegaSystem extends Boss {
                 // 원-원 충돌 감지를 위해 dist 사용
                 if (this.shieldActive && dist(bullet.x, bullet.y, this.x, this.y) < (bullet.size / 2 + this.size / 2)) {
                     this.takeDamage(bullet.damage);
+                    this.triggerHitEffect();
                     hit = true;
                 }
                 break;
@@ -306,6 +312,7 @@ class OmegaSystem extends Boss {
                 // 원-원 충돌 감지를 위해 dist 사용
                 if (dist(bullet.x, bullet.y, this.x, this.y) < (bullet.size / 2 + this.size / 2)) {
                     this.takeDamage(bullet.damage);
+                    this.triggerHitEffect();
                     hit = true;
                 }
                 break;
@@ -317,8 +324,15 @@ class OmegaSystem extends Boss {
         if (this.isDefeated) return;
 
         // 본체 그리기
+        push();
+        translate(this.x, this.y);
         imageMode(CENTER);
-        image(this.ASSETS.omegaSystemBossImage, this.x, this.y, this.width, this.height);
+        if (this.hitEffectTimer > 0) {
+            tint(255, 0, 0, 150); // Apply red tint
+        }
+        image(this.ASSETS.omegaSystemBossImage, 0, 0, this.width, this.height);
+        noTint(); // Reset tint
+        pop();
 
         // 페이즈별 요소 그리기
         switch (this.phase) {
@@ -355,8 +369,14 @@ class OmegaSystem extends Boss {
     drawPhase1() {
         this.smallPlanes.forEach(plane => {
             if (!plane.active) return;
+            push();
             imageMode(CENTER);
+            if (plane.hitEffectTimer > 0) {
+                tint(255, 0, 0, 150); // Apply red tint
+            }
             image(this.ASSETS.omegaSystemSmallPlaneImage, plane.x, plane.y, plane.size, plane.size);
+            noTint(); // Reset tint
+            pop();
         });
     }
 

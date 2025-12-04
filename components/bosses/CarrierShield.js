@@ -41,12 +41,10 @@ class CarrierShield extends Boss {
       // 보스를 따라 포탑 위치를 계속 업데이트
       turret.x = this.x + this.turretPositions[i].x;
       turret.y = this.y + this.turretPositions[i].y;
+      turret.update(player, enemyBullets);
       
       if (turret.health > 0) {
         allTurretsDestroyed = false;
-        if(!this.isIntro) {
-          turret.update(player, enemyBullets);
-        }
       }
     }
 
@@ -101,14 +99,13 @@ class CarrierShield extends Boss {
 
   draw() {
     push();
+    translate(this.x, this.y);
     imageMode(CENTER);
-    image(this.ASSETS.carrierShieldImage, this.x, this.y, this.width, this.height);
-    
-    // 체력 표시
-    //fill(255);
-    // textAlign(CENTER, CENTER);
-    // textSize(20);
-    // text(this.health, this.x, this.y);
+    if (this.hitEffectTimer > 0) {
+      tint(255, 0, 0, 150); // Apply red tint
+    }
+    image(this.ASSETS.carrierShieldImage, 0, 0, this.width, this.height);
+    noTint(); // Reset tint
     pop();
 
     this.turrets.forEach(turret => turret.draw());
@@ -120,22 +117,12 @@ class CarrierShield extends Boss {
       if (bullet.x > this.x - this.width / 2 && bullet.x < this.x + this.width / 2 &&
           bullet.y > this.y - this.height / 2 && bullet.y < this.y + this.height / 2) {
         this.health--;
+        this.triggerHitEffect();
         return true;
       }
     } else { // 포탑을 먼저 파괴해야 할 때
-      for (let i = 0; i < this.turrets.length; i++) {
-        const turret = this.turrets[i];
-        // 공격 가능한 포탑만 피격 판정
-        if (turret.isAttackable && turret.health > 0 && dist(bullet.x, bullet.y, turret.x, turret.y) < turret.size / 2) {
-          turret.health--;
-          if (turret.health <= 0) {
-            this.ASSETS.sounds.enemyExplosion.play();
-            this.onTurretDestroyed(enemyBullets, player);
-            // 다음 포탑 활성화
-            if (i + 1 < this.turrets.length) {
-              this.turrets[i + 1].isAttackable = true;
-            }
-          }
+      for (const turret of this.turrets) {
+        if (turret.isHit(bullet, enemyBullets, player)) {
           return true;
         }
       }
@@ -155,6 +142,7 @@ class CarrierTurret {
     this.index = index;
     this.isAttackable = isAttackable;
     this.ASSETS = ASSETS; 
+    this.hitEffectTimer = 0;
     
     this.laserInfo = {
       isCharging: false,
@@ -166,8 +154,16 @@ class CarrierTurret {
     this.shootInterval = turretStats.SHOOT_INTERVAL;
   }
 
+  triggerHitEffect() {
+    this.hitEffectTimer = CONFIG.HIT_EFFECT_DURATION;
+  }
+
   update(player, enemyBullets) {
-    if (this.health > 0 && this.isAttackable) {
+    if (this.hitEffectTimer > 0) {
+      this.hitEffectTimer--;
+    }
+
+    if (this.health > 0 && this.isAttackable && !this.boss.isIntro) {
       if (this.laserInfo.isCharging) {
         if (frameCount - this.laserInfo.chargeStartFrame > this.laserInfo.chargeDuration) {
           this.fireLaser(enemyBullets);
@@ -195,6 +191,9 @@ class CarrierTurret {
   draw() {
     push();
     imageMode(CENTER);
+    if (this.hitEffectTimer > 0) {
+      tint(255, 0, 0, 150); // Apply red tint
+    }
 
     if (this.health > 0) {
       if (this.isAttackable) {
@@ -202,15 +201,10 @@ class CarrierTurret {
       } else {
         image(this.ASSETS.carrierShieldTurretImage, this.x, this.y, this.size, this.size);
       }
-      
-      // 체력 표시
-      // fill(0);
-      // textAlign(CENTER, CENTER);
-      // textSize(14);
-      // text(this.health, this.x, this.y);
     } else {
       image(this.ASSETS.carrierShieldTurretDestroyedImage, this.x, this.y, this.size, this.size);
     }
+    noTint(); // Reset tint
     pop();
 
     if (this.laserInfo.isCharging && this.health > 0) { // 포탑이 활성화된 경우에만 레이저 충전
@@ -222,5 +216,23 @@ class CarrierTurret {
       line(0, 0, width * 1.5, 0);
       pop();
     }
+  }
+
+  isHit(bullet, enemyBullets, player) {
+    if (this.isAttackable && this.health > 0 && dist(bullet.x, bullet.y, this.x, this.y) < this.size / 2) {
+      this.health--;
+      this.triggerHitEffect();
+      if (this.health <= 0) {
+        this.ASSETS.sounds.enemyExplosion.play();
+        this.boss.onTurretDestroyed(enemyBullets, player);
+        // 다음 포탑 활성화
+        const nextTurretIndex = this.index + 1;
+        if (nextTurretIndex < this.boss.turrets.length) {
+          this.boss.turrets[nextTurretIndex].isAttackable = true;
+        }
+      }
+      return true;
+    }
+    return false;
   }
 }
