@@ -1,9 +1,9 @@
 /********* 스펙 상세 *********/
 
-const HP_very_low = 1
-const HP_low = 3
-const HP_medium = 5
-const HP_high = 7
+const HP_very_low = 2
+const HP_low = 4
+const HP_medium = 6
+const HP_high = 8
 const HP_very_high = 10
 const HP_infinite = 10000
 
