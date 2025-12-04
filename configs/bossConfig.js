@@ -1,12 +1,12 @@
-const Boss_HP_low = 15;
-const Boss_HP_medium = 20;
-const Boss_HP_high = 35;
-const Boss_HP_very_high = 50;
-const Boss_HP_extreme = 70;
+const Boss_HP_low = 25;
+const Boss_HP_medium = 40;
+const Boss_HP_high = 50;
+const Boss_HP_very_high = 70;
+const Boss_HP_extreme = 85;
 
-const Boss_ATTACK_COOLDOWN_slow = 180;
-const Boss_ATTACK_COOLDOWN_normal = 150;
-const Boss_ATTACK_COOLDOWN_fast = 100;
+const Boss_ATTACK_COOLDOWN_slow = 120;
+const Boss_ATTACK_COOLDOWN_normal = 100;
+const Boss_ATTACK_COOLDOWN_fast = 85;
 
 const BOSS_STATS = {
   OVERLOAD: { // 중간 보스 1 - 오버로드
@@ -38,7 +38,7 @@ const BOSS_STATS = {
 
 
   CANYON_ROCKER: { // 후반 보스 1 - 캐니언 록커
-    HEALTH: Boss_HP_very_high,
+    HEALTH: Boss_HP_extreme,
     WIDTH: 200,
     HEIGHT: 150,
     ATTACK_COOLDOWN: Boss_ATTACK_COOLDOWN_normal,
@@ -46,12 +46,14 @@ const BOSS_STATS = {
 
 
   OMEGA_SYSTEM: { // 후반 보스 2 - 오메가 시스템
-    HEALTH: Boss_HP_extreme,
     WIDTH: 170,
     HEIGHT: 170,
     SIZE: 170,
-    SMALL_PLANE_HEALTH: Boss_HP_medium,
-    SMALL_PLANE_SIZE: 40, 
-    SHIELD_HEALTH: Boss_HP_high,
+    HEALTH: Boss_HP_extreme,
+    
+    SMALL_PLANE_HEALTH: Boss_HP_high,
+    SMALL_PLANE_SIZE: 20, // Added for consistency
+    
+    SHIELD_HEALTH: Boss_HP_very_high,
   }
 };

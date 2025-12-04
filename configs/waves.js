@@ -1,6 +1,6 @@
 // 게임 진행 흐름: 초반부 > 중간보스1 (OVERLOAD) > 중반부1 > 중간보스2 (CARRIER_SHIELD) > 중반부2 > 중간보스3 (CANYON_ROCKER) > 후반부 > 최종보스 (OMEGA_SYSTEM)
 
-const Ypos = -50;
+const Ypos = -20;
 
 const WAVES = [
 
@@ -8,7 +8,7 @@ const WAVES = [
   ...(() => {
     const arr = [];
     for (let frameCount = 0; frameCount <= 7200; frameCount++) {
-      if (frameCount % 350 === 0) {
+      if (frameCount % 300 === 0) {
         arr.push({
           triggerFrame: frameCount,
           enemies: [
@@ -26,7 +26,7 @@ const WAVES = [
 
   // Boss Battle 1
   {
-    triggerFrame: 7200,
+    triggerFrame: 7199,
     type: 'BOSS',
     bossType: 'OVERLOAD'
     },
@@ -43,6 +43,8 @@ const WAVES = [
             { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
             { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
             { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
+            { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
+            { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
             { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos }
           ]
         });
@@ -53,7 +55,7 @@ const WAVES = [
 
   // Boss Battle 2
   {
-    triggerFrame: 10800,
+    triggerFrame: 10799,
     type: 'BOSS',
     bossType: 'CARRIER_SHIELD'
   },
@@ -72,6 +74,8 @@ const WAVES = [
             { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
             { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
             { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
+            { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
+            { type: mid_ENEMY_TYPES[Math.floor(Math.random() * mid_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos }
           ]
         });
       }
@@ -81,7 +85,6 @@ const WAVES = [
 
   // Boss Battle 3
   {
-    //triggerFrame: 14400,
     triggerFrame: 14400,
     type: 'BOSS',
     bossType: 'CANYON_ROCKER'
@@ -91,7 +94,7 @@ const WAVES = [
   ...(() => {
     const arr = [];
     for (let frameCount = 14400; frameCount <= 18000; frameCount++) {
-      if (frameCount % 500 === 0) {
+      if (frameCount % 380 === 0) {
         arr.push({
           triggerFrame: frameCount,
           enemies: [
@@ -102,6 +105,7 @@ const WAVES = [
             { type: end_ENEMY_TYPES[Math.floor(Math.random() * end_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
             { type: end_ENEMY_TYPES[Math.floor(Math.random() * end_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
             { type: end_ENEMY_TYPES[Math.floor(Math.random() * end_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos },
+            { type: end_ENEMY_TYPES[Math.floor(Math.random() * end_ENEMY_TYPES.length)], x: Math.random() * 0.9 + 0.1, y: Ypos }
           ]
         });
       }

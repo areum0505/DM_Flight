@@ -152,8 +152,8 @@ class GameScene {
       return; // Only spawn one item type at a time
     }
 
-    // Power-up spawn (3% chance)
-    if (random() < 0.03) {
+    // Power-up spawn (5% chance)
+    if (random() < 0.05) {
       this.items.push(new PowerUpItem(x, y, this.ASSETS.items.powerup));
       return; // Only spawn one item type at a time
     }
