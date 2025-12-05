@@ -8,7 +8,8 @@ function preload() {
     mid: loadImage('assets/images/background/background_mid.jpeg'),
     end: loadImage('assets/images/background/background_late.jpeg'),
     main: loadImage('assets/images/background/main.png'),
-    transition: loadImage('assets/images/background/change.png') // Added this line
+    transition: loadImage('assets/images/background/change.png'), // Added this line
+    gameTitle: loadImage('assets/images/background/game_title.png')
   };
 
   ASSETS.items = {

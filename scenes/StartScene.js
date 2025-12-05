@@ -45,13 +45,9 @@ class StartScene {
     noFill();
     rect(2, 2, width - 4, height - 4); 
 
-    noStroke();
-    fill(this.ASSETS.colors.BLUE); 
-    textStyle(BOLD);
-    textSize(48); 
-    text('DM FLIGHT', width / 2, 90); 
-
     imageMode(CENTER);
+    image(this.ASSETS.backgrounds.gameTitle, width / 2, 90);
+
     image(this.ASSETS.backgrounds.main, width / 2, 270, 350, 210);
     rectMode(CORNER); 
 
