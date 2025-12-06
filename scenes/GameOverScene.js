@@ -13,7 +13,7 @@ class GameOverScene {
         
         fill(0);
         textSize(20);
-        text('Press SPACE to return to title.', width / 2, height / 2 + 20);
+        text('Press SPACE to Restart', width / 2, height / 2 + 20);
     }
 
     handleInput(keyCode) {

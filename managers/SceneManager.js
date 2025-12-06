@@ -22,7 +22,7 @@ class SceneManager {
   }
 
   // 씬 전환
-  goTo(sceneName, data) {
+  goTo(sceneName) {
     const previousSceneName = Object.keys(this.scenes).find(key => this.scenes[key] === this.currentScene);
 
     // Stop sounds from end screens
@@ -48,15 +48,7 @@ class SceneManager {
       // Re-instantiate the GameScene to ensure a fresh start
       this.scenes.game = new GameScene(this, this.ASSETS);
     }
-    if (sceneName === 'gameClear') {
-      // Re-instantiate the GameClearScene as well
-      this.scenes.gameClear = new GameClearScene(this, this.ASSETS);
-    }
     this.currentScene = this.scenes[sceneName];
-
-    if (this.currentScene.onEnter) {
-        this.currentScene.onEnter(data);
-    }
 
     // Play menu music if entering menu scenes
     if (['start', 'options', 'tutorial'].includes(sceneName)) {
