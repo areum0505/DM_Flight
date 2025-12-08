@@ -117,6 +117,7 @@ class GameScene {
       if (!this.transitionEffect) { // Only create if not already active
         this.transitionEffect = new TransitionEffect(this.ASSETS.backgrounds.transition);
         this.ASSETS.sounds.stageClear.play();
+        this.player.resetPower();
       }
     }
     this.lastBackgroundState = currentBackgroundState;

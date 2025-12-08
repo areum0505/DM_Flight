@@ -82,6 +82,10 @@ class Player {
     this.weaponLevel++;
   }
 
+  resetPower() {
+    this.weaponLevel = 1;
+  }
+
   takeDamage() {
     // 무적 상태일 때는 데미지를 입지 않음
     if (this.isInvincible) {
