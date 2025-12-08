@@ -5,7 +5,7 @@ const CONFIG = {
   },
   PLAYER: {
     SIZE: 30,
-    SPEED: 10,
+    SPEED: 7,
     HEALTH: 5, // 플레이어 초기 체력
     SHOOT_INTERVAL: 6,
   },
