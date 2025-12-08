@@ -148,16 +148,30 @@ class GameScene {
   }
 
   spawnItems(deadEnemy) {
-    const { x, y, type } = deadEnemy;
+    const { x, y, type, triggerFrame } = deadEnemy;
 
-    // Health pack spawn (3% chance)
-    if (random() < 0.03) {
+    if (triggerFrame <= 7200) {
+      // early game: higher chance
+      healthChance = 0.02;   // 6%
+      powerupChance = 0.03;  // 7%
+    } else if (7200 < triggerFrame <= 10800) {
+      // mid game: medium chance
+      healthChance = 0.06;   // 3%
+      powerupChance = 0.05;  // 5%
+    } else {
+      // late game: lower chance
+      healthChance = 0.04;   // 1%
+      powerupChance = 0.05;  // 3%
+    }
+
+    // Health pack spawn
+    if (random() < healthChance) {
       this.items.push(new HealthItem(x, y, this.ASSETS.items.health));
       return; // Only spawn one item type at a time
     }
 
-    // Power-up spawn (5% chance)
-    if (random() < 0.05) {
+    // Power-up spawn
+    if (random() < powerupChance) {
       this.items.push(new PowerUpItem(x, y, this.ASSETS.items.powerup));
       return; // Only spawn one item type at a time
     }
