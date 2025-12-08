@@ -13,12 +13,16 @@ class Enemy {
     this.bulletSpeed = stats.bulletSpeed;
     this.points = stats.points;
     this.ultimateGauge = stats.ultimateGauge;
+    this.hitEffectTimer = 0;
   }
 
   update(enemyBullets) { // Removed enemyBulletImage from parameter
     this.move();
     if (this.shootInterval && frameCount % this.shootInterval === 0) {
       this.shoot(enemyBullets);
+    }
+    if (this.hitEffectTimer > 0) {
+      this.hitEffectTimer--;
     }
   }
 
@@ -33,8 +37,13 @@ class Enemy {
     }
   }
 
+  triggerHitEffect() {
+    this.hitEffectTimer = CONFIG.HIT_EFFECT_DURATION;
+  }
+
   // 총알에 맞았을 때 호출될 함수
   takeDamage() {
+    this.triggerHitEffect();
     this.health--;
   }
 
@@ -44,5 +53,10 @@ class Enemy {
     noStroke();
     rectMode(CENTER);
     rect(this.x, this.y, this.size, this.size);
+
+    if (this.hitEffectTimer > 0) {
+      fill(255, 0, 0, 100); // Semi-transparent red
+      rect(this.x, this.y, this.size, this.size);
+    }
   }
 }
