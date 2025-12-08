@@ -18,6 +18,8 @@ function preload() {
     powerup: loadImage('assets/images/item/item_powerup.png')
   };
 
+  ASSETS.logo = loadImage('assets/images/logo.png');
+
   ASSETS.playerImage = loadImage('assets/images/player/player.png');
   ASSETS.playerBulletImage = loadImage('assets/images/player/bullet.png');
   ASSETS.enemyBulletImage = loadImage('assets/images/enemy/bullet.png');

@@ -9,6 +9,7 @@ class GameScene {
     this.ASSETS = ASSETS; // Store ASSETS object
     this.transitionEffect = null; // Initialize transition effect
     this.lastBackgroundState = null; // Track last background state
+    this.startTime = 0; // Initialize startTime
     this.reset();
   }
 
@@ -19,6 +20,9 @@ class GameScene {
     this.enemies = [];
     this.items = [];
     this.score = 0;
+    this.coinsCollected = 0;
+    this.enemiesDefeated = 0;
+    this.startTime = millis(); // Set start time when game resets
 
     this.spawnManager = new SpawnManager(this.ASSETS);
     this.boss = null;
@@ -193,9 +197,17 @@ class GameScene {
 
   updateGameState() {
     if (this.boss && this.boss.isDefeated) {
+      this.enemiesDefeated++;
       if (this.boss instanceof OmegaSystem) {
         this.boss = null;
-        this.sceneManager.goTo('gameClear');
+        let elapsedTime = millis() - this.startTime;
+        const gameStats = {
+          score: this.score,
+          coins: this.coinsCollected,
+          enemiesDefeated: this.enemiesDefeated,
+          playTime: elapsedTime,
+        };
+        this.sceneManager.goTo('gameClear', gameStats);
       } else {
         this.boss = null;
         this.spawnManager.resume();
@@ -241,6 +253,7 @@ class GameScene {
         if (this.isCollidingCircles(this.bullets[i], this.enemies[j])) {
           this.enemies[j].takeDamage();
           if (this.enemies[j].health <= 0) {
+            this.enemiesDefeated++;
             this.spawnItems(this.enemies[j]); // Spawn items
             this.ASSETS.sounds.enemyExplosion.play();
             this.enemies.splice(j, 1);
@@ -291,6 +304,7 @@ class GameScene {
               switch(item.type) {
                   case 'coin':
                       this.score += item.value;
+                      this.coinsCollected++;
                       break;
                   case 'health':
                       if (this.player.health < CONFIG.PLAYER.HEALTH) {
