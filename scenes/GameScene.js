@@ -150,18 +150,21 @@ class GameScene {
   spawnItems(deadEnemy) {
     const { x, y, type, triggerFrame } = deadEnemy;
 
-    if (triggerFrame <= 7200) {
+    let healthChance;
+    let powerupChance;
+
+    if (triggerFrame <= CONFIG.PHASES.EARLY_END) {
       // early game: higher chance
-      healthChance = 0.02;   // 6%
-      powerupChance = 0.03;  // 7%
-    } else if (7200 < triggerFrame <= 10800) {
+      healthChance = 0.02;   // 2%
+      powerupChance = 0.03;  // 3%
+    } else if (triggerFrame > CONFIG.PHASES.EARLY_END && triggerFrame <= CONFIG.PHASES.MID_1_END) {
       // mid game: medium chance
-      healthChance = 0.06;   // 3%
+      healthChance = 0.06;   // 6%
       powerupChance = 0.05;  // 5%
     } else {
       // late game: lower chance
-      healthChance = 0.04;   // 1%
-      powerupChance = 0.05;  // 3%
+      healthChance = 0.04;   // 4%
+      powerupChance = 0.05;  // 5%
     }
 
     // Health pack spawn
