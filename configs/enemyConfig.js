@@ -13,10 +13,10 @@ const SPD_medium = 1
 const SPD_high = 1.25
 const SPD_very_high = 1.5
 
-const ShootSPD_low = 120
-const ShootSPD_normal = 105
-const ShootSPD_fast = 85
-const ShootSPD_very_fast = 50
+const ShootSPD_low = 145
+const ShootSPD_normal = 120
+const ShootSPD_fast = 105
+const ShootSPD_very_fast = 90
 
 const bulletSpeed_low = 2
 const bulletSpeed_normal = 2.5

@@ -14,6 +14,14 @@ class Enemy {
     this.points = stats.points;
     this.ultimateGauge = stats.ultimateGauge;
     this.hitEffectTimer = 0;
+
+    if (this.type.includes('Named')) {
+      const targetX = random() > 0.5 ? 0 : width;
+      const targetY = height;
+      
+      const direction = createVector(targetX - this.x, targetY - this.y);
+      this.velocity = direction.normalize().mult(this.speed);
+    }
   }
 
   update(enemyBullets) { // Removed enemyBulletImage from parameter
@@ -28,7 +36,12 @@ class Enemy {
 
   // 아래 방향으로 이동
   move() {
-    this.y += this.speed;
+    if (this.velocity) {
+      this.x += this.velocity.x;
+      this.y += this.velocity.y;
+    } else {
+      this.y += this.speed;
+    }
   }
 
   shoot(enemyBullets) { // Removed enemyBulletImage from parameter
