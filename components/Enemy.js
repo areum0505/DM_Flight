@@ -1,14 +1,14 @@
 class Enemy {
-  constructor(x, y, type, ASSETS) {
+  constructor(x, y, type, ASSETS, image) {
     const stats = ENEMY_STATS[type];
     this.x = x;
     this.y = y;
     this.type = type;
     this.ASSETS = ASSETS; // Store ASSETS object
+    this.image = image;
     this.size = stats.size;
     this.health = stats.health;
     this.speed = stats.speed;
-    this.color = stats.color;
     this.shootInterval = stats.shootInterval;
     this.bulletSpeed = stats.bulletSpeed;
     this.points = stats.points;
@@ -49,14 +49,13 @@ class Enemy {
 
   // 적 그리기
   draw() {
-    fill(this.color);
-    noStroke();
-    rectMode(CENTER);
-    rect(this.x, this.y, this.size, this.size);
-
+    push();
+    imageMode(CENTER);
     if (this.hitEffectTimer > 0) {
-      fill(255, 0, 0, 100); // Semi-transparent red
-      rect(this.x, this.y, this.size, this.size);
+      tint(255, 0, 0, 150);
     }
+    image(this.image, this.x, this.y, this.size, this.size);
+    noTint();
+    pop();
   }
 }

@@ -273,19 +273,7 @@ const ENEMY_STATS = {
     bulletSpeed: bulletSpeed_normal,
     points: 100,
     ultimateGauge: 10,
-  },
-
-  endNamed_tank: { //*********** 보충 필요
-    size: 25,
-    health: HP_very_high,
-    speed: SPD_low,
-    color: [200, 200, 255],
-    shootInterval: ShootSPD_normal, // Added default
-    bulletSpeed: bulletSpeed_low, // Added default
-    points: 100,
-    ultimateGauge: 10,
   }
-
 };
 
 // 초반부 몹 유형 배열
@@ -310,7 +298,6 @@ const mid_ENEMY_TYPES = [
 // 후반부 몹 유형 배열
 const end_ENEMY_TYPES = [
   'endNamed_simple',
-  'endNamed_tank',
   'endNamed_special',
   'endNamed_flock',
   'endNamed_special_1',

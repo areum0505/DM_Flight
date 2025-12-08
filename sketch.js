@@ -20,6 +20,11 @@ function preload() {
 
   ASSETS.logo = loadImage('assets/images/logo.png');
 
+  ASSETS.enemies = {};
+  for (const enemyType in ENEMY_STATS) {
+    ASSETS.enemies[enemyType] = loadImage(`assets/images/enemy/${enemyType}.png`);
+  }
+
   ASSETS.playerImage = loadImage('assets/images/player/player.png');
   ASSETS.playerBulletImage = loadImage('assets/images/player/bullet.png');
   ASSETS.enemyBulletImage = loadImage('assets/images/enemy/bullet.png');

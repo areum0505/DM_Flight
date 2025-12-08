@@ -42,7 +42,7 @@ class SpawnManager {
           for (const enemyData of currentWave.enemies) {
             const xPos = enemyData.x * width;
             const yPos = enemyData.y;
-            enemies.push(new Enemy(xPos, yPos, enemyData.type, this.ASSETS)); // Pass ASSETS
+            enemies.push(new Enemy(xPos, yPos, enemyData.type, this.ASSETS, this.ASSETS.enemies[enemyData.type])); // Pass ASSETS
           }
         }
         this.currentWaveIndex++;
