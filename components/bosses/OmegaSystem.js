@@ -150,7 +150,7 @@ class OmegaSystem extends Boss {
                 const randomType = namedEnemyTypes[Math.floor(Math.random() * namedEnemyTypes.length)];
                 const xPos = Math.random() * width;
                 const yPos = 0;
-                enemies.push(new Enemy(xPos, yPos, randomType, this.ASSETS));
+                enemies.push(new Enemy(xPos, yPos, randomType, this.ASSETS, this.ASSETS.enemies[randomType]));
             }
         }
     }
@@ -347,23 +347,23 @@ class OmegaSystem extends Boss {
                 break;
         }
 
-        push(); // 텍스트 스타일 분리
-        fill(255);
-        textSize(16);
-        textAlign(CENTER, CENTER);
-        // 1페이즈의 경우, 활성화된 소형 비행기들의 체력을 합산하여 표시
-        let currentDisplayHealth = this.health;
-        let maxDisplayHealth = this.maxHealth;
-        if (this.phase === 1) {
-            currentDisplayHealth = this.smallPlanes.reduce((sum, plane) => sum + (plane.active ? plane.health : 0), 0);
-            maxDisplayHealth = this.numSmallPlanes * this.smallPlaneHealth;
-            text(`Phase 1: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
-        } else if (this.phase === 2) {
-            text(`Shield: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
-        } else { // Phase 3
-            text(`Health: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
-        }
-        pop(); // 이전 스타일 복원
+        // push(); // 텍스트 스타일 분리
+        // fill(255);
+        // textSize(16);
+        // textAlign(CENTER, CENTER);
+        // // 1페이즈의 경우, 활성화된 소형 비행기들의 체력을 합산하여 표시
+        // let currentDisplayHealth = this.health;
+        // let maxDisplayHealth = this.maxHealth;
+        // if (this.phase === 1) {
+        //     currentDisplayHealth = this.smallPlanes.reduce((sum, plane) => sum + (plane.active ? plane.health : 0), 0);
+        //     maxDisplayHealth = this.numSmallPlanes * this.smallPlaneHealth;
+        //     text(`Phase 1: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
+        // } else if (this.phase === 2) {
+        //     text(`Shield: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
+        // } else { // Phase 3
+        //     text(`Health: ${floor(currentDisplayHealth)} / ${maxDisplayHealth}`, this.x, this.y);
+        // }
+        // pop(); // 이전 스타일 복원
     }
 
     drawPhase1() {
