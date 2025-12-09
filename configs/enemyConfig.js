@@ -5,7 +5,7 @@ const HP_low = 4
 const HP_medium = 6
 const HP_high = 8
 const HP_very_high = 10
-const HP_infinite = 10000
+const HP_infinite = 20
 
 const SPD_very_low = 0.5
 const SPD_low = 0.7
